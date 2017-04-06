@@ -90,10 +90,13 @@
     <ClCompile Include="fontclass.cpp" />
     <ClCompile Include="fontshaderclass.cpp" />
     <ClCompile Include="fpsclass.cpp" />
+    <ClCompile Include="game\scene\default_scene.cpp" />
+    <ClCompile Include="game\world\world_grid.cpp" />
     <ClCompile Include="inputclass.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="perlinnoise.cpp" />
     <ClCompile Include="positionclass.cpp" />
+    <ClCompile Include="game\scene\scene.cpp" />
     <ClCompile Include="systemclass.cpp" />
     <ClCompile Include="terrainclass.cpp" />
     <ClCompile Include="textclass.cpp" />
@@ -109,9 +112,12 @@
     <ClInclude Include="fontclass.h" />
     <ClInclude Include="fontshaderclass.h" />
     <ClInclude Include="fpsclass.h" />
+    <ClInclude Include="game\scene\default_scene.h" />
+    <ClInclude Include="game\world\world_grid.h" />
     <ClInclude Include="inputclass.h" />
     <ClInclude Include="perlinnoise.h" />
     <ClInclude Include="positionclass.h" />
+    <ClInclude Include="game\scene\scene.h" />
     <ClInclude Include="systemclass.h" />
     <ClInclude Include="terrainclass.h" />
     <ClInclude Include="textclass.h" />

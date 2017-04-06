@@ -12,7 +12,6 @@ class InputClass
 {
 public:
 	InputClass();
-	InputClass(const InputClass&);
 	~InputClass();
 
 	void Initialize();

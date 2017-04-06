@@ -4,7 +4,7 @@
 #include "applicationclass.h"
 
 
-ApplicationClass::ApplicationClass()
+ApplicationClass::ApplicationClass(InputClass *input) : m_Input(input)
 {
 	m_Direct3D = 0;
 	m_Camera = 0;
@@ -18,16 +18,9 @@ ApplicationClass::ApplicationClass()
 	m_Text = 0;
 }
 
-
-ApplicationClass::ApplicationClass(const ApplicationClass& other)
-{
-}
-
-
 ApplicationClass::~ApplicationClass()
 {
 }
-
 
 bool ApplicationClass::Initialize(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHeight)
 {

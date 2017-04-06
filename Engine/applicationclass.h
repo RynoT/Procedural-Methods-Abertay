@@ -36,8 +36,7 @@ const float SCREEN_NEAR = 0.1f;
 class ApplicationClass
 {
 public:
-	ApplicationClass();
-	ApplicationClass(const ApplicationClass&);
+	ApplicationClass(InputClass *input);
 	~ApplicationClass();
 
 	bool Initialize(HINSTANCE, HWND, int, int);
@@ -49,6 +48,7 @@ private:
 
 private:
 	D3DClass* m_Direct3D;
+	InputClass *m_Input;
 	CameraClass* m_Camera;
 	TerrainClass* m_Terrain;
 	ColorShaderClass* m_ColorShader;
