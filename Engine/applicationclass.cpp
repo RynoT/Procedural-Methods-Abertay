@@ -1,10 +1,8 @@
-////////////////////////////////////////////////////////////////////////////////
-// Filename: applicationclass.cpp
-////////////////////////////////////////////////////////////////////////////////
 #include "applicationclass.h"
 
+#include "game/scene/default_scene.h"
 
-ApplicationClass::ApplicationClass(InputClass *input) : m_Input(input)
+ApplicationClass::ApplicationClass(InputClass *input) : m_Input(input), m_Scene(nullptr)
 {
 	m_Direct3D = 0;
 	m_Camera = 0;
@@ -180,6 +178,8 @@ bool ApplicationClass::Initialize(HINSTANCE hinstance, HWND hwnd, int screenWidt
 		return false;
 	}
 
+	this->m_Scene = new DefaultScene(this->m_Direct3D, hwnd, this->m_Input);
+
 	return true;
 }
 
@@ -262,7 +262,11 @@ void ApplicationClass::Shutdown()
 		m_Direct3D = 0;
 	}
 
-	return;
+	if(this->m_Scene != nullptr)
+	{
+		delete this->m_Scene;
+		this->m_Scene = nullptr;
+	}
 }
 
 
@@ -289,6 +293,11 @@ bool ApplicationClass::Frame()
 		return false;
 	}
 
+	if(this->m_Scene != nullptr)
+	{
+		this->m_Scene->Update(this->m_Timer->GetTime());
+	}
+
 	// Render the graphics.
 	result = RenderGraphics();
 	if(!result)
@@ -301,52 +310,66 @@ bool ApplicationClass::Frame()
 
 bool ApplicationClass::RenderGraphics()
 {
-	D3DXMATRIX worldMatrix, viewMatrix, projectionMatrix, orthoMatrix;
-	bool result;
+	D3DXMATRIX projection;
+	this->m_Direct3D->GetProjectionMatrix(projection);
 
-	// Clear the scene.
-	m_Direct3D->BeginScene(0.0f, 0.0f, 0.0f, 1.0f);
+	this->m_Direct3D->BeginScene(0.0f, 0.0f, 0.0f, 1.0f);
 
-	// Generate the view matrix based on the camera's position.
-	m_Camera->Render();
-
-	// Get the world, view, projection, and ortho matrices from the camera and Direct3D objects.
-	m_Direct3D->GetWorldMatrix(worldMatrix);
-	m_Camera->GetViewMatrix(viewMatrix);
-	m_Direct3D->GetProjectionMatrix(projectionMatrix);
-	m_Direct3D->GetOrthoMatrix(orthoMatrix);
-
-	// Render the terrain buffers.
-	m_Terrain->Render(m_Direct3D->GetDeviceContext());
-
-	// Render the model using the color shader.
-	result = m_ColorShader->Render(m_Direct3D->GetDeviceContext(), m_Terrain->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix);
-	if(!result)
+	if(this->m_Scene != nullptr)
 	{
-		return false;
+		this->m_Scene->Render(this->m_Direct3D, projection);
 	}
 
-	// Turn off the Z buffer to begin all 2D rendering.
-	m_Direct3D->TurnZBufferOff();
-		
-	// Turn on the alpha blending before rendering the text.
-	m_Direct3D->TurnOnAlphaBlending();
-
-	// Render the text user interface elements.
-	result = m_Text->Render(m_Direct3D->GetDeviceContext(), m_FontShader, worldMatrix, orthoMatrix);
-	if(!result)
-	{
-		return false;
-	}
-
-	// Turn off alpha blending after rendering the text.
-	m_Direct3D->TurnOffAlphaBlending();
-
-	// Turn the Z buffer back on now that all 2D rendering has completed.
-	m_Direct3D->TurnZBufferOn();
-
-	// Present the rendered scene to the screen.
-	m_Direct3D->EndScene();
+	this->m_Direct3D->EndScene();
 
 	return true;
+
+	//D3DXMATRIX worldMatrix, viewMatrix, projectionMatrix, orthoMatrix;
+	//bool result;
+
+	//// Clear the scene.
+	//m_Direct3D->BeginScene(0.0f, 0.0f, 0.0f, 1.0f);
+
+	////// Generate the view matrix based on the camera's position.
+	//m_Camera->Render();
+
+	//// Get the world, view, projection, and ortho matrices from the camera and Direct3D objects.
+	//m_Direct3D->GetWorldMatrix(worldMatrix);
+	//m_Camera->GetViewMatrix(viewMatrix);
+	//m_Direct3D->GetProjectionMatrix(projectionMatrix);
+	//m_Direct3D->GetOrthoMatrix(orthoMatrix);
+
+	// Render the terrain buffers.
+	//m_Terrain->Render(m_Direct3D->GetDeviceContext());
+
+	// Render the model using the color shader.
+	//result = m_ColorShader->Render(m_Direct3D->GetDeviceContext(), m_Terrain->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix);
+	//if(!result)
+	//{
+	//	return false;
+	//}
+
+	//// Turn off the Z buffer to begin all 2D rendering.
+	//m_Direct3D->TurnZBufferOff();
+	//	
+	//// Turn on the alpha blending before rendering the text.
+	//m_Direct3D->TurnOnAlphaBlending();
+
+	//// Render the text user interface elements.
+	//result = m_Text->Render(m_Direct3D->GetDeviceContext(), m_FontShader, worldMatrix, orthoMatrix);
+	//if(!result)
+	//{
+	//	return false;
+	//}
+
+	//// Turn off alpha blending after rendering the text.
+	//m_Direct3D->TurnOffAlphaBlending();
+
+	//// Turn the Z buffer back on now that all 2D rendering has completed.
+	//m_Direct3D->TurnZBufferOn();
+
+	// Present the rendered scene to the screen.
+	//m_Direct3D->EndScene();
+
+	//return true;
 }

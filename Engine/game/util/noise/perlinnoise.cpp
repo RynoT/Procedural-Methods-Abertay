@@ -31,7 +31,7 @@ Permutation::Permutation(const int *permArray)
 
 double PerlinNoise::noise(double x, double y, double z)
 {
-	int X = (int)floor(x) & 255, Y = (int)floor(y) & 255, Z = (int)floor(z) & 255;
+	int X = int(floor(x)) & 255, Y = int(floor(y)) & 255, Z = int(floor(z)) & 255;
 	x -= floor(x); y -= floor(y); z -= floor(z);
 
 	const int *p = PerlinNoise::m_Permutation.value;

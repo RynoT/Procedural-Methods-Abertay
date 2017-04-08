@@ -29,10 +29,8 @@ const float SCREEN_NEAR = 0.1f;
 #include "fontshaderclass.h"
 #include "textclass.h"
 
+class Scene;
 
-////////////////////////////////////////////////////////////////////////////////
-// Class name: ApplicationClass
-////////////////////////////////////////////////////////////////////////////////
 class ApplicationClass
 {
 public:
@@ -58,6 +56,8 @@ private:
 	CpuClass* m_Cpu;
 	FontShaderClass* m_FontShader;
 	TextClass* m_Text;
+
+	Scene *m_Scene;
 };
 
 #endif

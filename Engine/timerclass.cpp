@@ -2,7 +2,9 @@
 // Filename: timerclass.cpp
 ///////////////////////////////////////////////////////////////////////////////
 #include "timerclass.h"
+#include <ctime>
 
+unsigned int TimerClass::SeedOffset = unsigned int(time(nullptr));
 
 TimerClass::TimerClass()
 {
@@ -54,8 +56,6 @@ void TimerClass::Frame()
 
 	// Restart the timer.
 	m_startTime = currentTime;
-
-	return;
 }
 
 

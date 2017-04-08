@@ -55,6 +55,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ShowIncludes>false</ShowIncludes>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -72,6 +73,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include</AdditionalIncludeDirectories>
+      <ShowIncludes>false</ShowIncludes>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -90,15 +92,21 @@
     <ClCompile Include="fontclass.cpp" />
     <ClCompile Include="fontshaderclass.cpp" />
     <ClCompile Include="fpsclass.cpp" />
+    <ClCompile Include="game\entity\entity.cpp" />
+    <ClCompile Include="game\entity\model_entity.cpp" />
+    <ClCompile Include="game\entity\Player.cpp" />
     <ClCompile Include="game\scene\default_scene.cpp" />
+    <ClCompile Include="game\world\grid_cell.cpp" />
     <ClCompile Include="game\world\world_grid.cpp" />
     <ClCompile Include="inputclass.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="perlinnoise.cpp" />
+    <ClCompile Include="game\util\noise\perlinnoise.cpp" />
+    <ClCompile Include="modelclass.cpp" />
     <ClCompile Include="positionclass.cpp" />
     <ClCompile Include="game\scene\scene.cpp" />
     <ClCompile Include="systemclass.cpp" />
     <ClCompile Include="terrainclass.cpp" />
+    <ClCompile Include="terrainshaderclass.cpp" />
     <ClCompile Include="textclass.cpp" />
     <ClCompile Include="textureclass.cpp" />
     <ClCompile Include="timerclass.cpp" />
@@ -112,14 +120,20 @@
     <ClInclude Include="fontclass.h" />
     <ClInclude Include="fontshaderclass.h" />
     <ClInclude Include="fpsclass.h" />
+    <ClInclude Include="game\entity\entity.h" />
+    <ClInclude Include="game\entity\model_entity.h" />
+    <ClInclude Include="game\entity\Player.h" />
     <ClInclude Include="game\scene\default_scene.h" />
+    <ClInclude Include="game\world\grid_cell.h" />
     <ClInclude Include="game\world\world_grid.h" />
     <ClInclude Include="inputclass.h" />
-    <ClInclude Include="perlinnoise.h" />
+    <ClInclude Include="game\util\noise\perlinnoise.h" />
+    <ClInclude Include="modelclass.h" />
     <ClInclude Include="positionclass.h" />
     <ClInclude Include="game\scene\scene.h" />
     <ClInclude Include="systemclass.h" />
     <ClInclude Include="terrainclass.h" />
+    <ClInclude Include="terrainshaderclass.h" />
     <ClInclude Include="textclass.h" />
     <ClInclude Include="textureclass.h" />
     <ClInclude Include="timerclass.h" />

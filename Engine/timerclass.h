@@ -26,6 +26,8 @@ public:
 
 	float GetTime();
 
+	static unsigned int SeedOffset;
+
 private:
 	INT64 m_frequency;
 	float m_ticksPerMs;
