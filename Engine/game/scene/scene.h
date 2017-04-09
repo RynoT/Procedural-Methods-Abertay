@@ -2,6 +2,7 @@
 
 #include "../../d3dclass.h"
 
+class Camera;
 class D3DClass;
 class InputClass;
 
@@ -18,7 +19,14 @@ public:
 	virtual void Render(D3DClass* direct, D3DXMATRIX& projection) = 0;
 
 protected:
-	D3DClass *m_Direct3D;
+	void SetCamera(Camera *camera);
 
+	D3DXMATRIX& GetViewMatrix();
+
+	D3DClass *m_Direct3D;
 	InputClass *m_Input;
+
+private:
+	Camera *m_Camera;
+	D3DXMATRIX m_ViewMatrix;
 };

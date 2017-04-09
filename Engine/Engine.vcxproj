@@ -95,7 +95,11 @@
     <ClCompile Include="game\entity\entity.cpp" />
     <ClCompile Include="game\entity\model_entity.cpp" />
     <ClCompile Include="game\entity\Player.cpp" />
+    <ClCompile Include="game\scene\camera\camera_fixed.cpp" />
+    <ClCompile Include="game\scene\camera\camera_fpv.cpp" />
     <ClCompile Include="game\scene\default_scene.cpp" />
+    <ClCompile Include="game\util\math\vector2f.cpp" />
+    <ClCompile Include="game\util\math\vector3f.cpp" />
     <ClCompile Include="game\world\grid_cell.cpp" />
     <ClCompile Include="game\world\world_grid.cpp" />
     <ClCompile Include="inputclass.cpp" />
@@ -109,6 +113,7 @@
     <ClCompile Include="terrainshaderclass.cpp" />
     <ClCompile Include="textclass.cpp" />
     <ClCompile Include="textureclass.cpp" />
+    <ClCompile Include="textureshaderclass.cpp" />
     <ClCompile Include="timerclass.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -123,7 +128,12 @@
     <ClInclude Include="game\entity\entity.h" />
     <ClInclude Include="game\entity\model_entity.h" />
     <ClInclude Include="game\entity\Player.h" />
+    <ClInclude Include="game\scene\camera\camera.h" />
+    <ClInclude Include="game\scene\camera\camera_fixed.h" />
+    <ClInclude Include="game\scene\camera\camera_fpv.h" />
     <ClInclude Include="game\scene\default_scene.h" />
+    <ClInclude Include="game\util\math\vector2f.h" />
+    <ClInclude Include="game\util\math\vector3f.h" />
     <ClInclude Include="game\world\grid_cell.h" />
     <ClInclude Include="game\world\world_grid.h" />
     <ClInclude Include="inputclass.h" />
@@ -136,6 +146,7 @@
     <ClInclude Include="terrainshaderclass.h" />
     <ClInclude Include="textclass.h" />
     <ClInclude Include="textureclass.h" />
+    <ClInclude Include="textureshaderclass.h" />
     <ClInclude Include="timerclass.h" />
   </ItemGroup>
   <ItemGroup>

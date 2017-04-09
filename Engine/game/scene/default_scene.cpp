@@ -3,6 +3,7 @@
 #include "../entity/player.h"
 #include "../world/world_grid.h"
 #include "../../textureshaderclass.h"
+#include "camera/camera_fixed.h"
 
 #define GRID_WORLD_SIZE 50.0f
 
@@ -15,6 +16,8 @@ DefaultScene::DefaultScene(D3DClass *d3d, const HWND& hwnd, InputClass *input) :
 
 	this->m_WorldGrid = new WorldGrid(GRID_WORLD_SIZE);
 	this->m_WorldGrid->SetShader(this->m_TextureShader);
+
+	this->SetState(GameState::Map);
 }
 
 DefaultScene::~DefaultScene()
@@ -34,6 +37,15 @@ DefaultScene::~DefaultScene()
 		this->m_TextureShader->Shutdown();
 		delete this->m_TextureShader;
 		this->m_TextureShader = nullptr;
+	}
+}
+
+void DefaultScene::SetState(const GameState& state)
+{
+	this->m_State = state;
+	if(state == GameState::Map)
+	{
+		Scene::SetCamera(new CameraFixed);
 	}
 }
 
