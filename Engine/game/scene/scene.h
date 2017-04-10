@@ -14,7 +14,7 @@ protected:
 public:
 	virtual ~Scene();
 
-	virtual void Update(const float& delta) = 0;
+	virtual void Update(const float& delta);
 
 	virtual void Render(D3DClass* direct, const D3DXMATRIX& projection) = 0;
 

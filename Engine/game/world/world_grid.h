@@ -18,8 +18,6 @@ public:
 
 	void Update(D3DClass *d3d, const float& worldX, const float& worldY);
 
-	void RenderCell(ModelEntity *model, D3DClass* direct, const D3DXMATRIX& projection, const D3DXMATRIX& view);
-
 	void Render(D3DClass* direct, const D3DXMATRIX& projection, const D3DXMATRIX& view) const;
 
 	inline const int& GetGridSize() const { return this->m_GridSize; }

@@ -48,10 +48,6 @@ void WorldGrid::Update(D3DClass *d3d, const float& worldX, const float& worldY)
 	}
 }
 
-void WorldGrid::RenderCell(ModelEntity* model, D3DClass* direct, const D3DXMATRIX& projection, const D3DXMATRIX& view)
-{
-}
-
 void WorldGrid::Render(D3DClass* direct, const D3DXMATRIX& projection, const D3DXMATRIX& view) const
 {
 	if(this->m_Shader == nullptr)

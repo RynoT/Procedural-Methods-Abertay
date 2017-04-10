@@ -308,7 +308,7 @@ bool ApplicationClass::Frame()
 	return result;
 }
 
-bool ApplicationClass::RenderGraphics()
+bool ApplicationClass::RenderGraphics() const
 {
 	D3DXMATRIX projection;
 	this->m_Direct3D->GetProjectionMatrix(projection);

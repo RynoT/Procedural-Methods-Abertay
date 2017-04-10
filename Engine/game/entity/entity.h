@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../d3dclass.h"
+#include "../util/math/vector3f.h"
 
 class Entity
 {
@@ -24,6 +24,14 @@ public:
 		this->m_Position.x = x; this->m_Position.y = y; this->m_Position.z = z;
 	}
 
+	inline void SetScale(const float& xyz) { this->SetScale(xyz, xyz, xyz); }
+
+	inline void SetScale(const float& x, const float& y, const float& z)
+	{
+		this->m_bModelDirty = true;
+		this->m_Scale.x = x; this->m_Scale.y = y; this->m_Scale.z = z;
+	}
+
 	inline void SetRotation(const float& x, const float& y, const float& z)
 	{
 		this->m_bModelDirty = true;
@@ -34,5 +42,5 @@ private:
 	bool m_bModelDirty;
 	D3DXMATRIX m_ModelMatrix;
 
-	D3DXVECTOR3 m_Position, m_Rotation;
+	Vector3f m_Position, m_Scale, m_Rotation;
 };

@@ -17,8 +17,16 @@ public:
 
 	inline const Vector3f& GetPosition() const { return this->m_Position; }
 
-	inline void SetPosition(const float& x, const float& y, const float& z) { this->m_Position.set(x, y, z); this->m_bViewDirty = true; }
-	inline void Translate(float dx, float dy, float dz) { this->SetPosition(this->m_Position.x + dx, this->m_Position.y + dy, this->m_Position.z + dz); }
+	virtual void SetPosition(const float& x, const float& y, const float& z)
+	{
+		this->SetViewAsDirty();
+		this->m_Position.set(x, y, z); 
+	}
+
+	virtual void Translate(const float& dx, const float& dy, const float& dz)
+	{
+		this->SetPosition(this->m_Position.x + dx, this->m_Position.y + dy, this->m_Position.z + dz);
+	}
 
 	inline const Vector3f& operator+=(const Vector3f& vector) { this->Translate(vector.x, vector.y, vector.z); return this->m_Position; }
 

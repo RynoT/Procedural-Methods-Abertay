@@ -14,7 +14,7 @@ InputClass::~InputClass()
 void InputClass::Initialize()
 {
 	// Initialize all the keys to being released and not pressed.
-	for (int i = 0; i < 256; i++)
+	for (int i = 0; i < KEY_COUNT; i++)
 	{
 		m_keys[i] = false;
 	}
@@ -22,6 +22,10 @@ void InputClass::Initialize()
 
 void InputClass::KeyDown(unsigned int input)
 {
+	if(input >= KEY_COUNT)
+	{
+		return;
+	}
 	// If a key is pressed then save that state in the key array.
 	m_keys[input] = true;
 	return;
@@ -29,6 +33,10 @@ void InputClass::KeyDown(unsigned int input)
 
 void InputClass::KeyUp(unsigned int input)
 {
+	if (input >= KEY_COUNT)
+	{
+		return;
+	}
 	// If a key is released then clear that state in the key array.
 	m_keys[input] = false;
 	return;
@@ -36,6 +44,10 @@ void InputClass::KeyUp(unsigned int input)
 
 bool InputClass::IsKeyDown(unsigned int key)
 {
+	if (key >= KEY_COUNT)
+	{
+		return false;
+	}
 	// Return what state the key is in (pressed/not pressed).
 	return m_keys[key];
 }

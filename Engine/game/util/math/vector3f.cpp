@@ -16,3 +16,12 @@ float Vector3f::GetLengthSq() const
 {
 	return Vector2f::GetLengthSq() + this->z * this->z;
 }
+
+Vector3f Vector3f::cross(const Vector3f& target) const
+{
+	return{
+		this->y * target.z - this->z * target.y,
+		-(this->x * target.z - this->z * target.x),
+		this->x * target.y - this->y * target.x
+	};
+}

@@ -39,6 +39,9 @@ void GridCell::GenerateIsland(D3DClass *d3d, const int& x, const int& y, const f
 	float rx = radius + (size - radius * 2.0f) * pseudo_random(), ry = radius + (size - radius * 2.0f) * pseudo_random();
 
 	this->m_Model = new ModelEntity;
+	this->m_Model->SetScale(radius);
+	//this->m_Model->SetPosition(20, 1, 0);
+	this->m_Model->SetPosition(x * size + rx, y * size + ry, 0.0f);
 	this->m_Model->SetFrom(d3d->GetDevice(), "data/models/cube.txt", L"data/models/seafloor.dds");
 	this->m_Model->SetRenderMethod([this](D3DClass* direct, const D3DXMATRIX& projection,
 		const D3DXMATRIX& view, const D3DXMATRIX& model)->void { this->Render(direct, projection, view, model); });
