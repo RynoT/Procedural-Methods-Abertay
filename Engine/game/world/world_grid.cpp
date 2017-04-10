@@ -18,6 +18,15 @@ WorldGrid::~WorldGrid()
 	}
 }
 
+void WorldGrid::SetShader(TextureShaderClass* shader)
+{
+	this->m_Shader = shader;
+	for(int i = 0; i < this->m_GridSize * this->m_GridSize; i++)
+	{
+		this->m_Cells[i].SetShader(shader);
+	}
+}
+
 void WorldGrid::Update(D3DClass *d3d, const float& worldX, const float& worldY)
 {
 	int x = this->GetGridCoord(worldX), y = this->GetGridCoord(worldY);
@@ -37,6 +46,10 @@ void WorldGrid::Update(D3DClass *d3d, const float& worldX, const float& worldY)
 		}
 		this->m_bDirty = false;
 	}
+}
+
+void WorldGrid::RenderCell(ModelEntity* model, D3DClass* direct, const D3DXMATRIX& projection, const D3DXMATRIX& view)
+{
 }
 
 void WorldGrid::Render(D3DClass* direct, const D3DXMATRIX& projection, const D3DXMATRIX& view) const

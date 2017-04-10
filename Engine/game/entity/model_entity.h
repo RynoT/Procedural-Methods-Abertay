@@ -7,6 +7,9 @@
 class D3DClass;
 class ModelClass;
 
+// Direct3D, projection, view, model
+typedef std::function<void(D3DClass*, const D3DXMATRIX&, const D3DXMATRIX&, const D3DXMATRIX&)> RenderMethod;
+
 class ModelEntity : public Entity
 {
 public:
@@ -17,11 +20,13 @@ public:
 
 	virtual void Update(const float& delta) override { }
 
-	virtual void Render(D3DClass *direct, const  D3DXMATRIX& projection, const D3DXMATRIX& view);
+	virtual void Render(D3DClass *direct, const D3DXMATRIX& projection, const D3DXMATRIX& view);
 
-	inline void SetRenderMethod(std::function<void(ModelEntity*)> method) { this->m_RenderMethod = method; }
+	inline ModelClass* GetInternalModelClass() const { return this->m_Model; }
+
+	inline void SetRenderMethod(RenderMethod method) { this->m_RenderMethod = method; }
 
 private:
 	ModelClass *m_Model;
-	std::function<void(ModelEntity*)> m_RenderMethod;
+	RenderMethod m_RenderMethod;
 };

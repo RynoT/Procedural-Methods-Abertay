@@ -34,5 +34,5 @@ void ModelEntity::Render(D3DClass* direct, const D3DXMATRIX& projection, const D
 	}
 	const D3DXMATRIX& model = Entity::GetModelMatrix();
 	this->m_Model->Render(direct->GetDeviceContext());
-	this->m_RenderMethod(this);
+	this->m_RenderMethod(direct, projection, view, model);
 }

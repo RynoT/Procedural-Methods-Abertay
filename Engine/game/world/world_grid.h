@@ -14,13 +14,15 @@ public:
 	WorldGrid(const float& worldSize, const int& size = WORLD_GRID_DEFAULT_SIZE);
 	~WorldGrid();
 
+	void SetShader(TextureShaderClass *shader);
+
 	void Update(D3DClass *d3d, const float& worldX, const float& worldY);
+
+	void RenderCell(ModelEntity *model, D3DClass* direct, const D3DXMATRIX& projection, const D3DXMATRIX& view);
 
 	void Render(D3DClass* direct, const D3DXMATRIX& projection, const D3DXMATRIX& view) const;
 
 	inline const int& GetGridSize() const { return this->m_GridSize; }
-
-	inline void SetShader(TextureShaderClass *shader) { this->m_Shader = shader; }
 
 protected:
 	inline float GetWorldOffset() const { return (this->m_WorldSize * this->m_GridSize) / 2.0f; }
