@@ -16,12 +16,12 @@ public:
 
 	virtual void Update(const float& delta) = 0;
 
-	virtual void Render(D3DClass* direct, D3DXMATRIX& projection) = 0;
+	virtual void Render(D3DClass* direct, const D3DXMATRIX& projection) = 0;
 
 protected:
 	void SetCamera(Camera *camera);
 
-	D3DXMATRIX& GetViewMatrix();
+	inline Camera* GetCamera() const { return this->m_Camera; }
 
 	D3DClass *m_Direct3D;
 	InputClass *m_Input;

@@ -23,7 +23,3 @@ void Scene::SetCamera(Camera* camera)
 	}
 	this->m_Camera = camera;
 }
-
-D3DXMATRIX& Scene::GetViewMatrix()
-{
-}

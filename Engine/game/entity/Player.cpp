@@ -6,5 +6,4 @@ Player::Player()
 
 void Player::Update(const float& delta)
 {
-
 }

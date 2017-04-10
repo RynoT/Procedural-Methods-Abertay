@@ -17,7 +17,7 @@ public:
 
 	virtual void Update(const float& delta) override { }
 
-	virtual void Render(D3DClass *direct, D3DXMATRIX& projection, D3DXMATRIX& view);
+	virtual void Render(D3DClass *direct, const  D3DXMATRIX& projection, const D3DXMATRIX& view);
 
 	inline void SetRenderMethod(std::function<void(ModelEntity*)> method) { this->m_RenderMethod = method; }
 

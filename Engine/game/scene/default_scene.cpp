@@ -57,6 +57,13 @@ void DefaultScene::Update(const float& delta)
 	this->m_WorldGrid->Update(Scene::m_Direct3D, position.x, position.z);
 }
 
-void DefaultScene::Render(D3DClass* direct, D3DXMATRIX& projection)
+void DefaultScene::Render(D3DClass* direct, const D3DXMATRIX& projection)
 {
+	Camera *camera = Scene::GetCamera();
+	if(camera == nullptr)
+	{
+		return;
+	}
+	const D3DXMATRIX& view = camera->GetViewMatrix();
+	this->m_WorldGrid->Render(direct, projection, view);
 }

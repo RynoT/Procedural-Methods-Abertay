@@ -8,5 +8,4 @@ public:
 	Player();
 
 	virtual void Update(const float& delta) override;
-
 };

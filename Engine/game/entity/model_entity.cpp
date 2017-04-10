@@ -26,7 +26,7 @@ bool ModelEntity::SetFrom(ID3D11Device* device, char* modelPath, WCHAR* textureP
 	return this->m_Model->Initialize(device, modelPath, texturePath);
 }
 
-void ModelEntity::Render(D3DClass* direct, D3DXMATRIX& projection, D3DXMATRIX& view)
+void ModelEntity::Render(D3DClass* direct, const D3DXMATRIX& projection, const D3DXMATRIX& view)
 {
 	if(this->m_Model == nullptr || this->m_RenderMethod == nullptr)
 	{

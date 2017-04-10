@@ -22,7 +22,7 @@ public:
 
 	virtual void Update(const float& delta) override;
 
-	virtual void Render(D3DClass* direct, D3DXMATRIX& projection) override;
+	virtual void Render(D3DClass* direct, const D3DXMATRIX& projection) override;
 
 private:
 	GameState m_State;
