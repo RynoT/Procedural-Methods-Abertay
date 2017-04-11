@@ -7,9 +7,10 @@
 #include "../../modelclass.h"
 #include "../entity/model_entity.h"
 #include "../../textureshaderclass.h"
+#include "../util/noise/perlinnoise.h"
 
-#define MIN_ISLAND_RADIUS_PERC 0.1f
-#define MAX_ISLAND_RADIUS_PERC 0.45f
+#define MIN_ISLAND_RADIUS_PERC 0.08f
+#define MAX_ISLAND_RADIUS_PERC 0.32f
 
 #define MIN_ISLAND_RADIUS (size * MIN_ISLAND_RADIUS_PERC)
 #define MAX_ISLAND_RADIUS (size * MAX_ISLAND_RADIUS_PERC)
@@ -17,7 +18,7 @@
 #define pseudo_seed(x, y) srand(TimerClass::SeedOffset + (x << 16 | y))
 #define pseudo_random() (rand() / float(RAND_MAX)) // Random number between 0-1
 
-GridCell::GridCell() : m_CellX(0), m_CellY(0), m_Model(nullptr), m_Shader(nullptr)
+GridCell::GridCell() : m_CellX(-1), m_CellY(-1), m_Model(nullptr), m_Shader(nullptr)
 {
 }
 
@@ -33,14 +34,15 @@ void GridCell::GenerateIsland(D3DClass *d3d, const int& x, const int& y, const f
 	pseudo_seed(x, y);
 
 	// Generate random radius for island
-	float radius = MIN_ISLAND_RADIUS + (MAX_ISLAND_RADIUS - MIN_ISLAND_RADIUS) * pseudo_random();
+	float radius = MIN_ISLAND_RADIUS + (MAX_ISLAND_RADIUS - MIN_ISLAND_RADIUS) * round(pseudo_random());
 
 	// Generate relative position within grid according to size and radius
 	float rx = radius + (size - radius * 2.0f) * pseudo_random(), ry = radius + (size - radius * 2.0f) * pseudo_random();
+	rx = ry = 0.0f;
 
 	this->m_Model = new ModelEntity;
+	//this->m_Model->SetScale(10.0f);
 	this->m_Model->SetScale(radius);
-	//this->m_Model->SetPosition(20, 1, 0);
 	this->m_Model->SetPosition(x * size + rx, y * size + ry, 0.0f);
 	this->m_Model->SetFrom(d3d->GetDevice(), "data/models/cube.txt", L"data/models/seafloor.dds");
 	this->m_Model->SetRenderMethod([this](D3DClass* direct, const D3DXMATRIX& projection,

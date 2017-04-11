@@ -12,6 +12,8 @@ class PerlinNoise
 	PerlinNoise() { }
 
 public:
+	static double noise(double x, double y);
+
 	static double noise(double x, double y, double z);
 
 private:

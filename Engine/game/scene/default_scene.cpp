@@ -7,12 +7,12 @@
 #include "camera/camera_fixed.h"
 #include "camera/camera_axis.h"
 
-#define GRID_WORLD_SIZE 50.0f
+#define GRID_WORLD_SIZE 9000.0f
 
-#define CAMERA_SPEED 1.0f
+#define CAMERA_SPEED 10.0f
 
 DefaultScene::DefaultScene(D3DClass *d3d, const HWND& hwnd, InputClass *input) : Scene(d3d, hwnd, input)
-{	
+{
 	this->m_TextureShader = new TextureShaderClass;
 	this->m_TextureShader->Initialize(d3d->GetDevice(), hwnd);
 
@@ -26,17 +26,17 @@ DefaultScene::DefaultScene(D3DClass *d3d, const HWND& hwnd, InputClass *input) :
 
 DefaultScene::~DefaultScene()
 {
-	if(this->m_Player != nullptr)
+	if (this->m_Player != nullptr)
 	{
 		delete this->m_Player;
 		this->m_Player = nullptr;
 	}
-	if(this->m_WorldGrid != nullptr)
+	if (this->m_WorldGrid != nullptr)
 	{
 		delete this->m_WorldGrid;
 		this->m_WorldGrid = nullptr;
 	}
-	if(this->m_TextureShader != nullptr)
+	if (this->m_TextureShader != nullptr)
 	{
 		this->m_TextureShader->Shutdown();
 		delete this->m_TextureShader;
@@ -47,10 +47,10 @@ DefaultScene::~DefaultScene()
 void DefaultScene::SetState(const GameState& state)
 {
 	this->m_State = state;
-	if(state == GameState::Map)
+	if (state == GameState::Map)
 	{
 		CameraAxis *camera = new CameraAxis;
-		camera->Translate(0.0f, 0.0f, -200.0f);
+		camera->Translate(0.0f, 0.0f, -GRID_WORLD_SIZE * 5.0f);
 		//camera->SetPoints(Vector3f(0.0f, 0.0f, -200.0f), Vector3f(0.0f));
 		Scene::SetCamera(camera);
 	}
@@ -66,7 +66,7 @@ void DefaultScene::Update(const float& delta)
 	this->m_WorldGrid->Update(Scene::m_Direct3D, position.x, position.z);
 
 	InputClass *input = Scene::m_Input;
-	if(this->m_State == GameState::Map)
+	if (this->m_State == GameState::Map)
 	{
 		Camera *camera = Scene::GetCamera();
 		if (input->IsKeyDown(VK_W))
@@ -81,9 +81,17 @@ void DefaultScene::Update(const float& delta)
 		{
 			camera->Translate(0.0f, -CAMERA_SPEED * delta, 0.0f);
 		}
-		if(input->IsKeyDown(VK_D))
+		if (input->IsKeyDown(VK_D))
 		{
 			camera->Translate(CAMERA_SPEED * delta, 0.0f, 0.0f);
+		}
+		if (input->IsKeyDown(VK_Q))
+		{
+			camera->Translate(0.0f, 0.0f, -CAMERA_SPEED * delta);
+		}
+		if (input->IsKeyDown(VK_E))
+		{
+			camera->Translate(0.0f, 0.0f, CAMERA_SPEED * delta);
 		}
 	}
 }
@@ -91,7 +99,7 @@ void DefaultScene::Update(const float& delta)
 void DefaultScene::Render(D3DClass* direct, const D3DXMATRIX& projection)
 {
 	Camera *camera = Scene::GetCamera();
-	if(camera == nullptr)
+	if (camera == nullptr)
 	{
 		return;
 	}

@@ -29,6 +29,11 @@ Permutation::Permutation(const int *permArray)
 	}
 }
 
+double PerlinNoise::noise(double x, double y)
+{
+	return PerlinNoise::noise(x, y, 0.0f);
+}
+
 double PerlinNoise::noise(double x, double y, double z)
 {
 	int X = int(floor(x)) & 255, Y = int(floor(y)) & 255, Z = int(floor(z)) & 255;
