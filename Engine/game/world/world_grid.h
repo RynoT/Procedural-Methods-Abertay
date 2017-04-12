@@ -1,6 +1,6 @@
 #pragma once
 
-#define WORLD_GRID_DEFAULT_SIZE 5
+#define WORLD_GRID_DEFAULT_SIZE 9
 
 #include "grid_cell.h"
 #include "../../d3dclass.h"

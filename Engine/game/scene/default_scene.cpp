@@ -61,8 +61,8 @@ void DefaultScene::Update(const float& delta)
 
 	this->m_Player->Update(delta);
 
-	const D3DXVECTOR3& position = this->m_Player->GetPosition();
-	this->m_WorldGrid->Update(Scene::m_Direct3D, position.x, position.z);
+	const Vector3f& position = this->m_Player->GetPosition();
+	this->m_WorldGrid->Update(Scene::m_Direct3D, position.x, position.y);
 
 	InputClass *input = Scene::m_Input;
 	if (this->m_State == GameState::Map)
@@ -92,6 +92,7 @@ void DefaultScene::Update(const float& delta)
 		{
 			camera->Translate(0.0f, 0.0f, CAMERA_SPEED * delta);
 		}
+		this->m_Player->SetPosition(VECTOR3_SPLIT(camera->GetPosition()));
 	}
 }
 

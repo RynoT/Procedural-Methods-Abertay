@@ -14,9 +14,9 @@ public:
 
 	virtual void Update(const float& delta) = 0;
 
-	inline const D3DXVECTOR3& GetPosition() const { return this->m_Position; }
+	inline const Vector3f& GetPosition() const { return this->m_Position; }
 
-	inline const D3DXVECTOR3& GetRotation() const { return this->m_Rotation; }
+	inline const Vector3f& GetRotation() const { return this->m_Rotation; }
 
 	inline void SetPosition(const float& x, const float& y, const float& z) 
 	{ 
