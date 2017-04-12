@@ -2,12 +2,11 @@
 
 #include "../../inputclass.h"
 #include "../entity/player.h"
+#include "camera/camera_axis.h"
 #include "../world/world_grid.h"
 #include "../../textureshaderclass.h"
-#include "camera/camera_fixed.h"
-#include "camera/camera_axis.h"
 
-#define GRID_WORLD_SIZE 9000.0f
+#define GRID_WORLD_SIZE 20000.0f
 
 #define CAMERA_SPEED 10.0f
 

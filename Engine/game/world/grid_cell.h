@@ -20,5 +20,7 @@ struct GridCell
 	ModelEntity *m_Model;
 
 private:
+	static int Hash(const int& x, const int& y);
+
 	TextureShaderClass *m_Shader;
 };
