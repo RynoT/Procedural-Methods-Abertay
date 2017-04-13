@@ -95,6 +95,9 @@
     <ClCompile Include="game\entity\entity.cpp" />
     <ClCompile Include="game\entity\model_entity.cpp" />
     <ClCompile Include="game\entity\player.cpp" />
+    <ClCompile Include="game\model\file_model.cpp" />
+    <ClCompile Include="game\model\generated\path_model.cpp" />
+    <ClCompile Include="game\model\model.cpp" />
     <ClCompile Include="game\scene\camera\camera.cpp" />
     <ClCompile Include="game\scene\camera\camera_axis.cpp" />
     <ClCompile Include="game\scene\camera\camera_fixed.cpp" />
@@ -130,6 +133,10 @@
     <ClInclude Include="game\entity\entity.h" />
     <ClInclude Include="game\entity\model_entity.h" />
     <ClInclude Include="game\entity\player.h" />
+    <ClInclude Include="game\model\file_model.h" />
+    <ClInclude Include="game\model\generated\path_model.h" />
+    <ClInclude Include="game\model\model.h" />
+    <ClInclude Include="game\model\generated\island_model.h" />
     <ClInclude Include="game\scene\camera\camera.h" />
     <ClInclude Include="game\scene\camera\camera_axis.h" />
     <ClInclude Include="game\scene\camera\camera_fixed.h" />

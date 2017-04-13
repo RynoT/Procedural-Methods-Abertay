@@ -4,8 +4,8 @@
 
 #include <functional>
 
+class Model;
 class D3DClass;
-class ModelClass;
 
 // Direct3D, projection, view, model
 typedef std::function<void(D3DClass*, const D3DXMATRIX&, const D3DXMATRIX&, const D3DXMATRIX&)> RenderMethod;
@@ -22,11 +22,11 @@ public:
 
 	virtual void Render(D3DClass *direct, const D3DXMATRIX& projection, const D3DXMATRIX& view);
 
-	inline ModelClass* GetInternalModelClass() const { return this->m_Model; }
+	inline Model* GetInternalModel() const { return this->m_Model; }
 
 	inline void SetRenderMethod(RenderMethod method) { this->m_RenderMethod = method; }
 
 private:
-	ModelClass *m_Model;
+	Model *m_Model;
 	RenderMethod m_RenderMethod;
 };

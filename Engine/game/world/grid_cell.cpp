@@ -2,6 +2,7 @@
 
 #include <cstdlib>
 
+#include "../model/model.h"
 #include "../../d3dclass.h"
 #include "../../timerclass.h"
 #include "../../modelclass.h"
@@ -14,12 +15,12 @@
 //#define MIN_ISLAND_RADIUS (size * MIN_ISLAND_RADIUS_PERC)
 //#define MAX_ISLAND_RADIUS (size * MAX_ISLAND_RADIUS_PERC)
 
-#define ISLAND_SPAWN_CHANCE 0.35f //spawns every x percent
+#define ISLAND_SPAWN_CHANCE 1.0f//0.35f //spawns every x percent
 #define ISLAND_BORDER_OFFSET 100.0f
 #define MAX_ISLAND_RADIUS 1000.0f
 #define MIN_ISLAND_RADIUS 5000.0f
 
-#define CENTER_ALL_ISLANDS false
+#define CENTER_ALL_ISLANDS true//false
 
 #define SEED TimerClass::SeedOffset // Use time as seed
 
@@ -89,6 +90,6 @@ void GridCell::Render(D3DClass* direct, const D3DXMATRIX& projection, const D3DX
 	{
 		return;
 	}
-	ModelClass *modelClass = this->m_Model->GetInternalModelClass();
-	this->m_Shader->Render(direct->GetDeviceContext(), modelClass->GetIndexCount(), model, view, projection, modelClass->GetTexture());
+	Model *imodel = this->m_Model->GetInternalModel();
+	this->m_Shader->Render(direct->GetDeviceContext(), imodel->GetIndexCount(), model, view, projection, imodel->GetTexture());
 }

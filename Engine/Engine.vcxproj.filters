@@ -114,6 +114,15 @@
     <ClCompile Include="game\scene\camera\camera_axis.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="game\model\generated\path_model.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="game\model\model.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="game\model\file_model.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="applicationclass.h">
@@ -210,6 +219,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="game\scene\camera\camera_axis.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="game\model\model.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="game\model\generated\island_model.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="game\model\generated\path_model.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="game\model\file_model.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

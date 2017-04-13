@@ -80,19 +80,6 @@ void WorldGrid::Update(D3DClass *d3d, const float& worldX, const float& worldY)
 				cell.GenerateIsland(d3d, this->m_WorldSize);
 			}
 		}
-
-		//for (int i = 0; i < this->m_GridSize * this->m_GridSize; i++)
-		//{
-		//	GridCell& cell = this->m_Cells[i];
-		//	int cx = i % this->m_GridSize - this->m_GridSize / 2, cy = i / this->m_GridSize - this->m_GridSize / 2;
-		//	if (!cell.IsReady() || cell.m_CellX != cx || cell.m_CellY != cy)
-		//	{
-		//		cell.m_CellX = cx;
-		//		cell.m_CellY = cy;
-
-		//		this->m_Cells[i].GenerateIsland(d3d, cx, cy, this->m_WorldSize);
-		//	}
-		//}
 		this->m_bDirty = false;
 	}
 }
