@@ -2,7 +2,7 @@
 
 #include <fstream>
 
-Model::Model() : m_ModelData(nullptr), m_Texture(nullptr), m_VertexCount(0),
+Model::Model() : m_Mesh(nullptr), m_Texture(nullptr), m_VertexCount(0),
 m_IndexCount(0), m_VertexBuffer(nullptr), m_IndexBuffer(nullptr)
 {
 }
@@ -25,10 +25,10 @@ Model::~Model()
 		delete m_Texture;
 		this->m_Texture = nullptr;
 	}
-	if (this->m_ModelData != nullptr)
+	if (this->m_Mesh != nullptr)
 	{
-		delete[] this->m_ModelData;
-		this->m_ModelData = nullptr;
+		delete this->m_Mesh;
+		this->m_Mesh = nullptr;
 	}
 }
 
@@ -50,15 +50,21 @@ void Model::Render(ID3D11DeviceContext* context) const
 
 bool Model::Initialize(ID3D11Device *device)
 {
+	if(this->m_Mesh == nullptr)
+	{
+		return false;
+	}
+
 	HRESULT result;
 	VertexType *vertices = new VertexType[this->m_VertexCount];
 	unsigned long *indices = new unsigned long[this->m_IndexCount];
 
 	// Load the vertex array and index array with data.
+	ModelData *data = this->m_Mesh->GetModelData();
 	for (int i = 0; i < this->m_VertexCount; i++)
 	{
-		vertices[i].position = D3DXVECTOR3(this->m_ModelData[i].x, this->m_ModelData[i].y, this->m_ModelData[i].z);
-		vertices[i].texture = D3DXVECTOR2(this->m_ModelData[i].tu, this->m_ModelData[i].tv);
+		vertices[i].position = D3DXVECTOR3(data[i].x, data[i].y, data[i].z);
+		vertices[i].texture = D3DXVECTOR2(data[i].tu, data[i].tv);
 
 		indices[i] = i;
 	}
@@ -150,7 +156,7 @@ bool Model::LoadModelFromFile(char* path)
 	this->m_IndexCount = this->m_VertexCount;
 
 	// Create the model using the vertex count that was read in.
-	this->m_ModelData = new ModelData[m_VertexCount];
+	this->m_Mesh = new ModelMesh(this->m_VertexCount);
 
 	// Read up to the beginning of the data.
 	fin.get(input);
@@ -162,11 +168,12 @@ bool Model::LoadModelFromFile(char* path)
 	fin.get(input);
 
 	// Read in the vertex data.
+	ModelData *data = this->m_Mesh->GetModelData();
 	for (int i = 0; i < this->m_VertexCount; i++)
 	{
-		fin >> this->m_ModelData[i].x >> this->m_ModelData[i].y >> this->m_ModelData[i].z;
-		fin >> this->m_ModelData[i].tu >> this->m_ModelData[i].tv;
-		fin >> this->m_ModelData[i].nx >> this->m_ModelData[i].ny >> this->m_ModelData[i].nz;
+		fin >> data[i].x >> data[i].y >> data[i].z;
+		fin >> data[i].tu >> data[i].tv;
+		fin >> data[i].nx >> data[i].ny >> data[i].nz;
 	}
 
 	// Close the model file.

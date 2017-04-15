@@ -123,6 +123,18 @@
     <ClCompile Include="game\model\file_model.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="game\entity\path.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="game\model\model_mesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="game\model\collision\collision.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="game\model\collision\aabb.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="applicationclass.h">
@@ -231,6 +243,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="game\model\file_model.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="game\entity\path.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="game\model\model_mesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="game\model\collision\collision.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="game\model\collision\aabb.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
