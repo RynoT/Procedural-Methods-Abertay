@@ -3,51 +3,15 @@
 ////////////////////////////////////////////////////////////////////////////////
 #include "inputclass.h"
 
-InputClass::InputClass()
+InputClass::InputClass(): m_MouseX(0), m_MouseY(0), m_Left(false), m_Right(false)
 {
-}
-
-InputClass::~InputClass()
-{
-}
-
-void InputClass::Initialize()
-{
-	// Initialize all the keys to being released and not pressed.
-	for (int i = 0; i < KEY_COUNT; i++)
+	for (int i = 0; i < KEY_COUNT; i++) //set all keys to false on initialization
 	{
-		m_keys[i] = false;
+		this->m_Keys[i] = false;
 	}
 }
 
-void InputClass::KeyDown(unsigned int input)
+void InputClass::Update()
 {
-	if(input >= KEY_COUNT)
-	{
-		return;
-	}
-	// If a key is pressed then save that state in the key array.
-	m_keys[input] = true;
-	return;
-}
-
-void InputClass::KeyUp(unsigned int input)
-{
-	if (input >= KEY_COUNT)
-	{
-		return;
-	}
-	// If a key is released then clear that state in the key array.
-	m_keys[input] = false;
-	return;
-}
-
-bool InputClass::IsKeyDown(unsigned int key)
-{
-	if (key >= KEY_COUNT)
-	{
-		return false;
-	}
-	// Return what state the key is in (pressed/not pressed).
-	return m_keys[key];
+	this->m_Pressed.clear();
 }

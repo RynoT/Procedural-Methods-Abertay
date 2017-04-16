@@ -1,8 +1,6 @@
-////////////////////////////////////////////////////////////////////////////////
-// Filename: inputclass.h
-////////////////////////////////////////////////////////////////////////////////
-#ifndef _INPUTCLASS_H_
-#define _INPUTCLASS_H_
+#pragma once
+
+#include <vector>
 
 #define KEY_COUNT 256
 
@@ -22,24 +20,33 @@
 
 #define VK_SPACE 0x20
 
-////////////////////////////////////////////////////////////////////////////////
-// Class name: InputClass
-////////////////////////////////////////////////////////////////////////////////
+enum class MouseButton
+{
+	LEFT, RIGHT
+};
+
 class InputClass
 {
 public:
 	InputClass();
-	~InputClass();
 
-	void Initialize();
+	void Update();
 
-	void KeyDown(unsigned int);
-	void KeyUp(unsigned int);
+	inline const int& GetMouseX() const { return this->m_MouseX; }
+	inline const int& GetMouseY() const { return this->m_MouseY; }
 
-	bool IsKeyDown(unsigned int);
+	inline bool IsKeyPressed(unsigned int key) const { return std::find(this->m_Pressed.begin(), this->m_Pressed.end(), key) != this->m_Pressed.end(); }
+	inline const bool& IsKeyDown(unsigned int key) const { return this->m_Keys[key]; }
+	inline const bool& IsMouseDown(const MouseButton& button) const { return button == MouseButton::RIGHT ? this->m_Right : this->m_Left; }
+
+	inline void SetKey(unsigned int key, bool value) { this->m_Keys[key] = value; if (!value) this->m_Pressed.push_back(key); }
+	inline void SetMouseButton(bool left, bool down) { if (left) this->m_Left = down; else this->m_Right = down; }
+	inline void SetMousePosition(int x, int y) { this->m_MouseX = x; this->m_MouseY = y; }
 
 private:
-	bool m_keys[KEY_COUNT];
-};
+	bool m_Keys[KEY_COUNT];
+	std::vector<unsigned int> m_Pressed;
 
-#endif
+	int m_MouseX, m_MouseY;
+	bool m_Left, m_Right;
+};
