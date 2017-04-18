@@ -3,7 +3,6 @@
 #include "../../d3dclass.h"
 
 class Camera;
-class D3DClass;
 class InputClass;
 
 class Scene

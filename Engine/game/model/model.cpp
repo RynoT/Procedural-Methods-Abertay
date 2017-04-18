@@ -54,13 +54,14 @@ bool Model::Initialize(ID3D11Device *device)
 	{
 		return false;
 	}
+	this->m_VertexCount = this->m_IndexCount = this->m_Mesh->GetVertexCount();
 
 	HRESULT result;
 	VertexType *vertices = new VertexType[this->m_VertexCount];
 	unsigned long *indices = new unsigned long[this->m_IndexCount];
 
 	// Load the vertex array and index array with data.
-	ModelData *data = this->m_Mesh->GetModelData();
+	const ModelData *data = this->m_Mesh->GetModelData();
 	for (int i = 0; i < this->m_VertexCount; i++)
 	{
 		vertices[i].position = D3DXVECTOR3(data[i].x, data[i].y, data[i].z);
@@ -130,6 +131,14 @@ bool Model::LoadTexture(ID3D11Device* device, WCHAR* path)
 	return this->m_Texture->Initialize(device, path);
 }
 
+ModelMesh* Model::CreateMesh()
+{
+	if(this->m_Mesh != nullptr)
+	{
+		delete this->m_Mesh;
+	}
+	return this->m_Mesh = new ModelMesh;
+}
 
 bool Model::LoadModelFromFile(char* path)
 {
@@ -156,7 +165,7 @@ bool Model::LoadModelFromFile(char* path)
 	this->m_IndexCount = this->m_VertexCount;
 
 	// Create the model using the vertex count that was read in.
-	this->m_Mesh = new ModelMesh(this->m_VertexCount);
+	this->m_Mesh = this->CreateMesh();
 
 	// Read up to the beginning of the data.
 	fin.get(input);
@@ -168,7 +177,7 @@ bool Model::LoadModelFromFile(char* path)
 	fin.get(input);
 
 	// Read in the vertex data.
-	ModelData *data = this->m_Mesh->GetModelData();
+	ModelData *data = this->m_Mesh->SetVertexCount(this->m_VertexCount);
 	for (int i = 0; i < this->m_VertexCount; i++)
 	{
 		fin >> data[i].x >> data[i].y >> data[i].z;

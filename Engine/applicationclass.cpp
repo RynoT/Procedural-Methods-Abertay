@@ -180,6 +180,11 @@ bool ApplicationClass::Initialize(HINSTANCE hinstance, HWND hwnd, int screenWidt
 
 	this->m_Scene = new DefaultScene(this->m_Direct3D, hwnd, this->m_Input);
 
+	if(WIREFRAME_MODE)
+	{
+		this->m_Direct3D->TurnOnWireframe();
+	}
+
 	return true;
 }
 

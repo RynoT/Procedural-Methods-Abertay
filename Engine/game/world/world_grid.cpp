@@ -31,7 +31,7 @@ WorldGrid::~WorldGrid()
 void WorldGrid::SetShader(TextureShaderClass* shader)
 {
 	this->m_Shader = shader;
-	for(int i = 0; i < this->m_GridSize * this->m_GridSize; i++)
+	for(int i = 0; i < this->GetCellCount(); i++)
 	{
 		this->m_Cells[i].SetShader(shader);
 	}
@@ -46,7 +46,7 @@ void WorldGrid::Update(D3DClass *d3d, const float& worldX, const float& worldY)
 		int offsetX = x - halfSize, offsetY = y - halfSize;
 		if(this->m_OffsetX != offsetX || this->m_OffsetY != offsetY)
 		{
-			int dx = offsetX - this->m_OffsetX, dy = offsetY - this->m_OffsetY;
+			//int dx = offsetX - this->m_OffsetX, dy = offsetY - this->m_OffsetY;
 			for(int i = 0; i < this->m_GridSize * this->m_GridSize; i++)
 			{
 				GridCell& cell = this->m_Cells[i];
@@ -72,7 +72,7 @@ void WorldGrid::Update(D3DClass *d3d, const float& worldX, const float& worldY)
 				}
 			}
 		}
-		for (int i = 0; i < this->m_GridSize * this->m_GridSize; i++)
+		for (int i = 0; i < this->GetCellCount(); i++)
 		{
 			GridCell& cell = this->m_Cells[i];
 			if (!cell.IsReady())
@@ -90,7 +90,7 @@ void WorldGrid::Render(D3DClass* direct, const D3DXMATRIX& projection, const D3D
 	{
 		return;
 	}
-	for (int i = 0; i < this->m_GridSize * this->m_GridSize; i++)
+	for (int i = 0; i < this->GetCellCount(); i++)
 	{
 		GridCell& cell = this->m_Cells[i];
 		if(cell.m_Model == nullptr)

@@ -21,6 +21,10 @@ public:
 
 	void Render(ID3D11DeviceContext *context) const;
 
+	inline void SetCollision(Collision *collision) const { this->m_Mesh->SetCollision(collision); }
+
+	inline const Collision* GetCollision() const { return this->m_Mesh->GetCollision(); }
+
 	inline const int& GetIndexCount() const { return this->m_IndexCount; }
 
 	inline const ModelMesh* GetModelMesh() const { return this->m_Mesh; }
@@ -28,6 +32,8 @@ public:
 	inline ID3D11ShaderResourceView* GetTexture() const { return this->m_Texture->GetTexture(); }
 
 protected:
+	virtual ModelMesh* CreateMesh();
+
 	virtual bool LoadModelFromFile(char *path);
 
 	virtual bool LoadTexture(ID3D11Device *device, WCHAR *path);

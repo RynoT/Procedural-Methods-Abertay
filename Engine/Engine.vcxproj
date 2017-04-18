@@ -99,6 +99,8 @@
     <ClCompile Include="game\model\collision\aabb.cpp" />
     <ClCompile Include="game\model\collision\collision.cpp" />
     <ClCompile Include="game\model\file_model.cpp" />
+    <ClCompile Include="game\model\generated\island_hover_model.cpp" />
+    <ClCompile Include="game\model\generated\island_model.cpp" />
     <ClCompile Include="game\model\generated\path_model.cpp" />
     <ClCompile Include="game\model\model.cpp" />
     <ClCompile Include="game\model\model_mesh.cpp" />
@@ -141,6 +143,7 @@
     <ClInclude Include="game\model\collision\aabb.h" />
     <ClInclude Include="game\model\collision\collision.h" />
     <ClInclude Include="game\model\file_model.h" />
+    <ClInclude Include="game\model\generated\island_hover_model.h" />
     <ClInclude Include="game\model\generated\path_model.h" />
     <ClInclude Include="game\model\model.h" />
     <ClInclude Include="game\model\generated\island_model.h" />

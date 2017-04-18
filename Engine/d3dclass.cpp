@@ -326,6 +326,9 @@ bool D3DClass::Initialize(int screenWidth, int screenHeight, bool vsync, HWND hw
 
 	// Now set the rasterizer state.
 	m_deviceContext->RSSetState(m_rasterState);
+
+	rasterDesc.FillMode = D3D11_FILL_WIREFRAME;
+	m_device->CreateRasterizerState(&rasterDesc, &m_rasterStateWF);
 	
 	// Setup the viewport for rendering.
     viewport.Width = (float)screenWidth;
@@ -411,6 +414,17 @@ bool D3DClass::Initialize(int screenWidth, int screenHeight, bool vsync, HWND hw
     return true;
 }
 
+void D3DClass::TurnOnWireframe()
+{
+	// Now set the rasterizer state.
+	m_deviceContext->RSSetState(m_rasterStateWF);
+}
+
+void D3DClass::TurnOffWireframe()
+{
+	// Now set the rasterizer state.
+	m_deviceContext->RSSetState(m_rasterState);
+}
 
 void D3DClass::Shutdown()
 {

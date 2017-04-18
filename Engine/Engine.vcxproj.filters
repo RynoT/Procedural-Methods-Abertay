@@ -135,6 +135,12 @@
     <ClCompile Include="game\model\collision\aabb.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="game\model\generated\island_model.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="game\model\generated\island_hover_model.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="applicationclass.h">
@@ -255,6 +261,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="game\model\collision\aabb.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="game\model\generated\island_hover_model.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -51,6 +51,8 @@ public:
 	void TurnZBufferOff();
 	void TurnOnAlphaBlending();
 	void TurnOffAlphaBlending();
+	void TurnOnWireframe();
+	void TurnOffWireframe();
 
 private:
 	bool m_vsync_enabled;
@@ -64,6 +66,7 @@ private:
 	ID3D11DepthStencilState* m_depthStencilState;
 	ID3D11DepthStencilView* m_depthStencilView;
 	ID3D11RasterizerState* m_rasterState;
+	ID3D11RasterizerState* m_rasterStateWF;
 	D3DXMATRIX m_projectionMatrix;
 	D3DXMATRIX m_worldMatrix;
 	D3DXMATRIX m_orthoMatrix;

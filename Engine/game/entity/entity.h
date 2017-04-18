@@ -14,6 +14,8 @@ public:
 
 	virtual void Update(const float& delta) = 0;
 
+	inline const Vector3f& GetScale() const { return this->m_Scale; }
+
 	inline const Vector3f& GetPosition() const { return this->m_Position; }
 
 	inline const Vector3f& GetRotation() const { return this->m_Rotation; }

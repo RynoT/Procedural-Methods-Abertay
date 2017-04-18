@@ -16,11 +16,11 @@ public:
 	ModelEntity();
 	virtual ~ModelEntity();
 
-	bool SetFrom(ID3D11Device *device, char *modelPath, WCHAR *texturePath);
-
 	virtual void Update(const float& delta) override { }
 
 	virtual void Render(D3DClass *direct, const D3DXMATRIX& projection, const D3DXMATRIX& view);
+
+	inline void SetModel(Model *model) { this->m_Model = model; }
 
 	inline Model* GetInternalModel() const { return this->m_Model; }
 

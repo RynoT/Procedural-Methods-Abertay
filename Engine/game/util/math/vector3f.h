@@ -57,6 +57,8 @@ struct Vector3f : public Vector2f
 
 	operator D3DXVECTOR3() const { return D3DXVECTOR3(Vector2f::x, Vector2f::y, this->z); }
 
+	operator D3DXVECTOR4() const { return D3DXVECTOR4(Vector2f::x, Vector2f::y, this->z, 1.0f); }
+
 public:
 	float z;
 };

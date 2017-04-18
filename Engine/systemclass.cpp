@@ -169,15 +169,11 @@ LRESULT CALLBACK SystemClass::MessageHandler(HWND hwnd, UINT umsg, WPARAM wparam
 			this->m_Input->SetMouseButton(false, true);
 			break;
 		case WM_MOUSEMOVE:
-			this->m_Input->SetMousePosition(LOWORD(lparam), HIWORD(lparam));
+			this->m_Input->SetMousePosition(LOWORD(lparam) + 10, HIWORD(lparam) + 22);
 			break;
-
-		// Any other messages send to the default message handler as our application won't make use of them.
-		default:
-		{
-			return DefWindowProc(hwnd, umsg, wparam, lparam);
-		}
+		default: break;
 	}
+	return DefWindowProc(hwnd, umsg, wparam, lparam);
 }
 
 
@@ -237,8 +233,8 @@ void SystemClass::InitializeWindows(int& screenWidth, int& screenHeight)
 	}
 	else
 	{
-		screenWidth = 800;
-		screenHeight = 600;
+		screenWidth = SCREEN_WIDTH;
+		screenHeight = SCREEN_HEIGHT;
 
 		// Place the window in the middle of the screen.
 		posX = (GetSystemMetrics(SM_CXSCREEN) - screenWidth) / 2;

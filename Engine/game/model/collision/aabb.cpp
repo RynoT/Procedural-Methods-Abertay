@@ -18,7 +18,7 @@ void CollisionAABB::Set(ModelMesh* mesh)
 	this->m_Min.set(std::numeric_limits<float>::max(), std::numeric_limits<float>::max(), std::numeric_limits<float>::max());
 	this->m_Max.set(std::numeric_limits<float>::min(), std::numeric_limits<float>::min(), std::numeric_limits<float>::min());
 
-	ModelData *data = mesh->GetModelData();
+	const ModelData *data = mesh->GetModelData();
 	for(int i = 0; i < mesh->GetVertexCount(); i++)
 	{
 		this->m_Min.x = std::min(this->m_Min.x, data[i].x);

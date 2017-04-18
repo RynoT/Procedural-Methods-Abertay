@@ -1,7 +1,7 @@
 #include "model_entity.h"
 
+#include "../model/model.h"
 #include "../../d3dclass.h"
-#include "../model/file_model.h"
 
 ModelEntity::ModelEntity() : m_Model(nullptr)//, m_RenderMethod(nullptr)
 {
@@ -14,15 +14,6 @@ ModelEntity::~ModelEntity()
 		delete this->m_Model;
 		this->m_Model = nullptr;
 	}
-}
-
-bool ModelEntity::SetFrom(ID3D11Device* device, char* modelPath, WCHAR* texturePath)
-{
-	if(this->m_Model == nullptr)
-	{
-		this->m_Model = new FileModel(modelPath, texturePath);
-	}
-	return this->m_Model->Initialize(device);
 }
 
 void ModelEntity::Render(D3DClass* direct, const D3DXMATRIX& projection, const D3DXMATRIX& view)

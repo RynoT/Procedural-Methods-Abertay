@@ -8,6 +8,9 @@
 #include "../../modelclass.h"
 #include "../entity/model_entity.h"
 #include "../../textureshaderclass.h"
+#include "../model/generated/island_model.h"
+#include "../model/collision/aabb.h"
+#include "../../applicationclass.h"
 
 //#define MIN_ISLAND_RADIUS_PERC 0.08f
 //#define MAX_ISLAND_RADIUS_PERC 0.32f
@@ -15,14 +18,15 @@
 //#define MIN_ISLAND_RADIUS (size * MIN_ISLAND_RADIUS_PERC)
 //#define MAX_ISLAND_RADIUS (size * MAX_ISLAND_RADIUS_PERC)
 
-#define ISLAND_SPAWN_CHANCE 1.0f//0.35f //spawns every x percent
+#define ISLAND_SPAWN_CHANCE 0.35f //spawns every x percent
 #define ISLAND_BORDER_OFFSET 100.0f
 #define MAX_ISLAND_RADIUS 1000.0f
 #define MIN_ISLAND_RADIUS 5000.0f
+#define COLLISION_BOX_SCALE 1.75f
 
-#define CENTER_ALL_ISLANDS true//false
+#define CENTER_ALL_ISLANDS false
 
-#define SEED TimerClass::SeedOffset // Use time as seed
+#define SEED 1000 //TimerClass::SeedOffset // Use time as seed
 
 #define pseudo_seed(x, y) srand(GridCell::Hash(x, y))
 #define pseudo_random() (rand() / float(RAND_MAX)) // Random number between 0-1
@@ -34,7 +38,7 @@ GridCell::GridCell() : m_CellX(0), m_CellY(0), m_Model(nullptr), m_bReady(false)
 void GridCell::Destroy()
 {
 	this->m_bReady = false;
-	if(this->m_Model != nullptr)
+	if (this->m_Model != nullptr)
 	{
 		delete this->m_Model;
 		this->m_Model = nullptr;
@@ -60,7 +64,7 @@ void GridCell::GenerateIsland(D3DClass *d3d, const float& size)
 	pseudo_seed(this->m_CellX, this->m_CellY);
 
 	this->m_bReady = true;
-	if(pseudo_random() > ISLAND_SPAWN_CHANCE)
+	if (pseudo_random() > ISLAND_SPAWN_CHANCE)
 	{
 		return;
 	}
@@ -71,17 +75,56 @@ void GridCell::GenerateIsland(D3DClass *d3d, const float& size)
 	// Generate relative position within grid according to size and radius
 	float rx = radius + (size - radius * 2.0f - ISLAND_BORDER_OFFSET) * pseudo_random(),
 		ry = radius + (size - radius * 2.0f - ISLAND_BORDER_OFFSET) * pseudo_random();
-	if(CENTER_ALL_ISLANDS)
+	if (CENTER_ALL_ISLANDS)
 	{
 		rx = ry = 0.0f;
 	}
 
 	this->m_Model = new ModelEntity;
+
+	Model *model = new IslandModel(VECTOR2_SPLIT(this->m_Model->GetPosition()));
+	model->Initialize(d3d->GetDevice());
+	model->SetCollision(new CollisionAABB);
+	this->m_Model->SetModel(model);
+
 	this->m_Model->SetScale(radius);
 	this->m_Model->SetPosition(this->m_CellX * size + rx, this->m_CellY * size + ry, 0.0f);
-	this->m_Model->SetFrom(d3d->GetDevice(), "data/models/cube.txt", L"data/models/seafloor.dds");
 	this->m_Model->SetRenderMethod([this](D3DClass* direct, const D3DXMATRIX& projection,
 		const D3DXMATRIX& view, const D3DXMATRIX& model)->void { this->Render(direct, projection, view, model); });
+}
+
+bool GridCell::IsHovered(const float& x, const float& y, const D3DXMATRIX& projection, const D3DXMATRIX& view) const
+{
+	if (this->m_Model == nullptr)
+	{
+		return false;
+	}
+	D3DXMATRIX model, transform;
+	D3DXMatrixIdentity(&model);
+
+	D3DXMatrixScaling(&transform, VECTOR3_SPLIT(this->m_Model->GetScale()));
+	D3DXMatrixMultiply(&model, &model, &transform);
+
+	D3DXMatrixTranslation(&transform, VECTOR3_SPLIT(this->m_Model->GetPosition()));
+	D3DXMatrixMultiply(&model, &model, &transform);
+
+	D3DXMATRIX pvm = model * view * projection;
+
+	CollisionAABB *collision = (CollisionAABB*)this->m_Model->GetInternalModel()->GetCollision();
+	D3DXVECTOR3 min = collision->GetMin() * COLLISION_BOX_SCALE, max = collision->GetMax() * COLLISION_BOX_SCALE;
+
+	D3DXVECTOR3 outA, outB;
+	D3DXVec3TransformCoord(&outA, &min, &pvm);
+	D3DXVec3TransformCoord(&outB, &max, &pvm);
+
+	outA.x = (outA.x + 1.0f) * SCREEN_WIDTH * 0.5f;
+	outA.y = (1.0f - outA.y) * SCREEN_HEIGHT * 0.5f;
+
+	outB.x = (outB.x + 1.0f) * SCREEN_WIDTH * 0.5f;
+	outB.y = (1.0f - outB.y) * SCREEN_HEIGHT * 0.5f;
+
+	return x >= min(outA.x, outB.x) && x <= max(outA.x, outB.x)
+		&& y >= min(outA.y, outB.y) && y <= max(outA.y, outB.y);
 }
 
 void GridCell::Render(D3DClass* direct, const D3DXMATRIX& projection, const D3DXMATRIX& view, const D3DXMATRIX& model) const

@@ -4,10 +4,8 @@
 
 #include "collision/collision.h"
 
-ModelMesh::ModelMesh(const int& count) : m_Count(count), m_Collision(nullptr)
+ModelMesh::ModelMesh() : m_Count(0), m_Collision(nullptr), m_ModelData(nullptr)
 {
-	assert(count >= 0 && "Count must be >= 0");
-	this->m_ModelData = new ModelData[count];
 }
 
 ModelMesh::~ModelMesh()
@@ -22,6 +20,17 @@ ModelMesh::~ModelMesh()
 		delete[] this->m_ModelData;
 		this->m_ModelData = nullptr;
 	}
+}
+
+ModelData* ModelMesh::SetVertexCount(const int& count)
+{
+	this->m_Count = count;
+	if(this->m_ModelData != nullptr)
+	{
+		delete[] this->m_ModelData;
+	}
+	assert(count >= 0 && "Count must be >= 0");
+	return this->m_ModelData = new ModelData[count];
 }
 
 void ModelMesh::SetCollision(Collision *collision)

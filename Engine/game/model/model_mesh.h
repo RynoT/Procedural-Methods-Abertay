@@ -12,8 +12,10 @@ struct ModelData
 class ModelMesh
 {
 public:
-	ModelMesh(const int& count);
+	ModelMesh();
 	~ModelMesh();
+
+	ModelData* SetVertexCount(const int& count);
 
 	void SetCollision(Collision *collision);
 

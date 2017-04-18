@@ -1,9 +1,12 @@
 #pragma once
 
 #include "scene.h"
+#include "../entity/model_entity.h"
 
 class Player;
+class GridCell;
 class WorldGrid;
+class IslandHoverModel;
 class TextureShaderClass;
 
 enum GameState
@@ -28,7 +31,12 @@ private:
 	GameState m_State;
 
 	Player *m_Player;
+	ModelEntity *m_IslandHover;
+
+	GridCell const*m_HoveredCell;
 	WorldGrid *m_WorldGrid;
 
 	TextureShaderClass *m_TextureShader;
+
+	D3DXMATRIX m_LastProjection, m_LastView;
 };

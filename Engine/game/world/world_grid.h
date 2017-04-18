@@ -22,6 +22,10 @@ public:
 
 	inline const int& GetGridSize() const { return this->m_GridSize; }
 
+	inline int GetCellCount() const { return this->m_GridSize * this->m_GridSize; }
+
+	inline const GridCell* GetCells() const { return this->m_Cells; }
+
 protected:
 	inline float GetWorldOffset() const { return (this->m_WorldSize * this->m_GridSize) / 2.0f; }
 
