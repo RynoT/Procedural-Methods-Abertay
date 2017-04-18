@@ -13,8 +13,8 @@ public:
 	CameraFPV(const float& sensitivity = CAMERA_FPV_MOVE_SENSITIVITY,
 		const bool& invertX = CAMERA_FPV_INVERT_X, const bool& invertY = CAMERA_FPV_INVERT_Y);
 
-	void Update() override;
-	 
+	virtual void Update(const float& delta) override;
+
 	/// Rotate yaw and pitch (factors in camera sensitivity)
 	void Rotate(float dx, float dy);
 

@@ -24,13 +24,13 @@ public:
 	bool Initialize();
 	void Frame();
 
-	float GetTime();
+	inline const float& GetTime() const { return this->m_frameTime; }
 
 	static unsigned int SeedOffset;
 
 private:
 	INT64 m_frequency;
-	float m_ticksPerMs;
+	float m_ticksPerS;
 	INT64 m_startTime;
 	float m_frameTime;
 };

@@ -8,7 +8,7 @@ class CameraFixed : public Camera
 public:
 	CameraFixed();
 
-	void Update() override;
+	void Update(const float& delta) override;
 
 	inline const Vector3f& GetUp() const override { return this->m_Up; }
 	inline const Vector3f& GetLookAt() const override { return this->m_LookAt; }

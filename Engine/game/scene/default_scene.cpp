@@ -7,13 +7,17 @@
 #include "../../textureshaderclass.h"
 #include "../model/generated/island_hover_model.h"
 #include "../../systemclass.h"
+#include "camera/camera_fpv.h"
+#include "camera/camera_transition.h"
+#include <cassert>
 
 #define GRID_SIZE 9
 #define GRID_WORLD_SIZE 20000.0f
 
-#define CAMERA_SPEED 10.0f
+#define CAMERA_SPEED 20000.0f
 
-DefaultScene::DefaultScene(D3DClass *d3d, const HWND& hwnd, InputClass *input) : Scene(d3d, hwnd, input), m_HoveredCell(nullptr)
+DefaultScene::DefaultScene(D3DClass *d3d, const HWND& hwnd, InputClass *input) 
+: Scene(d3d, hwnd, input), m_bTransitioning(false), m_HoveredCell(nullptr)
 {
 	this->m_TextureShader = new TextureShaderClass;
 	this->m_TextureShader->Initialize(d3d->GetDevice(), hwnd);
@@ -37,6 +41,9 @@ DefaultScene::DefaultScene(D3DClass *d3d, const HWND& hwnd, InputClass *input) :
 	D3DXMatrixIdentity(&this->m_LastProjection);
 
 	this->SetState(GameState::Map);
+	CameraAxis *camera = new CameraAxis;
+	camera->Translate(0.0f, 0.0f, -GRID_WORLD_SIZE * 5.0f);
+	Scene::SetCamera(camera);
 }
 
 DefaultScene::~DefaultScene()
@@ -68,26 +75,29 @@ DefaultScene::~DefaultScene()
 void DefaultScene::SetState(const GameState& state)
 {
 	this->m_State = state;
-	if (state == GameState::Map)
-	{
-		CameraAxis *camera = new CameraAxis;
-		camera->Translate(0.0f, 0.0f, -GRID_WORLD_SIZE * 5.0f);
-		//camera->Translate(0.0f, 0.0f, -20);
-		//camera->SetPoints(Vector3f(0.0f, 0.0f, -200.0f), Vector3f(0.0f));
-		Scene::SetCamera(camera);
-	}
 }
 
 void DefaultScene::Update(const float& delta)
 {
-	Scene::Update(delta);
-
 	this->m_Player->Update(delta);
 
 	const Vector3f& position = this->m_Player->GetPosition();
 	this->m_WorldGrid->Update(Scene::m_Direct3D, position.x, position.y);
 
 	InputClass *input = Scene::m_Input;
+
+	this->m_HoveredCell = nullptr;
+	const GridCell *cells = this->m_WorldGrid->GetCells();
+	for (int i = 0; i < this->m_WorldGrid->GetCellCount(); i++)
+	{
+		const GridCell& cell = cells[i];
+		if (cell.IsHovered(float(input->GetMouseX()), float(input->GetMouseY()), this->m_LastProjection, this->m_LastView))
+		{
+			this->m_HoveredCell = &cells[i];
+			this->m_IslandHover->SetScale(VECTOR3_SPLIT(cell.m_Model->GetScale() * 1.25f));
+			this->m_IslandHover->SetPosition(VECTOR3_SPLIT(cell.m_Model->GetPosition()));
+		}
+	}
 	if (this->m_State == GameState::Map)
 	{
 		Camera *camera = Scene::GetCamera();
@@ -116,19 +126,45 @@ void DefaultScene::Update(const float& delta)
 			camera->Translate(0.0f, 0.0f, CAMERA_SPEED * delta);
 		}
 		this->m_Player->SetPosition(VECTOR3_SPLIT(camera->GetPosition()));
-	}
-	this->m_HoveredCell = nullptr;
-	const GridCell *cells = this->m_WorldGrid->GetCells();
-	for (int i = 0; i < this->m_WorldGrid->GetCellCount(); i++)
-	{
-		const GridCell& cell = cells[i];
-		if (cell.IsHovered(input->GetMouseX(), input->GetMouseY(), this->m_LastProjection, this->m_LastView))
+
+		if (this->m_HoveredCell != nullptr && input->IsMouseDown(MouseButton::LEFT))
 		{
-			this->m_HoveredCell = &cells[i];
-			this->m_IslandHover->SetScale(VECTOR3_SPLIT(cell.m_Model->GetScale() * 1.1f));
-			this->m_IslandHover->SetPosition(VECTOR3_SPLIT(cell.m_Model->GetPosition()));
+			this->m_bTransitioning = true;
+			this->SetState(GameState::Surface);
+
+			Camera *current = Scene::GetCamera();
+
+			const float h = 1.75f;
+			Vector3f start = current->GetPosition(), end = this->m_HoveredCell->m_Model->GetPosition() - Vector3f(0.0f, 0.0f, h);
+
+			Vector3f normal = (end - start).normalize();
+			Vector3f lookAt = end + normal * sqrtf(h * h + h * h) - Vector3f(0.0f, 0.0f, h);
+
+			CameraTransition *transition = new CameraTransition(start, current->GetLookAt(), end, lookAt, 2.0f);
+			Scene::SetCamera(transition);
 		}
 	}
+	else if(this->m_State == GameState::Surface)
+	{
+		if(this->m_bTransitioning)
+		{
+			CameraTransition *camera = (CameraTransition*)Scene::GetCamera();
+			if(camera->IsTransitionComplete())
+			{
+				CameraFPV *fpv = new CameraFPV;
+				fpv->SetPosition(VECTOR3_SPLIT(camera->GetPosition()));
+				//Scene::SetCamera(fpv);
+
+				this->m_bTransitioning = false;
+			}
+		}
+		else
+		{
+			//SystemClass::DebugOut(L"Done\n");
+		}
+	}
+
+	Scene::Update(delta);
 }
 
 void DefaultScene::Render(D3DClass* direct, const D3DXMATRIX& projection)

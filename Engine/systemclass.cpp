@@ -169,7 +169,7 @@ LRESULT CALLBACK SystemClass::MessageHandler(HWND hwnd, UINT umsg, WPARAM wparam
 			this->m_Input->SetMouseButton(false, true);
 			break;
 		case WM_MOUSEMOVE:
-			this->m_Input->SetMousePosition(LOWORD(lparam) + 10, HIWORD(lparam) + 22);
+			this->m_Input->SetMousePosition(LOWORD(lparam) + 13, HIWORD(lparam) + 22);
 			break;
 		default: break;
 	}

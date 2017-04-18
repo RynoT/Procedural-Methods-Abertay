@@ -36,20 +36,20 @@ void CameraFPV::MoveSideways(const float& amount) //V(a, b), Vperp(-b, a). We on
 	Camera::Translate(-this->m_Forward.z * amount, 0.0f, this->m_Forward.x * amount);
 }
 
-void CameraFPV::Update()
+void CameraFPV::Update(const float& delta)
 {
 	float cosR, cosP, cosY;	//temp values for sin/cos from 
 	float sinR, sinP, sinY;
 
 	//since this is a first-person camera, don't allow the player to look too far up or down.
-	if (this->m_Pitch > 90.0f)
-	{
-		this->m_Pitch = 90.0f;
-	}
-	else if (this->m_Pitch < -90.0f)
-	{
-		this->m_Pitch = -90.0f;
-	}
+	//if (this->m_Pitch > 90.0f)
+	//{
+	//	this->m_Pitch = 90.0f;
+	//}
+	//else if (this->m_Pitch < -90.0f)
+	//{
+	//	this->m_Pitch = -90.0f;
+	//}
 
 	const float radians = 3.14159265358979f / 180.0f;
 	cosP = cosf(this->m_Pitch * radians);

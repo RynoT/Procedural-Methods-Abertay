@@ -17,6 +17,16 @@ float Vector3f::GetLengthSq() const
 	return Vector2f::GetLengthSq() + this->z * this->z;
 }
 
+Vector3f& Vector3f::normalize() 
+{
+	float len = this->GetLength();
+	if(len != 0.0f)
+	{
+		return this->multiply(1.0f / len);
+	}
+	return *this;
+}
+
 Vector3f Vector3f::cross(const Vector3f& target) const
 {
 	return{

@@ -7,7 +7,7 @@ class CameraAxis : public Camera
 public:
 	CameraAxis(const Vector3f& right = Vector3f(1.0f, 0.0f, 0.0f), const Vector3f& forward = Vector3f(0.0f, 0.0f, 1.0f));
 
-	virtual void Update() override { }
+	virtual void Update(const float& delta) override { }
 
 	virtual void Translate(const float& dright, const float& dup, const float& dforward) override;
 

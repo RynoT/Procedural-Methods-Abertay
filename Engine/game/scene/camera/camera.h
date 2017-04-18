@@ -8,7 +8,7 @@ class Camera
 public:
 	virtual ~Camera() { }
 
-	virtual void Update() = 0;
+	virtual void Update(const float& delta) = 0;
 
 	virtual const D3DXMATRIX& GetViewMatrix();
 

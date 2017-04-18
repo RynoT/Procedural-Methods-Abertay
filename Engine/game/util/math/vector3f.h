@@ -13,6 +13,8 @@ struct Vector3f : public Vector2f
 
 	inline float GetLengthSq() const override;
 
+	Vector3f& normalize();
+
 	Vector3f cross(const Vector3f& target) const;
 
 	inline Vector3f& add(const float& x, const float& y, const float& z) { Vector2f::add(x, y); this->z += z; return *this; }

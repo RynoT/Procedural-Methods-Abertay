@@ -3,8 +3,8 @@
 #include "scene.h"
 #include "../entity/model_entity.h"
 
+struct GridCell;
 class Player;
-class GridCell;
 class WorldGrid;
 class IslandHoverModel;
 class TextureShaderClass;
@@ -33,6 +33,7 @@ private:
 	Player *m_Player;
 	ModelEntity *m_IslandHover;
 
+	bool m_bTransitioning;
 	GridCell const*m_HoveredCell;
 	WorldGrid *m_WorldGrid;
 
