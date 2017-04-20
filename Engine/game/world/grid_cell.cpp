@@ -88,7 +88,7 @@ void GridCell::GenerateIsland(D3DClass *d3d, const float& size)
 	this->m_Model->SetModel(model);
 
 	this->m_Model->SetScale(radius);
-	this->m_Model->SetPosition(this->m_CellX * size + rx, this->m_CellY * size + ry, 0.0f);
+	this->m_Model->SetPosition(this->m_CellX * size + rx, 0.0f, this->m_CellY * size + ry);
 	this->m_Model->SetRenderMethod([this](D3DClass* direct, const D3DXMATRIX& projection,
 		const D3DXMATRIX& view, const D3DXMATRIX& model)->void { this->Render(direct, projection, view, model); });
 }

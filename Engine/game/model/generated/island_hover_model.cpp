@@ -2,34 +2,34 @@
 
 #define SIZE 1.0f
 #define INDENT 0.2f
-#define Z_OFFSET -0.0f
+#define Y_OFFSET -0.0f
 
 #define SURFACE_TEXTURE_PATH L"data/textures/island_hover.dds"
 
 bool IslandHoverModel::Initialize(ID3D11Device* device)
 {
-	int indices[] = { 0, 2, 1, 2, 0, 3 };
+	int indices[] = { 0, 1, 2, 2, 3, 0 };
 	float vertex[] =
 	{
-		-SIZE, SIZE, Z_OFFSET, //top
-		-SIZE + INDENT, SIZE - INDENT, Z_OFFSET,
-		SIZE - INDENT, SIZE - INDENT, Z_OFFSET,
-		SIZE, SIZE, Z_OFFSET,
+		-SIZE, Y_OFFSET, SIZE, //top
+		-SIZE + INDENT, Y_OFFSET, SIZE - INDENT,
+		SIZE - INDENT, Y_OFFSET, SIZE - INDENT,
+		SIZE, Y_OFFSET, SIZE,
 
-		SIZE, SIZE, Z_OFFSET, //right
-		SIZE - INDENT, SIZE - INDENT, Z_OFFSET,
-		SIZE - INDENT, -SIZE + INDENT, Z_OFFSET,
-		SIZE, -SIZE, Z_OFFSET,
+		SIZE, Y_OFFSET, SIZE, //right
+		SIZE - INDENT, Y_OFFSET, SIZE - INDENT,
+		SIZE - INDENT, Y_OFFSET, -SIZE + INDENT,
+		SIZE, Y_OFFSET, -SIZE,
 
-		-SIZE, -SIZE, Z_OFFSET, //bottom
-		SIZE, -SIZE, Z_OFFSET,
-		SIZE - INDENT, -SIZE + INDENT, Z_OFFSET,
-		-SIZE + INDENT, -SIZE + INDENT, Z_OFFSET,
+		-SIZE, Y_OFFSET, -SIZE, //bottom
+		SIZE, Y_OFFSET, -SIZE,
+		SIZE - INDENT, Y_OFFSET, -SIZE + INDENT,
+		-SIZE + INDENT, Y_OFFSET, -SIZE + INDENT,
 
-		-SIZE, SIZE, Z_OFFSET, //left
-		-SIZE, -SIZE, Z_OFFSET,
-		-SIZE + INDENT, -SIZE + INDENT, Z_OFFSET,
-		-SIZE + INDENT, SIZE - INDENT, Z_OFFSET,
+		-SIZE, Y_OFFSET, SIZE, //left
+		-SIZE, Y_OFFSET, -SIZE,
+		-SIZE + INDENT, Y_OFFSET, -SIZE + INDENT,
+		-SIZE + INDENT, Y_OFFSET, SIZE - INDENT
 	};
 
 	ModelMesh *mesh = Model::CreateMesh();

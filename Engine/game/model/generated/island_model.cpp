@@ -31,41 +31,42 @@ bool IslandModel::Initialize(ID3D11Device *device)
 		{
 			ModelData v1, v2, v3, v4;
 			v1.x = std::cosf(theta) * (itr * ITERATION_OFFSET);
-			v1.y = std::sinf(theta) * (itr * ITERATION_OFFSET);
-			v1.z = 0.0f;
+			v1.y = 0.0f;
+			v1.z = std::sinf(theta) * (itr * ITERATION_OFFSET);
 			v1.tu = v1.tv = 0.0f;
 			v1.nx = v1.ny = 0.0f;
 			v1.nz = 1.0f;
 
 			v2.x = std::cosf(theta) * ((itr - 1) * ITERATION_OFFSET);
-			v2.y = std::sinf(theta) * ((itr - 1) * ITERATION_OFFSET);
-			v2.z = 0.0f;
+			v2.y = 0.0f;
+			v2.z = std::sinf(theta) * ((itr - 1) * ITERATION_OFFSET);
 			v2.tu = v2.tv = 0.0f;
 			v2.nx = v2.ny = 0.0f;
 			v2.nz = 1.0f;
 
 			v3.x = std::cosf(theta - RES_DELTA) * (itr * ITERATION_OFFSET);
-			v3.y = std::sinf(theta - RES_DELTA) * (itr * ITERATION_OFFSET);
-			v3.z = 0.0f;
+			v3.y = 0.0f;
+			v3.z = std::sinf(theta - RES_DELTA) * (itr * ITERATION_OFFSET);
 			v3.tu = v3.tv = 0.0f;
 			v3.nx = v3.ny = 0.0f;
 			v3.nz = 1.0f;
 
 			v4.x = std::cosf(theta - RES_DELTA) * ((itr - 1) * ITERATION_OFFSET);
-			v4.y = std::sinf(theta - RES_DELTA) * ((itr - 1) * ITERATION_OFFSET);
-			v4.z = 0.0f;
+			v4.y = 0.0f;
+			v4.z = std::sinf(theta - RES_DELTA) * ((itr - 1) * ITERATION_OFFSET);
 			v4.tu = v4.tv = 0.0f;
 			v4.nx = v4.ny = 0.0f;
 			v4.nz = 1.0f;
 
 			// Push vertices as triangles
+
 			data.push_back(v4);
-			data.push_back(v2);
 			data.push_back(v1);
+			data.push_back(v2);
 
 			data.push_back(v3);
-			data.push_back(v4);
 			data.push_back(v1);
+			data.push_back(v4);
 		}
 	}
 	ModelMesh *mesh = Model::CreateMesh();

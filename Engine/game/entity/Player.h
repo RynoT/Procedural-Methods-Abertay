@@ -2,6 +2,8 @@
 
 #include "entity.h"
 
+#define PLAYER_HEIGHT 1.75f
+
 class Player : public Entity
 {
 public:

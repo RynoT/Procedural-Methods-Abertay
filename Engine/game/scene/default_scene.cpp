@@ -17,7 +17,7 @@
 #define CAMERA_SPEED 20000.0f
 #define CAMERA_SURFACE_SPEED 100.0f
 
-#define MAP_CAMERA_Z -GRID_WORLD_SIZE * 5.0f
+#define MAP_CAMERA_Y -GRID_WORLD_SIZE * 5.0f
 
 DefaultScene::DefaultScene(D3DClass *d3d, const HWND& hwnd, InputClass *input) 
 : Scene(d3d, hwnd, input), m_bTransitioning(false), m_HoveredCell(nullptr)
@@ -44,9 +44,9 @@ DefaultScene::DefaultScene(D3DClass *d3d, const HWND& hwnd, InputClass *input)
 	D3DXMatrixIdentity(&this->m_LastProjection);
 
 	this->SetState(GameState::Map);
-	CameraAxis *camera = new CameraAxis;
-	camera->Translate(0.0f, 0.0f, MAP_CAMERA_Z);
-	Scene::SetCamera(camera);
+	//CameraAxis *camera = new CameraAxis;
+	//camera->Translate(0.0f, MAP_CAMERA_Y, 0.0f);
+	Scene::SetCamera(new CameraTransition(Vector3f(0.0f, MAP_CAMERA_Y, 0.0f), Vector3f(90.0f, 0.0f, 0.0f)));
 }
 
 DefaultScene::~DefaultScene()
@@ -86,7 +86,7 @@ bool DefaultScene::Update(const float& delta)
 	this->m_Player->Update(delta);
 
 	const Vector3f& position = this->m_Player->GetPosition();
-	this->m_WorldGrid->Update(Scene::m_Direct3D, position.x, position.y);
+	this->m_WorldGrid->Update(Scene::m_Direct3D, position.x, position.z);
 
 	this->m_HoveredCell = nullptr;
 	const GridCell *cells = this->m_WorldGrid->GetCells();
@@ -122,27 +122,27 @@ bool DefaultScene::UpdateMap(const float& delta)
 	Camera *camera = Scene::GetCamera();
 	if (Scene::m_Input->IsKeyDown(VK_W))
 	{
-		camera->Translate(0.0f, CAMERA_SPEED * delta, 0.0f);
+		camera->Translate(0.0f, 0.0f, CAMERA_SPEED * delta);
 	}
 	if (Scene::m_Input->IsKeyDown(VK_A))
 	{
-		camera->Translate(-CAMERA_SPEED * delta, 0.0f, 0.0f);
+		camera->Translate(CAMERA_SPEED * delta, 0.0f, 0.0f);
 	}
 	if (Scene::m_Input->IsKeyDown(VK_S))
 	{
-		camera->Translate(0.0f, -CAMERA_SPEED * delta, 0.0f);
+		camera->Translate(0.0f, 0.0f, -CAMERA_SPEED * delta);
 	}
 	if (Scene::m_Input->IsKeyDown(VK_D))
 	{
-		camera->Translate(CAMERA_SPEED * delta, 0.0f, 0.0f);
+		camera->Translate(-CAMERA_SPEED * delta, 0.0f, 0.0f);
 	}
 	if (Scene::m_Input->IsKeyDown(VK_Q))
 	{
-		camera->Translate(0.0f, 0.0f, -CAMERA_SPEED * delta);
+		camera->Translate(0.0f, -CAMERA_SPEED * delta, 0.0f);
 	}
 	if (Scene::m_Input->IsKeyDown(VK_E))
 	{
-		camera->Translate(0.0f, 0.0f, CAMERA_SPEED * delta);
+		camera->Translate(0.0f, CAMERA_SPEED * delta, 0.0f);
 	}
 	if (Scene::m_Input->IsKeyDown(VK_ESCAPE))
 	{
@@ -156,9 +156,8 @@ bool DefaultScene::UpdateMap(const float& delta)
 		this->m_bSurfaceTransition = true;
 		this->SetState(GameState::Surface);
 
-		const float h = 1.75f;
-		Vector3f start = camera->GetPosition(), end = this->m_HoveredCell->m_Model->GetPosition() - Vector3f(0.0f, 0.0f, h);
-		Scene::SetCamera(new CameraTransition(start, Vector3f(180.0f, 0.0f, 180.0f), end, Vector3f(90.0f, 90.0f, 90.0f), 2.0f));
+		((CameraTransition*)camera)->Transition(this->m_HoveredCell->m_Model->GetPosition()
+			- Vector3f(0.0f, PLAYER_HEIGHT, 0.0f), Vector3f(180.0f, 0.0f, 0.0f), 2.0f);
 	}
 	return true;
 }
@@ -186,7 +185,7 @@ bool DefaultScene::UpdateSurface(const float& delta)
 		}
 		if (Scene::m_Input->IsKeyDown(VK_A))
 		{
-			camera->MoveSideways(CAMERA_SURFACE_SPEED * delta);
+			camera->MoveSideways(-CAMERA_SURFACE_SPEED * delta);
 		}
 		if (Scene::m_Input->IsKeyDown(VK_S))
 		{
@@ -194,17 +193,18 @@ bool DefaultScene::UpdateSurface(const float& delta)
 		}
 		if (Scene::m_Input->IsKeyDown(VK_D))
 		{
-			camera->MoveSideways(-CAMERA_SURFACE_SPEED * delta);
+			camera->MoveSideways(CAMERA_SURFACE_SPEED * delta);
 		}
+
 		if (Scene::m_Input->IsKeyDown(VK_ESCAPE))
 		{
 			this->m_bTransitioning = true;
 			this->m_bSurfaceTransition = false;
 
-			Vector3f start = camera->GetPosition(), end = Vector3f(start.x, start.y, MAP_CAMERA_Z);
-			//Scene::SetCamera(new CameraTransition(start, current->GetYawPitchRoll(), end, Vector3f(180.0f, 0.0f, 180.0f), 1.25f));
-			Scene::SetCamera(new CameraTransition(start, Vector3f(180.0f, 0.0f, 180.0f), end, Vector3f(180.0f, 0.0f, 180.0f), 1.25f));
 			SystemClass::SetMouseGrab(false);
+
+			const Vector3f& pos = camera->GetPosition();
+			camera->Transition(Vector3f(pos.x, MAP_CAMERA_Y, pos.z), Vector3f(90.0f, 0.0f, 0.0f), 1.25f);
 		}
 	}
 	return true;
