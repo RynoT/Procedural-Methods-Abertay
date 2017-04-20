@@ -15,6 +15,9 @@
 #define GRID_WORLD_SIZE 20000.0f
 
 #define CAMERA_SPEED 20000.0f
+#define CAMERA_SURFACE_SPEED 100.0f
+
+#define MAP_CAMERA_Z -GRID_WORLD_SIZE * 5.0f
 
 DefaultScene::DefaultScene(D3DClass *d3d, const HWND& hwnd, InputClass *input) 
 : Scene(d3d, hwnd, input), m_bTransitioning(false), m_HoveredCell(nullptr)
@@ -42,7 +45,7 @@ DefaultScene::DefaultScene(D3DClass *d3d, const HWND& hwnd, InputClass *input)
 
 	this->SetState(GameState::Map);
 	CameraAxis *camera = new CameraAxis;
-	camera->Translate(0.0f, 0.0f, -GRID_WORLD_SIZE * 5.0f);
+	camera->Translate(0.0f, 0.0f, MAP_CAMERA_Z);
 	Scene::SetCamera(camera);
 }
 
@@ -77,7 +80,7 @@ void DefaultScene::SetState(const GameState& state)
 	this->m_State = state;
 }
 
-void DefaultScene::Update(const float& delta)
+bool DefaultScene::Update(const float& delta)
 {
 	this->m_Player->Update(delta);
 
@@ -100,6 +103,11 @@ void DefaultScene::Update(const float& delta)
 	}
 	if (this->m_State == GameState::Map)
 	{
+		if(input->IsKeyDown(VK_ESCAPE))
+		{
+			return false;
+		}
+
 		Camera *camera = Scene::GetCamera();
 		if (input->IsKeyDown(VK_W))
 		{
@@ -130,41 +138,65 @@ void DefaultScene::Update(const float& delta)
 		if (this->m_HoveredCell != nullptr && input->IsMouseDown(MouseButton::LEFT))
 		{
 			this->m_bTransitioning = true;
+			this->m_bSurfaceTransition = true;
 			this->SetState(GameState::Surface);
 
 			Camera *current = Scene::GetCamera();
 
 			const float h = 1.75f;
 			Vector3f start = current->GetPosition(), end = this->m_HoveredCell->m_Model->GetPosition() - Vector3f(0.0f, 0.0f, h);
-
-			Vector3f normal = (end - start).normalize();
-			Vector3f lookAt = end + normal * sqrtf(h * h + h * h) - Vector3f(0.0f, 0.0f, h);
-
-			CameraTransition *transition = new CameraTransition(start, current->GetLookAt(), end, lookAt, 2.0f);
-			Scene::SetCamera(transition);
+			Scene::SetCamera(new CameraTransition(start, end, Vector3f(90.0f), 2.0f));
 		}
 	}
 	else if(this->m_State == GameState::Surface)
 	{
+		CameraTransition *camera = (CameraTransition*)Scene::GetCamera();
 		if(this->m_bTransitioning)
 		{
-			CameraTransition *camera = (CameraTransition*)Scene::GetCamera();
 			if(camera->IsTransitionComplete())
 			{
-				CameraFPV *fpv = new CameraFPV;
-				fpv->SetPosition(VECTOR3_SPLIT(camera->GetPosition()));
-				//Scene::SetCamera(fpv);
-
 				this->m_bTransitioning = false;
+				if(!this->m_bSurfaceTransition)
+				{
+					this->SetState(GameState::Map);
+				}
 			}
 		}
 		else
 		{
-			//SystemClass::DebugOut(L"Done\n");
+			if (input->IsKeyDown(VK_W))
+			{
+				camera->MoveForward(CAMERA_SURFACE_SPEED * delta);
+			}
+			if (input->IsKeyDown(VK_A))
+			{
+				camera->MoveSideways(CAMERA_SURFACE_SPEED * delta);
+			}
+			if (input->IsKeyDown(VK_S))
+			{
+				camera->MoveForward(-CAMERA_SURFACE_SPEED * delta);
+			}
+			if (input->IsKeyDown(VK_D))
+			{
+				camera->MoveSideways(-CAMERA_SURFACE_SPEED * delta);
+			}
+			if (input->IsKeyDown(VK_ESCAPE))
+			{
+				this->m_bTransitioning = true;
+				this->m_bSurfaceTransition = false;
+
+				CameraFPV *current = (CameraFPV*)Scene::GetCamera();
+
+				Vector3f start = current->GetPosition(), end = Vector3f(start.x, start.y, MAP_CAMERA_Z);
+				CameraTransition *next = new CameraTransition(start, end, Vector3f(180.0f, 0.0f, 180.0f), 1.25f);
+				next->SetYaw(current->GetYaw());
+				next->SetPitch(current->GetPitch());
+				next->SetRoll(current->GetRoll());
+				Scene::SetCamera(next);
+			}
 		}
 	}
-
-	Scene::Update(delta);
+	return Scene::Update(delta);
 }
 
 void DefaultScene::Render(D3DClass* direct, const D3DXMATRIX& projection)

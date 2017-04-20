@@ -1,14 +1,11 @@
 #include "camera_transition.h"
+
 #include "../../../systemclass.h"
+
 #include <cassert>
 
-#define TARGET_YAW 90.0f
-#define TARGET_PITCH 90.0f
-#define TARGET_ROLL 90.0f
-
-CameraTransition::CameraTransition(const Vector3f& startPos, const Vector3f& startLook,
-	const Vector3f& endPos, const Vector3f& endLook, const float& duration)
-	: m_Duration(duration), m_Counter(0.0f), m_StartPos(startPos), m_StartLook(startLook), m_EndPos(endPos), m_EndLook(endLook)
+CameraTransition::CameraTransition(const Vector3f& startPos, const Vector3f& endPos, const Vector3f& rotation, const float& duration)
+	: m_Duration(duration), m_Counter(0.0f), m_StartPos(startPos), m_EndPos(endPos), m_Rotation(rotation)
 {
 	CameraFPV::SetRoll(180.0f);
 	CameraFPV::SetPitch(180.0f);
@@ -30,9 +27,9 @@ void CameraTransition::Update(const float& delta)
 		Vector3f position = this->m_StartPos + (this->m_EndPos - this->m_StartPos) * percentage;
 		Camera::SetPosition(VECTOR3_SPLIT(position));
 
-		CameraFPV::SetYaw(TARGET_YAW * percentage);
-		CameraFPV::SetPitch(180.0f + (TARGET_PITCH - 180.0f) * percentage);
-		CameraFPV::SetRoll(180.0f + (TARGET_ROLL - 180.0f) * percentage);
+		CameraFPV::SetYaw(this->m_Rotation.y * percentage);
+		CameraFPV::SetPitch(180.0f + (this->m_Rotation.x - 180.0f) * percentage);
+		CameraFPV::SetRoll(180.0f + (this->m_Rotation.z - 180.0f) * percentage);
 	}
 
 	CameraFPV::Update(delta);

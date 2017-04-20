@@ -13,7 +13,7 @@ const bool VSYNC_ENABLED = true;
 const bool SHOW_CURSOR = true;
 const float SCREEN_DEPTH = 1000000.0f;
 const float SCREEN_NEAR = 0.1f;
-const bool WIREFRAME_MODE = false;
+const bool WIREFRAME_MODE = true;
 
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600

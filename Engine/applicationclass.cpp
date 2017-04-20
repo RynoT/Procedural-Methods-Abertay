@@ -300,7 +300,11 @@ bool ApplicationClass::Frame()
 
 	if(this->m_Scene != nullptr)
 	{
-		this->m_Scene->Update(this->m_Timer->GetTime());
+		result = this->m_Scene->Update(this->m_Timer->GetTime());
+		if(!result)
+		{
+			return false;
+		}
 	}
 
 	// Render the graphics.

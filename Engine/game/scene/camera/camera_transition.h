@@ -5,8 +5,7 @@
 class CameraTransition : public CameraFPV
 {
 public:
-	CameraTransition(const Vector3f& startPos, const Vector3f& startLook,
-		const Vector3f& endPos, const Vector3f& endLook, const float& duration);
+	CameraTransition(const Vector3f& startPos, const Vector3f& endPos, const Vector3f& rotation, const float& duration);
 
 	virtual void Update(const float& delta) override;
 
@@ -14,5 +13,5 @@ public:
 
 private:
 	float m_Duration, m_Counter;
-	Vector3f m_StartPos, m_StartLook, m_EndPos, m_EndLook;
+	Vector3f m_StartPos, m_EndPos, m_Rotation;
 };

@@ -23,7 +23,7 @@ public:
 
 	void SetState(const GameState& state);
 
-	virtual void Update(const float& delta) override;
+	virtual bool Update(const float& delta) override;
 
 	virtual void Render(D3DClass* direct, const D3DXMATRIX& projection) override;
 
@@ -33,7 +33,7 @@ private:
 	Player *m_Player;
 	ModelEntity *m_IslandHover;
 
-	bool m_bTransitioning;
+	bool m_bTransitioning, m_bSurfaceTransition;
 	GridCell const*m_HoveredCell;
 	WorldGrid *m_WorldGrid;
 

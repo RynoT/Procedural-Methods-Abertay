@@ -33,7 +33,7 @@ void CameraFPV::MoveForward(const float& amount)
 
 void CameraFPV::MoveSideways(const float& amount) //V(a, b), Vperp(-b, a). We only move sideways on the X-Z axis. (Where y-axis is 'up and down' or height)
 {
-	Camera::Translate(-this->m_Forward.z * amount, 0.0f, this->m_Forward.x * amount);
+	Camera::Translate(-this->m_Forward.y * amount, this->m_Forward.x * amount, 0.0f);
 }
 
 void CameraFPV::Update(const float& delta)

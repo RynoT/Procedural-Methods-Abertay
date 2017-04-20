@@ -24,10 +24,11 @@ void Scene::SetCamera(Camera* camera)
 	this->m_Camera = camera;
 }
 
-void Scene::Update(const float& delta)
+bool Scene::Update(const float& delta)
 {
 	if(this->m_Camera != nullptr)
 	{
 		this->m_Camera->Update(delta);
 	}
+	return true;
 }
