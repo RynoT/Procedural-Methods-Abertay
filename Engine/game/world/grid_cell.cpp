@@ -117,11 +117,11 @@ bool GridCell::IsHovered(const float& x, const float& y, const D3DXMATRIX& proje
 	D3DXVec3TransformCoord(&outA, &min, &pvm);
 	D3DXVec3TransformCoord(&outB, &max, &pvm);
 
-	outA.x = (outA.x + 1.0f) * SCREEN_WIDTH * 0.5f;
-	outA.y = (1.0f - outA.y) * SCREEN_HEIGHT * 0.5f;
+	outA.x = (outA.x + 1.0f) * ApplicationClass::SCREEN_WIDTH * 0.5f;
+	outA.y = (1.0f - outA.y) * ApplicationClass::SCREEN_HEIGHT * 0.5f;
 
-	outB.x = (outB.x + 1.0f) * SCREEN_WIDTH * 0.5f;
-	outB.y = (1.0f - outB.y) * SCREEN_HEIGHT * 0.5f;
+	outB.x = (outB.x + 1.0f) * ApplicationClass::SCREEN_WIDTH * 0.5f;
+	outB.y = (1.0f - outB.y) * ApplicationClass::SCREEN_HEIGHT * 0.5f;
 
 	return x >= min(outA.x, outB.x) && x <= max(outA.x, outB.x)
 		&& y >= min(outA.y, outB.y) && y <= max(outA.y, outB.y);

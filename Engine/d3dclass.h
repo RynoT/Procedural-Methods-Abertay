@@ -32,6 +32,7 @@ public:
 	D3DClass(const D3DClass&);
 	~D3DClass();
 
+	void Resize(int, int);
 	bool Initialize(int, int, bool, HWND, bool, float, float);
 	void Shutdown();
 	
@@ -55,6 +56,7 @@ public:
 	void TurnOffWireframe();
 
 private:
+	float m_near, m_far;
 	bool m_vsync_enabled;
 	int m_videoCardMemory;
 	char m_videoCardDescription[128];

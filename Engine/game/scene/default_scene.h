@@ -27,6 +27,11 @@ public:
 
 	virtual void Render(D3DClass* direct, const D3DXMATRIX& projection) override;
 
+protected:
+	bool UpdateMap(const float& delta);
+
+	bool UpdateSurface(const float& delta);
+
 private:
 	GameState m_State;
 

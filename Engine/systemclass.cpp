@@ -143,6 +143,19 @@ LRESULT CALLBACK SystemClass::MessageHandler(HWND hwnd, UINT umsg, WPARAM wparam
 {
 	switch (umsg)
 	{
+		case WM_SIZE:
+			GetClientRect(this->m_hwnd, &this->m_bounds);
+			if (this->m_bounds.bottom == 0)
+			{
+				this->m_bounds.bottom = 1;
+			}
+			if (this->m_Application != nullptr)
+			{
+				this->m_Application->m_Direct3D->Resize(this->m_bounds.right, this->m_bounds.bottom);
+			}
+			ApplicationClass::SCREEN_WIDTH = this->m_bounds.right;
+			ApplicationClass::SCREEN_HEIGHT = this->m_bounds.bottom;
+			break;
 		case WM_KEYDOWN:
 			this->m_Input->SetKey(wparam, true);
 			break;
@@ -162,7 +175,7 @@ LRESULT CALLBACK SystemClass::MessageHandler(HWND hwnd, UINT umsg, WPARAM wparam
 			this->m_Input->SetMouseButton(false, true);
 			break;
 		case WM_MOUSEMOVE:
-			this->m_Input->SetMousePosition(LOWORD(lparam) + 13, HIWORD(lparam) + 22);
+			this->m_Input->SetMousePosition(LOWORD(lparam), HIWORD(lparam));
 			break;
 		default: break;
 	}
@@ -226,8 +239,8 @@ void SystemClass::InitializeWindows(int& screenWidth, int& screenHeight)
 	}
 	else
 	{
-		screenWidth = SCREEN_WIDTH;
-		screenHeight = SCREEN_HEIGHT;
+		screenWidth = ApplicationClass::SCREEN_WIDTH;
+		screenHeight = ApplicationClass::SCREEN_HEIGHT;
 
 		// Place the window in the middle of the screen.
 		posX = (GetSystemMetrics(SM_CXSCREEN) - screenWidth) / 2;

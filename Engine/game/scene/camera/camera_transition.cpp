@@ -4,11 +4,14 @@
 
 #include <cassert>
 
-CameraTransition::CameraTransition(const Vector3f& startPos, const Vector3f& endPos, const Vector3f& rotation, const float& duration)
-	: m_Duration(duration), m_Counter(0.0f), m_StartPos(startPos), m_EndPos(endPos), m_Rotation(rotation)
+#define LERP(a, b, p) (a + (b - a) * p)
+
+CameraTransition::CameraTransition(const Vector3f& startPos, const Vector3f& startRot, const Vector3f& endPos, const Vector3f& endRot, const float& duration)
+	: m_Duration(duration), m_Counter(0.0f), m_StartPos(startPos), m_EndPos(endPos), m_StartRot(startRot), m_EndRot(endRot)
 {
-	CameraFPV::SetRoll(180.0f);
-	CameraFPV::SetPitch(180.0f);
+	CameraFPV::SetPitch(startRot.x);
+	CameraFPV::SetYaw(startRot.y);
+	CameraFPV::SetRoll(startRot.z);
 	Camera::SetPosition(VECTOR3_SPLIT(startPos));
 }
 
@@ -27,9 +30,9 @@ void CameraTransition::Update(const float& delta)
 		Vector3f position = this->m_StartPos + (this->m_EndPos - this->m_StartPos) * percentage;
 		Camera::SetPosition(VECTOR3_SPLIT(position));
 
-		CameraFPV::SetYaw(this->m_Rotation.y * percentage);
-		CameraFPV::SetPitch(180.0f + (this->m_Rotation.x - 180.0f) * percentage);
-		CameraFPV::SetRoll(180.0f + (this->m_Rotation.z - 180.0f) * percentage);
+		CameraFPV::SetPitch(LERP(this->m_StartRot.x, this->m_EndRot.x, percentage));
+		CameraFPV::SetYaw(LERP(this->m_StartRot.y, this->m_EndRot.y, percentage));
+		CameraFPV::SetRoll(LERP(this->m_StartRot.z, this->m_EndRot.z, percentage));
 	}
 
 	CameraFPV::Update(delta);

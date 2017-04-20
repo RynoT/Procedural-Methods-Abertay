@@ -2,6 +2,9 @@
 
 #include "game/scene/default_scene.h"
 
+int ApplicationClass::SCREEN_WIDTH = 800;
+int ApplicationClass::SCREEN_HEIGHT = 600;
+
 ApplicationClass::ApplicationClass(InputClass *input) : m_Input(input), m_Scene(nullptr)
 {
 	m_Direct3D = 0;

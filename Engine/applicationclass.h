@@ -15,9 +15,6 @@ const float SCREEN_DEPTH = 1000000.0f;
 const float SCREEN_NEAR = 0.1f;
 const bool WIREFRAME_MODE = true;
 
-#define SCREEN_WIDTH 800
-#define SCREEN_HEIGHT 600
-
 ///////////////////////
 // MY CLASS INCLUDES //
 ///////////////////////
@@ -37,6 +34,8 @@ class Scene;
 
 class ApplicationClass
 {
+	friend class SystemClass;
+
 public:
 	ApplicationClass(InputClass *input);
 	~ApplicationClass();
@@ -44,6 +43,9 @@ public:
 	bool Initialize(HINSTANCE, HWND, int, int);
 	void Shutdown();
 	bool Frame();
+
+	static int SCREEN_WIDTH;
+	static int SCREEN_HEIGHT;
 
 private:
 	bool RenderGraphics() const;

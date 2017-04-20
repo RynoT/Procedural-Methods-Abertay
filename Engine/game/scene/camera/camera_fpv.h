@@ -42,6 +42,8 @@ public:
 	inline const float& GetPitch() const { return this->m_Pitch; }
 	inline const float& GetRoll() const { return this->m_Roll; }
 
+	inline Vector3f GetYawPitchRoll() const { return Vector3f(this->m_Pitch, this->m_Yaw, this->m_Roll); }
+
 	inline const Vector3f& GetUp() const override { return this->m_Up; }
 	inline const Vector3f& GetLookAt() const override { return this->m_LookAt; }
 	inline const Vector3f& GetForward() const { return this->m_Forward; }

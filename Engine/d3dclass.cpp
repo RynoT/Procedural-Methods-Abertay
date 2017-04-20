@@ -29,6 +29,13 @@ D3DClass::~D3DClass()
 {
 }
 
+void D3DClass::Resize(int width, int height)
+{
+	float fieldOfView = (float)D3DX_PI / 4.0f;
+	float screenAspect = (float)width / (float)height;
+	D3DXMatrixPerspectiveFovLH(&m_projectionMatrix, fieldOfView, screenAspect, m_near, m_far);
+	D3DXMatrixOrthoLH(&m_orthoMatrix, (float)width, (float)height, m_near, m_far);
+}
 
 bool D3DClass::Initialize(int screenWidth, int screenHeight, bool vsync, HWND hwnd, bool fullscreen, 
 						  float screenDepth, float screenNear)
@@ -53,6 +60,8 @@ bool D3DClass::Initialize(int screenWidth, int screenHeight, bool vsync, HWND hw
 	D3D11_DEPTH_STENCIL_DESC depthDisabledStencilDesc;
 	D3D11_BLEND_DESC blendStateDescription;
 
+	m_near = screenNear;
+	m_far = screenDepth;
 
 	// Store the vsync setting.
 	m_vsync_enabled = vsync;

@@ -60,6 +60,7 @@ private:
 	LPCWSTR m_applicationName;
 	HINSTANCE m_hinstance;
 	HWND m_hwnd;
+	RECT m_bounds;
 
 	InputClass* m_Input;
 	ApplicationClass* m_Application;
