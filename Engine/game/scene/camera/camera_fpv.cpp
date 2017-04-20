@@ -17,8 +17,7 @@ void CameraFPV::Rotate(float dx, float dy)
 	{
 		dy = -dy;
 	}
-	this->AddYaw(dx * this->m_Sensitivity);
-	this->AddPitch(-dy * this->m_Sensitivity);
+	this->AddPitch(-dx * this->m_Sensitivity);
 }
 
 void CameraFPV::MoveVertical(const float& amount)

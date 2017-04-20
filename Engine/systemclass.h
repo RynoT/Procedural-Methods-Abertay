@@ -37,6 +37,8 @@ public:
 	void Shutdown();
 	void Run();
 
+	static void SetMouseGrab(const bool& enable);
+
 	LRESULT CALLBACK MessageHandler(HWND, UINT, WPARAM, LPARAM);
 
 	static void WINAPIV DebugOut(const TCHAR *fmt, ...) 
@@ -52,6 +54,8 @@ public:
 	}
 
 private:
+	static bool MOUSE_GRAB;
+
 	bool Frame();
 	void InitializeWindows(int&, int&);
 	void ShutdownWindows();

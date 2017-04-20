@@ -13,6 +13,10 @@ protected:
 public:
 	virtual ~Scene();
 
+	float GetCameraDX() const;
+
+	float GetCameraDY() const;
+
 	virtual bool Update(const float& delta);
 
 	virtual void Render(D3DClass* direct, const D3DXMATRIX& projection) = 0;

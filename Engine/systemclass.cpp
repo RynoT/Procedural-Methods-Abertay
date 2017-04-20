@@ -3,6 +3,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 #include "systemclass.h"
 
+bool SystemClass::MOUSE_GRAB = false;
 
 SystemClass::SystemClass()
 {
@@ -20,6 +21,18 @@ SystemClass::~SystemClass()
 {
 }
 
+void SystemClass::SetMouseGrab(const bool& enable)
+{
+	SystemClass::MOUSE_GRAB = enable;
+	if(!enable)
+	{
+		while (ShowCursor(true) < 0);
+	}
+	else
+	{
+		while (ShowCursor(false) >= 0);
+	}
+}
 
 bool SystemClass::Initialize()
 {
@@ -110,6 +123,15 @@ void SystemClass::Run()
 		}
 		else
 		{
+			if (SystemClass::MOUSE_GRAB)
+			{
+				POINT point;
+				point.x = ApplicationClass::SCREEN_WIDTH / 2;
+				point.y = ApplicationClass::SCREEN_HEIGHT / 2;
+				ClientToScreen(this->m_hwnd, &point);
+				SetCursorPos(point.x, point.y);
+			}
+
 			// Otherwise do the frame processing.
 			result = Frame();
 			if (!result)
@@ -117,7 +139,6 @@ void SystemClass::Run()
 				done = true;
 			}
 		}
-
 	}
 
 	return;

@@ -78,6 +78,7 @@ DefaultScene::~DefaultScene()
 void DefaultScene::SetState(const GameState& state)
 {
 	this->m_State = state;
+	SystemClass::SetMouseGrab(state != GameState::Map);
 }
 
 bool DefaultScene::Update(const float& delta)
@@ -155,10 +156,8 @@ bool DefaultScene::UpdateMap(const float& delta)
 		this->m_bSurfaceTransition = true;
 		this->SetState(GameState::Surface);
 
-		Camera *current = Scene::GetCamera();
-
 		const float h = 1.75f;
-		Vector3f start = current->GetPosition(), end = this->m_HoveredCell->m_Model->GetPosition() - Vector3f(0.0f, 0.0f, h);
+		Vector3f start = camera->GetPosition(), end = this->m_HoveredCell->m_Model->GetPosition() - Vector3f(0.0f, 0.0f, h);
 		Scene::SetCamera(new CameraTransition(start, Vector3f(180.0f, 0.0f, 180.0f), end, Vector3f(90.0f, 90.0f, 90.0f), 2.0f));
 	}
 	return true;
@@ -180,6 +179,7 @@ bool DefaultScene::UpdateSurface(const float& delta)
 	}
 	else
 	{
+		camera->Rotate(Scene::GetCameraDX() * delta, Scene::GetCameraDY() * delta);
 		if (Scene::m_Input->IsKeyDown(VK_W))
 		{
 			camera->MoveForward(CAMERA_SURFACE_SPEED * delta);
@@ -201,11 +201,10 @@ bool DefaultScene::UpdateSurface(const float& delta)
 			this->m_bTransitioning = true;
 			this->m_bSurfaceTransition = false;
 
-			CameraFPV *current = (CameraFPV*)Scene::GetCamera();
-
-			Vector3f start = current->GetPosition(), end = Vector3f(start.x, start.y, MAP_CAMERA_Z);
+			Vector3f start = camera->GetPosition(), end = Vector3f(start.x, start.y, MAP_CAMERA_Z);
 			//Scene::SetCamera(new CameraTransition(start, current->GetYawPitchRoll(), end, Vector3f(180.0f, 0.0f, 180.0f), 1.25f));
 			Scene::SetCamera(new CameraTransition(start, Vector3f(180.0f, 0.0f, 180.0f), end, Vector3f(180.0f, 0.0f, 180.0f), 1.25f));
+			SystemClass::SetMouseGrab(false);
 		}
 	}
 	return true;
