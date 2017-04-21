@@ -6,6 +6,7 @@
 class Camera
 {
 public:
+	Camera();
 	virtual ~Camera() { }
 
 	virtual void Update(const float& delta) = 0;
@@ -14,6 +15,12 @@ public:
 
 	virtual const Vector3f& GetUp() const = 0;
 	virtual const Vector3f& GetLookAt() const = 0;
+
+	inline const float& GetX() const { return this->m_Position.x; }
+
+	inline const float& GetY() const { return this->m_Position.y; }
+
+	inline const float& GetZ() const { return this->m_Position.z; }
 
 	inline const Vector3f& GetPosition() const { return this->m_Position; }
 

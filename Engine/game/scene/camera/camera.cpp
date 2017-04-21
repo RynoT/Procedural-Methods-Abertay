@@ -1,5 +1,9 @@
 #include "camera.h"
 
+Camera::Camera() : m_bViewDirty(true)
+{
+}
+
 const D3DXMATRIX& Camera::GetViewMatrix()
 {
 	if (this->m_bViewDirty)

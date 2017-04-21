@@ -156,8 +156,9 @@ bool DefaultScene::UpdateMap(const float& delta)
 		this->m_bSurfaceTransition = true;
 		this->SetState(GameState::Surface);
 
-		((CameraTransition*)camera)->Transition(this->m_HoveredCell->m_Island->GetPosition()
-			- Vector3f(0.0f, PLAYER_HEIGHT, 0.0f), Vector3f(180.0f, 0.0f, 0.0f), 2.0f);
+		Vector3f islandPos = this->m_HoveredCell->m_Island->GetPosition();
+		this->m_HoveredCell->m_Island->GetSurfaceY(islandPos.x, islandPos.z, islandPos.y);
+		((CameraTransition*)camera)->Transition(islandPos + Vector3f(0.0f, -PLAYER_HEIGHT, 0.0f), Vector3f(180.0f, 0.0f, 0.0f), 2.0f);
 	}
 	return true;
 }
@@ -178,6 +179,7 @@ bool DefaultScene::UpdateSurface(const float& delta)
 	}
 	else
 	{
+		Vector3f previousPosition = camera->GetPosition();
 		if (Scene::m_Input->IsKeyDown(VK_W))
 		{
 			camera->MoveForward(CAMERA_SURFACE_SPEED * delta);
@@ -194,10 +196,17 @@ bool DefaultScene::UpdateSurface(const float& delta)
 		{
 			camera->MoveSideways(CAMERA_SURFACE_SPEED * delta);
 		}
-		const Vector3f& position = camera->GetPosition();
 		camera->Rotate(Scene::GetCameraDX() * delta, Scene::GetCameraDY() * delta);
-		camera->SetPosition(position.x, this->m_HoveredCell->m_Island->
-			GetSurfaceY(position.x, position.z) - PLAYER_HEIGHT, position.z);
+
+		float outY; 
+		if(this->m_HoveredCell->m_Island->GetSurfaceY(camera->GetX(), camera->GetZ(), outY))
+		{
+			camera->SetPosition(camera->GetX(), outY - PLAYER_HEIGHT, camera->GetZ());
+		}
+		else
+		{
+			camera->SetPosition(VECTOR3_SPLIT(previousPosition));
+		}
 
 		if (Scene::m_Input->IsKeyDown(VK_ESCAPE))
 		{

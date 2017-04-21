@@ -7,5 +7,5 @@ class Island : public ModelEntity
 public:
 	Island(ID3D11Device *device);
 
-	float GetSurfaceY(float x, float z) const;
+	bool GetSurfaceY(float x, float z, float& out) const;
 };

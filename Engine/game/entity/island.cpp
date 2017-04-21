@@ -12,11 +12,15 @@ Island::Island(ID3D11Device* device)
 	ModelEntity::SetModel(model);
 }
 
-float Island::GetSurfaceY(float x, float z) const
+bool Island::GetSurfaceY(float x, float z, float& out) const
 {
 	x -= Entity::GetPosition().x;
 	z -= Entity::GetPosition().z;
-
+	if(x == 0.0f && z == 0.0f)
+	{
+		// Stop dividing by 0 error by shifting the coordinates by a very small distance
+		x = z = 0.00001f;
+	}
 	Vector3f v1, v2, v3;
 	IslandModel *model = (IslandModel*)ModelEntity::GetInternalModel();
 	const ModelData *data = model->GetModelMesh()->GetModelData();
@@ -39,17 +43,8 @@ float Island::GetSurfaceY(float x, float z) const
 		if (w3 < 0.0f || w3 > 1.0f) {
 			continue;
 		}
-		return v1.y * w1 + v2.y * w2 + v3.y * w3;
+		out = v1.y * w1 + v2.y * w2 + v3.y * w3;
+		return true;
 	}
-	return 0.0f;
+	return false;
 }
-
-//function pointInTriangle(x1, y1, x2, y2, x3, y3, x, y:Number) :Boolean
-//{
-//	var denominator : Number = (x1*(y2 - y3) + y1*(x3 - x2) + x2*y3 - y2*x3);
-//var t1 : Number = (x*(y3 - y1) + y*(x1 - x3) - x1*y3 + y1*x3) / denominator;
-//var t2 : Number = (x*(y2 - y1) + y*(x1 - x2) - x1*y2 + y1*x2) / -denominator;
-//var s : Number = t1 + t2;
-//
-//return 0 <= t1 && t1 <= 1 && 0 <= t2 && t2 <= 1 && s <= 1;
-//}
