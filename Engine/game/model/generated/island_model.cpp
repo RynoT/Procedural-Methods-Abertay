@@ -14,9 +14,12 @@
 
 #define RES_DELTA (PI2 / 30.0f)
 
+#define NOISE_FREQUENCY 4.0f
+#define NOISE_INTENSITY 0.18f
+
 #define SURFACE_TEXTURE_PATH L"data/textures/seafloor.dds"
 
-IslandModel::IslandModel(const float& x, const float& y) : m_X(x), m_Y(y)
+IslandModel::IslandModel() : m_SurfaceLastIndex(0)
 {
 }
 
@@ -59,7 +62,6 @@ bool IslandModel::Initialize(ID3D11Device *device)
 			v4.nz = 1.0f;
 
 			// Push vertices as triangles
-
 			data.push_back(v4);
 			data.push_back(v1);
 			data.push_back(v2);
@@ -69,12 +71,14 @@ bool IslandModel::Initialize(ID3D11Device *device)
 			data.push_back(v4);
 		}
 	}
+	this->m_SurfaceLastIndex = data.size();
+
 	ModelMesh *mesh = Model::CreateMesh();
 	ModelData *modelData = mesh->SetVertexCount(data.size());
 	// Set mesh and apply perlin noise to surface
 	for(int i = 0; i < data.size(); i++)
 	{
-		//data[i].z = PerlinNoise::noise(this->m_X, this->m_Y, (this->m_X + this->m_Y) / 2.0f);
+		data[i].y = PerlinNoise::noise(data[i].x * NOISE_FREQUENCY, data[i].y * NOISE_FREQUENCY, 0.0f) * NOISE_INTENSITY;
 		modelData[i] = data[i];
 	}
 	return Model::LoadTexture(device, SURFACE_TEXTURE_PATH) && Model::Initialize(device);

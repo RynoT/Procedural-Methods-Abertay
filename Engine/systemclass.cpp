@@ -91,35 +91,20 @@ void SystemClass::Shutdown()
 
 	// Shutdown the window.
 	ShutdownWindows();
-
-	return;
 }
 
 
-void SystemClass::Run()
+void SystemClass::Run() const
 {
 	MSG msg;
-	bool done, result;
-
-
-	// Initialize the message structure.
-	ZeroMemory(&msg, sizeof(MSG));
-
-	// Loop until there is a quit message from the window or the user.
-	done = false;
-	while (!done)
+	while (true)
 	{
-		// Handle the windows messages.
 		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
 		{
+			if (msg.message == WM_QUIT)
+				break;
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
-		}
-
-		// If windows signals to end the application then exit out.
-		if (msg.message == WM_QUIT)
-		{
-			done = true;
 		}
 		else
 		{
@@ -131,34 +116,18 @@ void SystemClass::Run()
 				ClientToScreen(this->m_hwnd, &point);
 				SetCursorPos(point.x, point.y);
 			}
-
-			// Otherwise do the frame processing.
-			result = Frame();
-			if (!result)
+			if(!this->Frame())
 			{
-				done = true;
+				break;
 			}
 		}
 	}
-
-	return;
 }
 
-
-bool SystemClass::Frame()
+bool SystemClass::Frame() const
 {
-	bool result;
-
-	// Do the frame processing for the graphics object.
-	result = m_Application->Frame();
-	if (!result)
-	{
-		return false;
-	}
-
-	return true;
+	return this->m_Application->Frame();
 }
-
 
 LRESULT CALLBACK SystemClass::MessageHandler(HWND hwnd, UINT umsg, WPARAM wparam, LPARAM lparam)
 {

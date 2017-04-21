@@ -46,11 +46,11 @@ void CameraTransition::Update(const float& delta)
 		CameraFPV::SetYaw(LERP(this->m_StartRot.y, this->m_EndRot.y, percentage));
 		CameraFPV::SetRoll(LERP(this->m_StartRot.z, this->m_EndRot.z, percentage));
 	}
-	else
-	{
-		const Vector3f& currentPos = Camera::GetPosition();
-		Camera::SetPosition(currentPos.x, this->m_EndPos.y, currentPos.z);
-	}
+	//else
+	//{
+	//	const Vector3f& currentPos = Camera::GetPosition();
+	//	Camera::SetPosition(currentPos.x, this->m_EndPos.y, currentPos.z);
+	//}
 
 	CameraFPV::Update(delta);
 }

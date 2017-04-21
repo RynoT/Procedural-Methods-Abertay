@@ -5,8 +5,7 @@
 #include "../model/model.h"
 #include "../../d3dclass.h"
 #include "../../timerclass.h"
-#include "../../modelclass.h"
-#include "../entity/model_entity.h"
+#include "../entity/island.h"
 #include "../../textureshaderclass.h"
 #include "../model/generated/island_model.h"
 #include "../model/collision/aabb.h"
@@ -19,9 +18,9 @@
 //#define MAX_ISLAND_RADIUS (size * MAX_ISLAND_RADIUS_PERC)
 
 #define ISLAND_SPAWN_CHANCE 0.35f //spawns every x percent
-#define ISLAND_BORDER_OFFSET 100.0f
-#define MAX_ISLAND_RADIUS 1000.0f
-#define MIN_ISLAND_RADIUS 5000.0f
+#define ISLAND_BORDER_OFFSET 20.0f
+#define MAX_ISLAND_RADIUS 60.0f
+#define MIN_ISLAND_RADIUS 450.0f
 #define COLLISION_BOX_SCALE 1.25f
 
 #define CENTER_ALL_ISLANDS false
@@ -31,17 +30,17 @@
 #define pseudo_seed(x, y) srand(GridCell::Hash(x, y))
 #define pseudo_random() (rand() / float(RAND_MAX)) // Random number between 0-1
 
-GridCell::GridCell() : m_CellX(0), m_CellY(0), m_Model(nullptr), m_bReady(false), m_Shader(nullptr)
+GridCell::GridCell() : m_CellX(0), m_CellY(0), m_Island(nullptr), m_bReady(false), m_Shader(nullptr)
 {
 }
 
 void GridCell::Destroy()
 {
 	this->m_bReady = false;
-	if (this->m_Model != nullptr)
+	if (this->m_Island != nullptr)
 	{
-		delete this->m_Model;
-		this->m_Model = nullptr;
+		delete this->m_Island;
+		this->m_Island = nullptr;
 	}
 }
 
@@ -54,10 +53,10 @@ int GridCell::Hash(const int& x, const int& y)
 
 void GridCell::GenerateIsland(D3DClass *d3d, const float& size)
 {
-	if (this->m_Model != nullptr)
+	if (this->m_Island != nullptr)
 	{
-		delete this->m_Model;
-		this->m_Model = nullptr;
+		delete this->m_Island;
+		this->m_Island = nullptr;
 	}
 
 	// We must seed the random using x and y so that our random numbers are always consistent
@@ -80,37 +79,31 @@ void GridCell::GenerateIsland(D3DClass *d3d, const float& size)
 		rx = ry = 0.0f;
 	}
 
-	this->m_Model = new ModelEntity;
-
-	Model *model = new IslandModel(VECTOR2_SPLIT(this->m_Model->GetPosition()));
-	model->Initialize(d3d->GetDevice());
-	model->SetCollision(new CollisionAABB);
-	this->m_Model->SetModel(model);
-
-	this->m_Model->SetScale(radius);
-	this->m_Model->SetPosition(this->m_CellX * size + rx, 0.0f, this->m_CellY * size + ry);
-	this->m_Model->SetRenderMethod([this](D3DClass* direct, const D3DXMATRIX& projection,
+	this->m_Island = new Island(d3d->GetDevice());
+	this->m_Island->SetScale(radius);
+	this->m_Island->SetPosition(this->m_CellX * size + rx, 0.0f, this->m_CellY * size + ry);
+	this->m_Island->SetRenderMethod([this](D3DClass* direct, const D3DXMATRIX& projection,
 		const D3DXMATRIX& view, const D3DXMATRIX& model)->void { this->Render(direct, projection, view, model); });
 }
 
 bool GridCell::IsHovered(const float& x, const float& y, const D3DXMATRIX& projection, const D3DXMATRIX& view) const
 {
-	if (this->m_Model == nullptr)
+	if (this->m_Island == nullptr)
 	{
 		return false;
 	}
 	D3DXMATRIX model, transform;
 	D3DXMatrixIdentity(&model);
 
-	D3DXMatrixScaling(&transform, VECTOR3_SPLIT(this->m_Model->GetScale()));
+	D3DXMatrixScaling(&transform, VECTOR3_SPLIT(this->m_Island->GetScale()));
 	D3DXMatrixMultiply(&model, &model, &transform);
 
-	D3DXMatrixTranslation(&transform, VECTOR3_SPLIT(this->m_Model->GetPosition()));
+	D3DXMatrixTranslation(&transform, VECTOR3_SPLIT(this->m_Island->GetPosition()));
 	D3DXMatrixMultiply(&model, &model, &transform);
 
 	D3DXMATRIX pvm = model * view * projection;
 
-	CollisionAABB *collision = (CollisionAABB*)this->m_Model->GetInternalModel()->GetCollision();
+	CollisionAABB *collision = (CollisionAABB*)this->m_Island->GetInternalModel()->GetCollision();
 	D3DXVECTOR3 min = collision->GetMin() * COLLISION_BOX_SCALE, max = collision->GetMax() * COLLISION_BOX_SCALE;
 
 	D3DXVECTOR3 outA, outB;
@@ -133,6 +126,6 @@ void GridCell::Render(D3DClass* direct, const D3DXMATRIX& projection, const D3DX
 	{
 		return;
 	}
-	Model *imodel = this->m_Model->GetInternalModel();
+	Model *imodel = this->m_Island->GetInternalModel();
 	this->m_Shader->Render(direct->GetDeviceContext(), imodel->GetIndexCount(), model, view, projection, imodel->GetTexture());
 }

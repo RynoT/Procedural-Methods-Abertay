@@ -3,7 +3,7 @@
 #include <assert.h>
 
 #include "grid_cell.h"
-#include "../entity/model_entity.h"
+#include "../entity/island.h"
 
 WorldGrid::WorldGrid(const float& worldSize, const int& size)
 	: m_Shader(nullptr), m_WorldSize(worldSize), m_GridSize(size), m_bDirty(true), m_OffsetX(0), m_OffsetY(0)
@@ -93,10 +93,10 @@ void WorldGrid::Render(D3DClass* direct, const D3DXMATRIX& projection, const D3D
 	for (int i = 0; i < this->GetCellCount(); i++)
 	{
 		GridCell& cell = this->m_Cells[i];
-		if(cell.m_Model == nullptr)
+		if(cell.m_Island == nullptr)
 		{
 			continue;
 		}
-		cell.m_Model->Render(direct, projection, view);
+		cell.m_Island->Render(direct, projection, view);
 	}
 }

@@ -4,7 +4,7 @@
 
 #define CAMERA_FPV_INVERT_X false
 #define CAMERA_FPV_INVERT_Y false
-#define CAMERA_FPV_MOVE_SENSITIVITY 30.0f
+#define CAMERA_FPV_MOVE_SENSITIVITY 20.0f
 
 /// First-person camera is a camera which works based off of yaw, pitch, and roll. Useful for first person movement.
 class CameraFPV : public Camera //Camera First Person View

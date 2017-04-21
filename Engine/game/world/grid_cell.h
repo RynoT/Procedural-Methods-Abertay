@@ -3,6 +3,7 @@
 #include "../../d3dclass.h"
 
 struct Vector3f;
+class Island;
 class D3DClass;
 class ModelEntity;
 class TextureShaderClass;
@@ -23,8 +24,8 @@ struct GridCell
 
 	inline void SetShader(TextureShaderClass *shader) { this->m_Shader = shader; }
 
+	Island *m_Island;
 	int m_CellX, m_CellY;
-	ModelEntity *m_Model;
 
 private:
 	static int Hash(const int& x, const int& y);

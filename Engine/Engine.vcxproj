@@ -93,6 +93,7 @@
     <ClCompile Include="fontshaderclass.cpp" />
     <ClCompile Include="fpsclass.cpp" />
     <ClCompile Include="game\entity\entity.cpp" />
+    <ClCompile Include="game\entity\island.cpp" />
     <ClCompile Include="game\entity\model_entity.cpp" />
     <ClCompile Include="game\entity\path.cpp" />
     <ClCompile Include="game\entity\player.cpp" />
@@ -138,6 +139,7 @@
     <ClInclude Include="fontshaderclass.h" />
     <ClInclude Include="fpsclass.h" />
     <ClInclude Include="game\entity\entity.h" />
+    <ClInclude Include="game\entity\island.h" />
     <ClInclude Include="game\entity\model_entity.h" />
     <ClInclude Include="game\entity\path.h" />
     <ClInclude Include="game\entity\player.h" />

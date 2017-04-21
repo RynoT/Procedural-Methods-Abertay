@@ -35,7 +35,7 @@ public:
 
 	bool Initialize();
 	void Shutdown();
-	void Run();
+	void Run() const;
 
 	static void SetMouseGrab(const bool& enable);
 
@@ -56,7 +56,7 @@ public:
 private:
 	static bool MOUSE_GRAB;
 
-	bool Frame();
+	bool Frame() const;
 	void InitializeWindows(int&, int&);
 	void ShutdownWindows();
 

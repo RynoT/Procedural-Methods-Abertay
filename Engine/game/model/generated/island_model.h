@@ -1,14 +1,17 @@
 #pragma once
 
 #include "../model.h"
+#include "../../util/math/vector3f.h"
 
 class IslandModel : public Model
 {
 public:
-	IslandModel(const float& x, const float& y);
+	IslandModel();
 
 	virtual bool Initialize(ID3D11Device *device) override;
 
+	inline const int& GetLastSurfaceIndex() const { return this->m_SurfaceLastIndex; }
+
 private:
-	const float m_X, m_Y;
+	int m_SurfaceLastIndex;
 };
