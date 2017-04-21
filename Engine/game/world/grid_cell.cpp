@@ -21,6 +21,7 @@
 #define ISLAND_BORDER_OFFSET 20.0f
 #define MAX_ISLAND_RADIUS 60.0f
 #define MIN_ISLAND_RADIUS 450.0f
+#define ISLAND_Y_OFFSET 800.0f
 #define COLLISION_BOX_SCALE 1.25f
 
 #define CENTER_ALL_ISLANDS false
@@ -30,7 +31,7 @@
 #define pseudo_seed(x, y) srand(GridCell::Hash(x, y))
 #define pseudo_random() (rand() / float(RAND_MAX)) // Random number between 0-1
 
-GridCell::GridCell() : m_CellX(0), m_CellY(0), m_Island(nullptr), m_bReady(false), m_Shader(nullptr)
+GridCell::GridCell() : m_Island(nullptr), m_CellX(0), m_CellY(0), m_bReady(false), m_Shader(nullptr)
 {
 }
 
@@ -74,14 +75,15 @@ void GridCell::GenerateIsland(D3DClass *d3d, const float& size)
 	// Generate relative position within grid according to size and radius
 	float rx = radius + (size - radius * 2.0f - ISLAND_BORDER_OFFSET) * pseudo_random(),
 		ry = radius + (size - radius * 2.0f - ISLAND_BORDER_OFFSET) * pseudo_random();
+	float y = -ISLAND_Y_OFFSET / 2.0f + ISLAND_Y_OFFSET * pseudo_random();
 	if (CENTER_ALL_ISLANDS)
 	{
-		rx = ry = 0.0f;
+		rx = ry = y = 0.0f;
 	}
 
 	this->m_Island = new Island(d3d->GetDevice());
 	this->m_Island->SetScale(radius);
-	this->m_Island->SetPosition(this->m_CellX * size + rx, 0.0f, this->m_CellY * size + ry);
+	this->m_Island->SetPosition(this->m_CellX * size + rx, y, this->m_CellY * size + ry);
 	this->m_Island->SetRenderMethod([this](D3DClass* direct, const D3DXMATRIX& projection,
 		const D3DXMATRIX& view, const D3DXMATRIX& model)->void { this->Render(direct, projection, view, model); });
 }

@@ -43,7 +43,7 @@ bool Island::GetSurfaceY(float x, float z, float& out) const
 		if (w3 < 0.0f || w3 > 1.0f) {
 			continue;
 		}
-		out = v1.y * w1 + v2.y * w2 + v3.y * w3;
+		out = v1.y * w1 + v2.y * w2 + v3.y * w3 + Entity::GetPosition().y;
 		return true;
 	}
 	return false;

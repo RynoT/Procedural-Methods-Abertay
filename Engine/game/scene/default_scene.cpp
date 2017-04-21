@@ -16,7 +16,7 @@
 #define GRID_WORLD_SIZE 2000.0f
 
 #define CAMERA_SPEED 2000.0f
-#define CAMERA_SURFACE_SPEED 16.0f
+#define CAMERA_SURFACE_SPEED 26.0f
 
 #define MAP_CAMERA_Y -GRID_WORLD_SIZE * 5.0f
 
@@ -205,7 +205,7 @@ bool DefaultScene::UpdateSurface(const float& delta)
 		}
 		else
 		{
-			camera->SetPosition(VECTOR3_SPLIT(previousPosition));
+			//camera->SetPosition(VECTOR3_SPLIT(previousPosition));
 		}
 
 		if (Scene::m_Input->IsKeyDown(VK_ESCAPE))
