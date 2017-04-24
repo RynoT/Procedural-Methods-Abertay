@@ -13,6 +13,7 @@
 #define PI2 (PI * 2.0f)
 
 #define RES_DELTA (PI2 / 30.0f)
+#define UV_MUL 8.0f
 
 #define NOISE_FREQUENCY 4.0f
 #define NOISE_INTENSITY 0.18f
@@ -33,37 +34,36 @@ bool IslandModel::Initialize(ID3D11Device *device)
 	{
 		for(int itr = 1; itr <= RADIUS_ITERATIONS; itr++)
 		{
-			float rt = ITERATION_OFFSET * RADIUS_ITERATIONS;
 			float r1 = (itr * ITERATION_OFFSET), r2 = ((itr - 1) * ITERATION_OFFSET);
 			v1.x = std::cosf(theta) * r1;
 			v1.y = 0.0f;
 			v1.z = std::sinf(theta) * r1;
-			v1.tu = (v1.x/r1) / (rt * 2.0f) + 0.5f;
-			v1.tv = (v1.y/r1) / (rt * 2.0f) + 0.5f;
+			v1.tu = 0.5f + v1.x / 2.0f * UV_MUL;
+			v1.tv = 0.5f + v1.z / 2.0f * UV_MUL;
 			v1.nx = v1.nz = 0.0f;
 			v1.ny = 1.0f;
 
 			v2.x = std::cosf(theta) * r2;
 			v2.y = 0.0f;
 			v2.z = std::sinf(theta) * r2;
-			v2.tu = (v2.x/r2) / (rt * 2.0f) + 0.5f;
-			v2.tv = (v2.y/r2) / (rt * 2.0f) + 0.5f;
+			v2.tu = 0.5f + v2.x / 2.0f * UV_MUL;
+			v2.tv = 0.5f + v2.z / 2.0f * UV_MUL;
 			v2.nx = v2.nz = 0.0f;
 			v2.ny = 1.0f;
 
 			v3.x = std::cosf(theta - RES_DELTA) * r1;
 			v3.y = 0.0f;
 			v3.z = std::sinf(theta - RES_DELTA) * r1;
-			v3.tu = (v3.x/r1) / (rt * 2.0f) + 0.5f;
-			v3.tv = (v3.y/r1) / (rt * 2.0f) + 0.5f;
+			v3.tu = 0.5f + v3.x / 2.0f * UV_MUL;
+			v3.tv = 0.5f + v3.z / 2.0f * UV_MUL;
 			v3.nx = v3.nz = 0.0f;
 			v3.ny = 1.0f;
 
 			v4.x = std::cosf(theta - RES_DELTA) * r2;
 			v4.y = 0.0f;
 			v4.z = std::sinf(theta - RES_DELTA) * r2;
-			v4.tu = (v4.x/r2) / (rt * 2.0f) + 0.5f;
-			v4.tv = (v4.y/r2) / (rt * 2.0f) + 0.5f;
+			v4.tu = 0.5f + v4.x / 2.0f * UV_MUL;
+			v4.tv = 0.5f + v4.z / 2.0f * UV_MUL;
 			v4.nx = v4.nz = 0.0f;
 			v4.ny = 1.0f;
 
@@ -138,5 +138,5 @@ bool IslandModel::Initialize(ID3D11Device *device)
 	{
 		modelData[i] = data[i];
 	}
-	return Model::LoadTexture(device, SURFACE_TEXTURE_PATH) && Model::Initialize(device);
+	return Model::LoadTexture(device, SURFACE_TEXTURE_PATH) && Model::InitializeVerticesTexture(device) && Model::InitializeIndices(device);
 }

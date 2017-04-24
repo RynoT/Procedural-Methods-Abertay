@@ -10,5 +10,5 @@ bool FileModel::Initialize(ID3D11Device* device)
 	{
 		return false;
 	}
-	return Model::Initialize(device);
+	return Model::InitializeVerticesTexture(device) && Model::InitializeIndices(device);
 }

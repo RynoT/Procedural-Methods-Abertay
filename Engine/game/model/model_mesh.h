@@ -6,6 +6,7 @@ struct ModelData
 {
 	float x, y, z;
 	float tu, tv;
+	float cr, cg, cb, ca;
 	float nx, ny, nz;
 };
 

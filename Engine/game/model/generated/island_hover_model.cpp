@@ -45,5 +45,5 @@ bool IslandHoverModel::Initialize(ID3D11Device* device)
 		data[i].nx = data[i].ny = 0.0f;
 		data[i].nz = 1.0f;
 	}
-	return Model::LoadTexture(device, SURFACE_TEXTURE_PATH) && Model::Initialize(device);
+	return Model::LoadTexture(device, SURFACE_TEXTURE_PATH) && Model::InitializeVerticesTexture(device) && Model::InitializeIndices(device);
 }

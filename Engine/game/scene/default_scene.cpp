@@ -16,9 +16,13 @@
 #define GRID_WORLD_SIZE 2000.0f
 
 #define CAMERA_SPEED 2000.0f
-#define CAMERA_SURFACE_SPEED 26.0f
+#define CAMERA_SURFACE_SPEED 36.0f
 
-#define MAP_CAMERA_Y -GRID_WORLD_SIZE * 5.0f
+#define MAP_CAMERA_Y (-GRID_WORLD_SIZE * 4.0f)
+
+#define MAP_ZOOM_TOTAL 7500.0f
+#define MAP_MIN_ZOOM (MAP_CAMERA_Y - MAP_ZOOM_TOTAL / 2.0f)
+#define MAP_MAX_ZOOM (MAP_CAMERA_Y + MAP_ZOOM_TOTAL / 2.0f)
 
 DefaultScene::DefaultScene(D3DClass *d3d, const HWND& hwnd, InputClass *input) 
 : Scene(d3d, hwnd, input), m_bTransitioning(false), m_HoveredCell(nullptr)
@@ -139,10 +143,12 @@ bool DefaultScene::UpdateMap(const float& delta)
 	if (Scene::m_Input->IsKeyDown(VK_Q))
 	{
 		camera->Translate(0.0f, -CAMERA_SPEED * delta, 0.0f);
+		camera->SetPosition(camera->GetX(), max(camera->GetY(), MAP_MIN_ZOOM), camera->GetZ());
 	}
 	if (Scene::m_Input->IsKeyDown(VK_E))
 	{
 		camera->Translate(0.0f, CAMERA_SPEED * delta, 0.0f);
+		camera->SetPosition(camera->GetX(), min(camera->GetY(), MAP_MAX_ZOOM), camera->GetZ());
 	}
 	if (Scene::m_Input->IsKeyDown(VK_ESCAPE))
 	{
@@ -205,7 +211,7 @@ bool DefaultScene::UpdateSurface(const float& delta)
 		}
 		else
 		{
-			//camera->SetPosition(VECTOR3_SPLIT(previousPosition));
+			camera->SetPosition(VECTOR3_SPLIT(previousPosition));
 		}
 
 		if (Scene::m_Input->IsKeyDown(VK_ESCAPE))

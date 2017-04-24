@@ -1,6 +1,7 @@
 #include "applicationclass.h"
 
 #include "game/scene/default_scene.h"
+#include "game/scene/dungeon_scene.h"
 
 int ApplicationClass::SCREEN_WIDTH = 800;
 int ApplicationClass::SCREEN_HEIGHT = 600;
@@ -33,14 +34,14 @@ bool ApplicationClass::Initialize(HINSTANCE hinstance, HWND hwnd, int screenWidt
 
 	// Create the Direct3D object.
 	m_Direct3D = new D3DClass;
-	if(!m_Direct3D)
+	if (!m_Direct3D)
 	{
 		return false;
 	}
 
 	// Initialize the Direct3D object.
 	result = m_Direct3D->Initialize(screenWidth, screenHeight, VSYNC_ENABLED, hwnd, FULL_SCREEN, SCREEN_DEPTH, SCREEN_NEAR);
-	if(!result)
+	if (!result)
 	{
 		MessageBox(hwnd, L"Could not initialize DirectX 11.", L"Error", MB_OK);
 		return false;
@@ -48,7 +49,7 @@ bool ApplicationClass::Initialize(HINSTANCE hinstance, HWND hwnd, int screenWidt
 
 	// Create the camera object.
 	m_Camera = new CameraClass;
-	if(!m_Camera)
+	if (!m_Camera)
 	{
 		return false;
 	}
@@ -67,14 +68,14 @@ bool ApplicationClass::Initialize(HINSTANCE hinstance, HWND hwnd, int screenWidt
 
 	// Create the terrain object.
 	m_Terrain = new TerrainClass;
-	if(!m_Terrain)
+	if (!m_Terrain)
 	{
 		return false;
 	}
 
 	// Initialize the terrain object.
 	result = m_Terrain->Initialize(m_Direct3D->GetDevice());
-	if(!result)
+	if (!result)
 	{
 		MessageBox(hwnd, L"Could not initialize the terrain object.", L"Error", MB_OK);
 		return false;
@@ -82,14 +83,14 @@ bool ApplicationClass::Initialize(HINSTANCE hinstance, HWND hwnd, int screenWidt
 
 	// Create the color shader object.
 	m_ColorShader = new ColorShaderClass;
-	if(!m_ColorShader)
+	if (!m_ColorShader)
 	{
 		return false;
 	}
 
 	// Initialize the color shader object.
 	result = m_ColorShader->Initialize(m_Direct3D->GetDevice(), hwnd);
-	if(!result)
+	if (!result)
 	{
 		MessageBox(hwnd, L"Could not initialize the color shader object.", L"Error", MB_OK);
 		return false;
@@ -97,14 +98,14 @@ bool ApplicationClass::Initialize(HINSTANCE hinstance, HWND hwnd, int screenWidt
 
 	// Create the timer object.
 	m_Timer = new TimerClass;
-	if(!m_Timer)
+	if (!m_Timer)
 	{
 		return false;
 	}
 
 	// Initialize the timer object.
 	result = m_Timer->Initialize();
-	if(!result)
+	if (!result)
 	{
 		MessageBox(hwnd, L"Could not initialize the timer object.", L"Error", MB_OK);
 		return false;
@@ -112,7 +113,7 @@ bool ApplicationClass::Initialize(HINSTANCE hinstance, HWND hwnd, int screenWidt
 
 	// Create the position object.
 	m_Position = new PositionClass;
-	if(!m_Position)
+	if (!m_Position)
 	{
 		return false;
 	}
@@ -122,7 +123,7 @@ bool ApplicationClass::Initialize(HINSTANCE hinstance, HWND hwnd, int screenWidt
 
 	// Create the fps object.
 	m_Fps = new FpsClass;
-	if(!m_Fps)
+	if (!m_Fps)
 	{
 		return false;
 	}
@@ -132,7 +133,7 @@ bool ApplicationClass::Initialize(HINSTANCE hinstance, HWND hwnd, int screenWidt
 
 	// Create the cpu object.
 	m_Cpu = new CpuClass;
-	if(!m_Cpu)
+	if (!m_Cpu)
 	{
 		return false;
 	}
@@ -142,14 +143,14 @@ bool ApplicationClass::Initialize(HINSTANCE hinstance, HWND hwnd, int screenWidt
 
 	// Create the font shader object.
 	m_FontShader = new FontShaderClass;
-	if(!m_FontShader)
+	if (!m_FontShader)
 	{
 		return false;
 	}
 
 	// Initialize the font shader object.
 	result = m_FontShader->Initialize(m_Direct3D->GetDevice(), hwnd);
-	if(!result)
+	if (!result)
 	{
 		MessageBox(hwnd, L"Could not initialize the font shader object.", L"Error", MB_OK);
 		return false;
@@ -157,14 +158,14 @@ bool ApplicationClass::Initialize(HINSTANCE hinstance, HWND hwnd, int screenWidt
 
 	// Create the text object.
 	m_Text = new TextClass;
-	if(!m_Text)
+	if (!m_Text)
 	{
 		return false;
 	}
 
 	// Initialize the text object.
 	result = m_Text->Initialize(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), hwnd, screenWidth, screenHeight, baseViewMatrix);
-	if(!result)
+	if (!result)
 	{
 		MessageBox(hwnd, L"Could not initialize the text object.", L"Error", MB_OK);
 		return false;
@@ -175,15 +176,16 @@ bool ApplicationClass::Initialize(HINSTANCE hinstance, HWND hwnd, int screenWidt
 
 	// Set the video card information in the text object.
 	result = m_Text->SetVideoCardInfo(videoCard, videoMemory, m_Direct3D->GetDeviceContext());
-	if(!result)
+	if (!result)
 	{
 		MessageBox(hwnd, L"Could not set video card info in the text object.", L"Error", MB_OK);
 		return false;
 	}
 
 	this->m_Scene = new DefaultScene(this->m_Direct3D, hwnd, this->m_Input);
+	//this->m_Scene = new DungeonScene(this->m_Direct3D, hwnd, this->m_Input);
 
-	if(WIREFRAME_MODE)
+	if (WIREFRAME_MODE)
 	{
 		this->m_Direct3D->TurnOnWireframe();
 	}
@@ -195,7 +197,7 @@ bool ApplicationClass::Initialize(HINSTANCE hinstance, HWND hwnd, int screenWidt
 void ApplicationClass::Shutdown()
 {
 	// Release the text object.
-	if(m_Text)
+	if (m_Text)
 	{
 		m_Text->Shutdown();
 		delete m_Text;
@@ -203,7 +205,7 @@ void ApplicationClass::Shutdown()
 	}
 
 	// Release the font shader object.
-	if(m_FontShader)
+	if (m_FontShader)
 	{
 		m_FontShader->Shutdown();
 		delete m_FontShader;
@@ -211,7 +213,7 @@ void ApplicationClass::Shutdown()
 	}
 
 	// Release the cpu object.
-	if(m_Cpu)
+	if (m_Cpu)
 	{
 		m_Cpu->Shutdown();
 		delete m_Cpu;
@@ -219,28 +221,28 @@ void ApplicationClass::Shutdown()
 	}
 
 	// Release the fps object.
-	if(m_Fps)
+	if (m_Fps)
 	{
 		delete m_Fps;
 		m_Fps = 0;
 	}
 
 	// Release the position object.
-	if(m_Position)
+	if (m_Position)
 	{
 		delete m_Position;
 		m_Position = 0;
 	}
 
 	// Release the timer object.
-	if(m_Timer)
+	if (m_Timer)
 	{
 		delete m_Timer;
 		m_Timer = 0;
 	}
 
 	// Release the color shader object.
-	if(m_ColorShader)
+	if (m_ColorShader)
 	{
 		m_ColorShader->Shutdown();
 		delete m_ColorShader;
@@ -248,7 +250,7 @@ void ApplicationClass::Shutdown()
 	}
 
 	// Release the terrain object.
-	if(m_Terrain)
+	if (m_Terrain)
 	{
 		m_Terrain->Shutdown();
 		delete m_Terrain;
@@ -256,21 +258,21 @@ void ApplicationClass::Shutdown()
 	}
 
 	// Release the camera object.
-	if(m_Camera)
+	if (m_Camera)
 	{
 		delete m_Camera;
 		m_Camera = 0;
 	}
 
 	// Release the Direct3D object.
-	if(m_Direct3D)
+	if (m_Direct3D)
 	{
 		m_Direct3D->Shutdown();
 		delete m_Direct3D;
 		m_Direct3D = 0;
 	}
 
-	if(this->m_Scene != nullptr)
+	if (this->m_Scene != nullptr)
 	{
 		delete this->m_Scene;
 		this->m_Scene = nullptr;
@@ -289,22 +291,22 @@ bool ApplicationClass::Frame()
 
 	// Update the FPS value in the text object.
 	result = m_Text->SetFps(m_Fps->GetFps(), m_Direct3D->GetDeviceContext());
-	if(!result)
-	{
-		return false;
-	}
-	
-	// Update the CPU usage value in the text object.
-	result = m_Text->SetCpu(m_Cpu->GetCpuPercentage(), m_Direct3D->GetDeviceContext());
-	if(!result)
+	if (!result)
 	{
 		return false;
 	}
 
-	if(this->m_Scene != nullptr)
+	// Update the CPU usage value in the text object.
+	result = m_Text->SetCpu(m_Cpu->GetCpuPercentage(), m_Direct3D->GetDeviceContext());
+	if (!result)
+	{
+		return false;
+	}
+
+	if (this->m_Scene != nullptr)
 	{
 		result = this->m_Scene->Update(this->m_Timer->GetTime());
-		if(!result)
+		if (!result)
 		{
 			return false;
 		}
@@ -312,7 +314,7 @@ bool ApplicationClass::Frame()
 
 	// Render the graphics.
 	result = RenderGraphics();
-	if(!result)
+	if (!result)
 	{
 		return false;
 	}
@@ -327,7 +329,7 @@ bool ApplicationClass::RenderGraphics() const
 
 	this->m_Direct3D->BeginScene(0.0f, 0.0f, 0.0f, 1.0f);
 
-	if(this->m_Scene != nullptr)
+	if (this->m_Scene != nullptr)
 	{
 		this->m_Scene->Render(this->m_Direct3D, projection);
 	}

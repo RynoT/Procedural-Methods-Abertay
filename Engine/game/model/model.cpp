@@ -35,7 +35,7 @@ Model::~Model()
 void Model::Render(ID3D11DeviceContext* context) const
 {
 	// Set vertex buffer stride and offset.
-	unsigned int stride = sizeof(VertexType);
+	unsigned int stride = this->m_Stride;
 	unsigned int offset = 0;
 
 	// Set the vertex buffer to active in the input assembler so it can be rendered.
@@ -48,17 +48,12 @@ void Model::Render(ID3D11DeviceContext* context) const
 	context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }
 
-bool Model::Initialize(ID3D11Device *device)
+bool Model::InitializeVerticesTexture(ID3D11Device* device)
 {
-	if(this->m_Mesh == nullptr)
-	{
-		return false;
-	}
+	this->m_Stride = sizeof(VertexTypeTexture);
 	this->m_VertexCount = this->m_IndexCount = this->m_Mesh->GetVertexCount();
 
-	HRESULT result;
-	VertexType *vertices = new VertexType[this->m_VertexCount];
-	unsigned long *indices = new unsigned long[this->m_IndexCount];
+	VertexTypeTexture *vertices = new VertexTypeTexture[this->m_VertexCount];
 
 	// Load the vertex array and index array with data.
 	const ModelData *data = this->m_Mesh->GetModelData();
@@ -66,14 +61,12 @@ bool Model::Initialize(ID3D11Device *device)
 	{
 		vertices[i].position = D3DXVECTOR3(data[i].x, data[i].y, data[i].z);
 		vertices[i].texture = D3DXVECTOR2(data[i].tu, data[i].tv);
-
-		indices[i] = i;
 	}
 
 	D3D11_BUFFER_DESC vertexBufferDesc;
 	// Set up the description of the static vertex buffer.
 	vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	vertexBufferDesc.ByteWidth = sizeof(VertexType) * this->m_VertexCount;
+	vertexBufferDesc.ByteWidth = sizeof(VertexTypeTexture) * this->m_VertexCount;
 	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	vertexBufferDesc.CPUAccessFlags = 0;
 	vertexBufferDesc.MiscFlags = 0;
@@ -86,10 +79,21 @@ bool Model::Initialize(ID3D11Device *device)
 	vertexData.SysMemSlicePitch = 0;
 
 	// Now create the vertex buffer.
-	result = device->CreateBuffer(&vertexBufferDesc, &vertexData, &this->m_VertexBuffer);
-	if (FAILED(result))
+	if (FAILED(device->CreateBuffer(&vertexBufferDesc, &vertexData, &this->m_VertexBuffer)))
 	{
 		return false;
+	}
+	delete[] vertices;
+
+	return true;
+}
+
+bool Model::InitializeIndices(ID3D11Device* device)
+{
+	unsigned long *indices = new unsigned long[this->m_IndexCount];
+	for (int i = 0; i < this->m_IndexCount; i++)
+	{
+		indices[i] = i;
 	}
 
 	D3D11_BUFFER_DESC indexBufferDesc;
@@ -108,13 +112,10 @@ bool Model::Initialize(ID3D11Device *device)
 	indexData.SysMemSlicePitch = 0;
 
 	// Create the index buffer.
-	result = device->CreateBuffer(&indexBufferDesc, &indexData, &this->m_IndexBuffer);
-	if (FAILED(result))
+	if (FAILED(device->CreateBuffer(&indexBufferDesc, &indexData, &this->m_IndexBuffer)))
 	{
 		return false;
 	}
-
-	delete[] vertices;
 	delete[] indices;
 
 	return true;

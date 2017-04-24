@@ -4,10 +4,16 @@
 #include "../../d3dclass.h"
 #include "../../textureclass.h"
 
-struct VertexType
+struct VertexTypeTexture
 {
 	D3DXVECTOR3 position;
 	D3DXVECTOR2 texture;
+};
+
+struct VertexTypeColor
+{
+	D3DXVECTOR3 position;
+	D3DXVECTOR4 color;
 };
 
 class Model
@@ -17,7 +23,11 @@ public:
 	virtual ~Model();
 
 	// Initialize vertex buffer and index buffer. ModelData should be set before calling
-	virtual bool Initialize(ID3D11Device *device);
+	virtual bool Initialize(ID3D11Device *device) = 0;
+
+	bool InitializeVerticesTexture(ID3D11Device *device);
+
+	bool InitializeIndices(ID3D11Device *device);
 
 	void Render(ID3D11DeviceContext *context) const;
 
@@ -42,6 +52,6 @@ private:
 	ModelMesh *m_Mesh;
 	TextureClass *m_Texture;
 
-	int m_VertexCount, m_IndexCount;
+	int m_VertexCount, m_IndexCount, m_Stride;
 	ID3D11Buffer *m_VertexBuffer, *m_IndexBuffer;
 };

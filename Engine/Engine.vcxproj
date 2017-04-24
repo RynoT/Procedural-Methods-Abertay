@@ -103,6 +103,7 @@
     <ClCompile Include="game\model\generated\island_hover_model.cpp" />
     <ClCompile Include="game\model\generated\island_model.cpp" />
     <ClCompile Include="game\model\generated\path_model.cpp" />
+    <ClCompile Include="game\model\generated\quad_model.cpp" />
     <ClCompile Include="game\model\model.cpp" />
     <ClCompile Include="game\model\model_mesh.cpp" />
     <ClCompile Include="game\scene\camera\camera.cpp" />
@@ -111,6 +112,7 @@
     <ClCompile Include="game\scene\camera\camera_fpv.cpp" />
     <ClCompile Include="game\scene\camera\camera_transition.cpp" />
     <ClCompile Include="game\scene\default_scene.cpp" />
+    <ClCompile Include="game\scene\dungeon_scene.cpp" />
     <ClCompile Include="game\util\math\vector2f.cpp" />
     <ClCompile Include="game\util\math\vector3f.cpp" />
     <ClCompile Include="game\world\grid_cell.cpp" />
@@ -148,6 +150,7 @@
     <ClInclude Include="game\model\file_model.h" />
     <ClInclude Include="game\model\generated\island_hover_model.h" />
     <ClInclude Include="game\model\generated\path_model.h" />
+    <ClInclude Include="game\model\generated\quad_model.h" />
     <ClInclude Include="game\model\model.h" />
     <ClInclude Include="game\model\generated\island_model.h" />
     <ClInclude Include="game\model\model_mesh.h" />
@@ -157,6 +160,7 @@
     <ClInclude Include="game\scene\camera\camera_fpv.h" />
     <ClInclude Include="game\scene\camera\camera_transition.h" />
     <ClInclude Include="game\scene\default_scene.h" />
+    <ClInclude Include="game\scene\dungeon_scene.h" />
     <ClInclude Include="game\util\math\vector2f.h" />
     <ClInclude Include="game\util\math\vector3f.h" />
     <ClInclude Include="game\world\grid_cell.h" />
