@@ -47,7 +47,7 @@ void DungeonScene::GenerateDungeon(D3DClass* d3d)
 	// Seed random time
 	srand(unsigned int(time(nullptr)));
 
-	this->m_RootLeaf = new Leaf(-SIZE / 2.0f, -SIZE / 2.0f, SIZE, SIZE);
+	this->m_RootLeaf = new Leaf(nullptr, -SIZE / 2.0f, -SIZE / 2.0f, SIZE, SIZE);
 
 	// Split our BSP
 	bool split;
@@ -57,11 +57,15 @@ void DungeonScene::GenerateDungeon(D3DClass* d3d)
 	} while (split);
 
 	this->m_RootLeaf->CreateRooms(d3d->GetDevice(), this->m_ColorShader);
-	this->m_RootLeaf->CreateHalls(d3d->GetDevice(), nullptr, this->m_ColorShader);
+	this->m_RootLeaf->CreateHalls(d3d->GetDevice(), this->m_ColorShader);
 }
 
 bool DungeonScene::Update(const float& delta)
 {
+	if (Scene::m_Input->IsKeyDown(VK_ESCAPE))
+	{
+		return false;
+	}
 	return Scene::Update(delta);
 }
 

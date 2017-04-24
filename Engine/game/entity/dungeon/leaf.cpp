@@ -12,10 +12,15 @@
 #define SPLIT_OVERRIDE_PERC 1.25f
 
 #define pseudo_random() (rand() / float(RAND_MAX)) // Random number between 0-1
+#define random(min, max) ((min) + ((max) - (min)) * pseudo_random())
+#define center_pos(e, xp, yp) xp + e->GetScale().x / 2.0f, 0.0f, yp + e->GetScale().z / 2.0f
+#define leaf_distance(a, from) (from - a->GetPosition()).GetLengthSq()
 
-Leaf::Leaf(const float& x, const float& y, const float& width, const float& height)
-	: m_X(x), m_Y(y), m_Width(width), m_Height(height), m_ChildA(nullptr), m_ChildB(nullptr), m_Hall(nullptr), m_Back(nullptr)
+Leaf::Leaf(Leaf *parent, const float& x, const float& y, const float& width, const float& height)
+	: m_X(x), m_Y(y), m_Width(width), m_Height(height), m_Parent(parent),
+	m_ChildA(nullptr), m_ChildB(nullptr), m_Hall(nullptr), m_Back(nullptr)
 {
+	Entity::SetPosition(x + width / 2, 0.0f, y + height / 2);
 }
 
 Leaf::~Leaf()
@@ -52,30 +57,42 @@ void Leaf::SetRenderMethod(ModelEntity *entity, ColorShaderClass* shader)
 	});
 }
 
-void Leaf::CreateHalls(ID3D11Device* device, Leaf *neighbour, ColorShaderClass* shader)
+Leaf* Leaf::GetClosestTo(const Vector3f& position)
 {
-	if (this->IsSplit())
+	if(this->IsSplit())
 	{
-		this->m_ChildA->CreateHalls(device, this->m_ChildB, shader);
-		this->m_ChildB->CreateHalls(device, this->m_ChildA, shader);
-		return;
+		Leaf *l1 = this->m_ChildA->GetClosestTo(position), *l2 = this->m_ChildB->GetClosestTo(position);
+		return leaf_distance(l1, position) < leaf_distance(l2, position) ? l1 : l2;
 	}
-	if(neighbour == nullptr)
+	return this;
+}
+
+void Leaf::CreateHalls(ID3D11Device* device, ColorShaderClass* shader)
+{
+	if(this->IsSplit())
 	{
-		return;
+		this->m_ChildA->CreateHalls(device, shader);
+		this->m_ChildB->CreateHalls(device, shader);
+
+		Leaf *neighbourA = this->m_ChildA->GetClosestTo(this->m_ChildB->GetPosition());
+		Leaf *neighbourB = this->m_ChildB->GetClosestTo(this->m_ChildA->GetPosition());
+		this->CreateHall(device, neighbourA->GetPosition(), neighbourB->GetPosition(), shader);
 	}
-	// Setup hall
+}
+
+void Leaf::CreateHall(ID3D11Device* device, const Vector3f& pointA, const Vector3f& pointB, ColorShaderClass* shader)
+{
 	this->m_Hall = new ModelEntity;
 	this->m_Hall->SetModel(new QuadModel(1.0f, 0.0, 0.0f));
 	this->m_Hall->GetInternalModel()->Initialize(device);
 	Leaf::SetRenderMethod(this->m_Hall, shader);
 
-	Vector3f vector = neighbour->GetPosition() - this->GetPosition();
+	Vector3f vector = pointB - pointA;
 	float length = vector.GetLength();
 
-	float theta = std::atan2f(neighbour->GetPosition().x - this->GetPosition().x, neighbour->GetPosition().z - this->GetPosition().z);// -3.14159f / 2.0f;
-	this->m_Hall->SetPosition(VECTOR3_SPLIT(this->GetPosition() /*+ Vector3f(0.0f, 0.0f, length / 2.0f)*/));
-	this->m_Hall->SetScale(HALL_WIDTH, 0.0f, length / 2);
+	float theta = std::atan2f(pointB.x - pointA.x, pointB.z - pointA.z);
+	this->m_Hall->SetPosition(VECTOR3_SPLIT(pointA + vector.normalize().multiply(length / 2.0f) + Vector3f(0.0f, -0.02f, 0.0f)));
+	this->m_Hall->SetScale(HALL_WIDTH, 0.0f, length);
 	this->m_Hall->SetRotation(0.0f, theta, 0.0f);
 }
 
@@ -108,7 +125,7 @@ void Leaf::CreateRooms(ID3D11Device *device, ColorShaderClass* shader)
 		this->m_Back->GetInternalModel()->Initialize(device);
 		Leaf::SetRenderMethod(this->m_Back, shader);
 
-		this->m_Back->SetPosition(this->m_X + this->m_Width / 2.0f, -0.01f, this->m_Y + this->m_Height / 2.0f);
+		this->m_Back->SetPosition(this->m_X + this->m_Width / 2.0f, -0.05f, this->m_Y + this->m_Height / 2.0f);
 		this->m_Back->SetScale(this->m_Width, 0.0f, this->m_Height);
 	}
 }
@@ -143,19 +160,23 @@ bool Leaf::Split()
 	float split = MIN_SIZE + (max - MIN_SIZE) * pseudo_random();
 	if (horizontal)
 	{
-		this->m_ChildA = new Leaf(this->m_X, this->m_Y, this->m_Width, split);
-		this->m_ChildB = new Leaf(this->m_X, this->m_Y + split, this->m_Width, this->m_Height - split);
+		this->m_ChildA = new Leaf(this, this->m_X, this->m_Y, this->m_Width, split);
+		this->m_ChildB = new Leaf(this, this->m_X, this->m_Y + split, this->m_Width, this->m_Height - split);
 	}
 	else
 	{
-		this->m_ChildA = new Leaf(this->m_X, this->m_Y, split, this->m_Height);
-		this->m_ChildB = new Leaf(this->m_X + split, this->m_Y, this->m_Width - split, this->m_Height);
+		this->m_ChildA = new Leaf(this, this->m_X, this->m_Y, split, this->m_Height);
+		this->m_ChildB = new Leaf(this, this->m_X + split, this->m_Y, this->m_Width - split, this->m_Height);
 	}
 	return true;
 }
 
 void Leaf::Render(D3DClass* direct, const D3DXMATRIX& projection, const D3DXMATRIX& view)
 {
+	if (this->m_Hall != nullptr)
+	{
+		this->m_Hall->Render(direct, projection, view);
+	}
 	if (this->IsSplit())
 	{
 		this->m_ChildA->Render(direct, projection, view);
@@ -165,12 +186,7 @@ void Leaf::Render(D3DClass* direct, const D3DXMATRIX& projection, const D3DXMATR
 	{
 		if (this->m_Back != nullptr)
 		{
-			//this->m_Back->Render(direct, projection, view);
-		}
-		if (this->m_Hall != nullptr)
-		{
-			//this->m_Hall->SetRotation(0.0f, this->m_Hall->GetRotation().y + 0.001f, 0.0f);
-			this->m_Hall->Render(direct, projection, view);
+			this->m_Back->Render(direct, projection, view);
 		}
 		ModelEntity::Render(direct, projection, view);
 	}
