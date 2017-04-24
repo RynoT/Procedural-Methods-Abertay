@@ -24,13 +24,15 @@ ApplicationClass::~ApplicationClass()
 {
 }
 
-bool ApplicationClass::Initialize(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHeight)
+bool ApplicationClass::Initialize(HINSTANCE hinstance, HWND& hwnd, int screenWidth, int screenHeight)
 {
 	bool result;
 	float cameraX, cameraY, cameraZ;
 	D3DXMATRIX baseViewMatrix;
 	char videoCard[128];
 	int videoMemory;
+
+	this->m_HWND = &hwnd;
 
 	// Create the Direct3D object.
 	m_Direct3D = new D3DClass;
@@ -182,8 +184,8 @@ bool ApplicationClass::Initialize(HINSTANCE hinstance, HWND hwnd, int screenWidt
 		return false;
 	}
 
-	this->m_Scene = new DefaultScene(this->m_Direct3D, hwnd, this->m_Input);
-	//this->m_Scene = new DungeonScene(this->m_Direct3D, hwnd, this->m_Input);
+	//this->m_Scene = new DefaultScene(this->m_Direct3D, hwnd, this->m_Input);
+	this->m_Scene = new DungeonScene(this->m_Direct3D, hwnd, this->m_Input);
 
 	if (WIREFRAME_MODE)
 	{
@@ -279,6 +281,14 @@ void ApplicationClass::Shutdown()
 	}
 }
 
+void ApplicationClass::SetScene(Scene* scene)
+{
+	if(this->m_Scene != nullptr)
+	{
+		delete this->m_Scene;
+	}
+	this->m_Scene = scene;
+}
 
 bool ApplicationClass::Frame()
 {
@@ -301,6 +311,15 @@ bool ApplicationClass::Frame()
 	if (!result)
 	{
 		return false;
+	}
+
+	if(this->m_Input->IsKeyDown(VK_NUMPAD1))
+	{
+		this->SetScene(new DefaultScene(this->m_Direct3D, *this->m_HWND, this->m_Input));
+	}
+	else if(this->m_Input->IsKeyDown(VK_NUMPAD2))
+	{
+		this->SetScene(new DungeonScene(this->m_Direct3D, *this->m_HWND, this->m_Input));
 	}
 
 	if (this->m_Scene != nullptr)

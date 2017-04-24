@@ -25,6 +25,8 @@ public:
 	// Initialize vertex buffer and index buffer. ModelData should be set before calling
 	virtual bool Initialize(ID3D11Device *device) = 0;
 
+	bool InitializeVerticesColor(ID3D11Device *device);
+
 	bool InitializeVerticesTexture(ID3D11Device *device);
 
 	bool InitializeIndices(ID3D11Device *device);

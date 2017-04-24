@@ -3,7 +3,7 @@
 #include "../model/model.h"
 #include "../../d3dclass.h"
 
-ModelEntity::ModelEntity() : m_Model(nullptr)//, m_RenderMethod(nullptr)
+ModelEntity::ModelEntity() : m_Model(nullptr), m_RenderMethod(nullptr)
 {
 }
 

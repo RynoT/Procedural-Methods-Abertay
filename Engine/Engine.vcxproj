@@ -112,6 +112,7 @@
     <ClCompile Include="game\scene\camera\camera_fpv.cpp" />
     <ClCompile Include="game\scene\camera\camera_transition.cpp" />
     <ClCompile Include="game\scene\default_scene.cpp" />
+    <ClCompile Include="game\entity\dungeon\leaf.cpp" />
     <ClCompile Include="game\scene\dungeon_scene.cpp" />
     <ClCompile Include="game\util\math\vector2f.cpp" />
     <ClCompile Include="game\util\math\vector3f.cpp" />
@@ -160,6 +161,7 @@
     <ClInclude Include="game\scene\camera\camera_fpv.h" />
     <ClInclude Include="game\scene\camera\camera_transition.h" />
     <ClInclude Include="game\scene\default_scene.h" />
+    <ClInclude Include="game\entity\dungeon\leaf.h" />
     <ClInclude Include="game\scene\dungeon_scene.h" />
     <ClInclude Include="game\util\math\vector2f.h" />
     <ClInclude Include="game\util\math\vector3f.h" />

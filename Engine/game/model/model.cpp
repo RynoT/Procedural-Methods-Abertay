@@ -1,6 +1,7 @@
 #include "model.h"
 
 #include <fstream>
+#include <cassert>
 
 Model::Model() : m_Mesh(nullptr), m_Texture(nullptr), m_VertexCount(0),
 m_IndexCount(0), m_VertexBuffer(nullptr), m_IndexBuffer(nullptr)
@@ -34,6 +35,10 @@ Model::~Model()
 
 void Model::Render(ID3D11DeviceContext* context) const
 {
+	if(this->m_VertexBuffer == nullptr || this->m_IndexBuffer == nullptr)
+	{
+		assert(false && "Model was not initialized");
+	}
 	// Set vertex buffer stride and offset.
 	unsigned int stride = this->m_Stride;
 	unsigned int offset = 0;
@@ -46,6 +51,46 @@ void Model::Render(ID3D11DeviceContext* context) const
 
 	// Set the type of primitive that should be rendered from this vertex buffer, in this case triangles.
 	context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+}
+
+bool Model::InitializeVerticesColor(ID3D11Device* device)
+{
+	this->m_Stride = sizeof(VertexTypeColor);
+	this->m_VertexCount = this->m_IndexCount = this->m_Mesh->GetVertexCount();
+
+	VertexTypeColor *vertices = new VertexTypeColor[this->m_VertexCount];
+
+	// Load the vertex array and index array with data.
+	const ModelData *data = this->m_Mesh->GetModelData();
+	for (int i = 0; i < this->m_VertexCount; i++)
+	{
+		vertices[i].position = D3DXVECTOR3(data[i].x, data[i].y, data[i].z);
+		vertices[i].color = D3DXVECTOR4(data[i].cr, data[i].cg, data[i].cb, data[i].ca);
+	}
+
+	D3D11_BUFFER_DESC vertexBufferDesc;
+	// Set up the description of the static vertex buffer.
+	vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	vertexBufferDesc.ByteWidth = sizeof(VertexTypeColor) * this->m_VertexCount;
+	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	vertexBufferDesc.CPUAccessFlags = 0;
+	vertexBufferDesc.MiscFlags = 0;
+	vertexBufferDesc.StructureByteStride = 0;
+
+	D3D11_SUBRESOURCE_DATA vertexData;
+	// Give the subresource structure a pointer to the vertex data.
+	vertexData.pSysMem = vertices;
+	vertexData.SysMemPitch = 0;
+	vertexData.SysMemSlicePitch = 0;
+
+	// Now create the vertex buffer.
+	if (FAILED(device->CreateBuffer(&vertexBufferDesc, &vertexData, &this->m_VertexBuffer)))
+	{
+		return false;
+	}
+	delete[] vertices;
+
+	return true;
 }
 
 bool Model::InitializeVerticesTexture(ID3D11Device* device)

@@ -40,9 +40,11 @@ public:
 	ApplicationClass(InputClass *input);
 	~ApplicationClass();
 
-	bool Initialize(HINSTANCE, HWND, int, int);
+	bool Initialize(HINSTANCE, HWND&, int, int);
 	void Shutdown();
 	bool Frame();
+
+	void SetScene(class Scene *scene);
 
 	static int SCREEN_WIDTH;
 	static int SCREEN_HEIGHT;
@@ -51,6 +53,7 @@ private:
 	bool RenderGraphics() const;
 
 private:
+	HWND *m_HWND;
 	D3DClass* m_Direct3D;
 	InputClass *m_Input;
 	CameraClass* m_Camera;
