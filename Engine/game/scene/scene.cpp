@@ -28,7 +28,7 @@ float Scene::GetCameraDY() const
 
 void Scene::SetCamera(Camera* camera)
 {
-	if(this->m_Camera != nullptr)
+	if (this->m_Camera != nullptr)
 	{
 		delete this->m_Camera;
 	}
@@ -37,7 +37,11 @@ void Scene::SetCamera(Camera* camera)
 
 bool Scene::Update(const float& delta)
 {
-	if(this->m_Camera != nullptr)
+	if (this->m_Input != nullptr)
+	{
+		this->m_Input->Update();
+	}
+	if (this->m_Camera != nullptr)
 	{
 		this->m_Camera->Update(delta);
 	}

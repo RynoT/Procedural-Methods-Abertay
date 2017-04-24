@@ -184,8 +184,8 @@ bool ApplicationClass::Initialize(HINSTANCE hinstance, HWND& hwnd, int screenWid
 		return false;
 	}
 
-	//this->m_Scene = new DefaultScene(this->m_Direct3D, hwnd, this->m_Input);
-	this->m_Scene = new DungeonScene(this->m_Direct3D, hwnd, this->m_Input);
+	this->m_Scene = new DefaultScene(this->m_Direct3D, hwnd, this->m_Input);
+	//this->m_Scene = new DungeonScene(this->m_Direct3D, hwnd, this->m_Input);
 
 	if (WIREFRAME_MODE)
 	{
@@ -313,11 +313,11 @@ bool ApplicationClass::Frame()
 		return false;
 	}
 
-	if(this->m_Input->IsKeyDown(VK_NUMPAD1))
+	if(this->m_Input->IsKeyPressed(VK_NUMPAD1))
 	{
 		this->SetScene(new DefaultScene(this->m_Direct3D, *this->m_HWND, this->m_Input));
 	}
-	else if(this->m_Input->IsKeyDown(VK_NUMPAD2))
+	else if(this->m_Input->IsKeyPressed(VK_NUMPAD2))
 	{
 		this->SetScene(new DungeonScene(this->m_Direct3D, *this->m_HWND, this->m_Input));
 	}
@@ -346,7 +346,7 @@ bool ApplicationClass::RenderGraphics() const
 	D3DXMATRIX projection;
 	this->m_Direct3D->GetProjectionMatrix(projection);
 
-	this->m_Direct3D->BeginScene(0.0f, 0.0f, 0.0f, 1.0f);
+	this->m_Direct3D->BeginScene(0.15f, 0.16f, 0.17f, 1.0f);
 
 	if (this->m_Scene != nullptr)
 	{
@@ -356,53 +356,4 @@ bool ApplicationClass::RenderGraphics() const
 	this->m_Direct3D->EndScene();
 
 	return true;
-
-	//D3DXMATRIX worldMatrix, viewMatrix, projectionMatrix, orthoMatrix;
-	//bool result;
-
-	//// Clear the scene.
-	//m_Direct3D->BeginScene(0.0f, 0.0f, 0.0f, 1.0f);
-
-	////// Generate the view matrix based on the camera's position.
-	//m_Camera->Render();
-
-	//// Get the world, view, projection, and ortho matrices from the camera and Direct3D objects.
-	//m_Direct3D->GetWorldMatrix(worldMatrix);
-	//m_Camera->GetViewMatrix(viewMatrix);
-	//m_Direct3D->GetProjectionMatrix(projectionMatrix);
-	//m_Direct3D->GetOrthoMatrix(orthoMatrix);
-
-	// Render the terrain buffers.
-	//m_Terrain->Render(m_Direct3D->GetDeviceContext());
-
-	// Render the model using the color shader.
-	//result = m_ColorShader->Render(m_Direct3D->GetDeviceContext(), m_Terrain->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix);
-	//if(!result)
-	//{
-	//	return false;
-	//}
-
-	//// Turn off the Z buffer to begin all 2D rendering.
-	//m_Direct3D->TurnZBufferOff();
-	//	
-	//// Turn on the alpha blending before rendering the text.
-	//m_Direct3D->TurnOnAlphaBlending();
-
-	//// Render the text user interface elements.
-	//result = m_Text->Render(m_Direct3D->GetDeviceContext(), m_FontShader, worldMatrix, orthoMatrix);
-	//if(!result)
-	//{
-	//	return false;
-	//}
-
-	//// Turn off alpha blending after rendering the text.
-	//m_Direct3D->TurnOffAlphaBlending();
-
-	//// Turn the Z buffer back on now that all 2D rendering has completed.
-	//m_Direct3D->TurnZBufferOn();
-
-	// Present the rendered scene to the screen.
-	//m_Direct3D->EndScene();
-
-	//return true;
 }

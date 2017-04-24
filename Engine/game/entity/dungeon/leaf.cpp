@@ -7,7 +7,7 @@
 
 #define MIN_SIZE 18
 #define MIN_ROOM_SIZE 6
-#define ROOM_GAP 4
+#define ROOM_GAP 3
 #define HALL_WIDTH 2
 #define SPLIT_OVERRIDE_PERC 1.25f
 
