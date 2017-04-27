@@ -37,6 +37,16 @@ void D3DClass::Resize(int width, int height)
 	D3DXMatrixOrthoLH(&m_orthoMatrix, (float)width, (float)height, m_near, m_far);
 }
 
+void D3DClass::SetBackBufferRenderTarget()
+{
+	m_deviceContext->OMSetRenderTargets(1, &m_renderTargetView, m_depthStencilView);
+}
+
+void D3DClass::ResetViewport()
+{
+	m_deviceContext->RSSetViewports(1, &m_viewport);
+}
+
 bool D3DClass::Initialize(int screenWidth, int screenHeight, bool vsync, HWND hwnd, bool fullscreen, 
 						  float screenDepth, float screenNear)
 {
@@ -55,10 +65,9 @@ bool D3DClass::Initialize(int screenWidth, int screenHeight, bool vsync, HWND hw
 	D3D11_DEPTH_STENCIL_DESC depthStencilDesc;
 	D3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc;
 	D3D11_RASTERIZER_DESC rasterDesc;
-	D3D11_VIEWPORT viewport;
 	float fieldOfView, screenAspect;
 	D3D11_DEPTH_STENCIL_DESC depthDisabledStencilDesc;
-	D3D11_BLEND_DESC blendStateDescription;
+	//D3D11_BLEND_DESC blendStateDescription;
 
 	m_near = screenNear;
 	m_far = screenDepth;
@@ -340,15 +349,15 @@ bool D3DClass::Initialize(int screenWidth, int screenHeight, bool vsync, HWND hw
 	m_device->CreateRasterizerState(&rasterDesc, &m_rasterStateWF);
 	
 	// Setup the viewport for rendering.
-    viewport.Width = (float)screenWidth;
-    viewport.Height = (float)screenHeight;
-    viewport.MinDepth = 0.0f;
-    viewport.MaxDepth = 1.0f;
-    viewport.TopLeftX = 0.0f;
-    viewport.TopLeftY = 0.0f;
+    m_viewport.Width = (float)screenWidth;
+	m_viewport.Height = (float)screenHeight;
+	m_viewport.MinDepth = 0.0f;
+	m_viewport.MaxDepth = 1.0f;
+	m_viewport.TopLeftX = 0.0f;
+	m_viewport.TopLeftY = 0.0f;
 
 	// Create the viewport.
-    m_deviceContext->RSSetViewports(1, &viewport);
+    m_deviceContext->RSSetViewports(1, &m_viewport);
 
 	// Setup the projection matrix.
 	fieldOfView = (float)D3DX_PI / 4.0f;
@@ -390,35 +399,35 @@ bool D3DClass::Initialize(int screenWidth, int screenHeight, bool vsync, HWND hw
 		return false;
 	}
 
-	// Clear the blend state description.
-	ZeroMemory(&blendStateDescription, sizeof(D3D11_BLEND_DESC));
+	//// Clear the blend state description.
+	//ZeroMemory(&blendStateDescription, sizeof(D3D11_BLEND_DESC));
 
-	// Create an alpha enabled blend state description.
-	blendStateDescription.RenderTarget[0].BlendEnable = TRUE;
-	blendStateDescription.RenderTarget[0].SrcBlend = D3D11_BLEND_ONE;
-	blendStateDescription.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
-	blendStateDescription.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
-	blendStateDescription.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
-	blendStateDescription.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
-	blendStateDescription.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
-	blendStateDescription.RenderTarget[0].RenderTargetWriteMask = 0x0f;
+	//// Create an alpha enabled blend state description.
+	//blendStateDescription.RenderTarget[0].BlendEnable = TRUE;
+	//blendStateDescription.RenderTarget[0].SrcBlend = D3D11_BLEND_ONE;
+	//blendStateDescription.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+	//blendStateDescription.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+	//blendStateDescription.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+	//blendStateDescription.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
+	//blendStateDescription.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+	//blendStateDescription.RenderTarget[0].RenderTargetWriteMask = 0x0f;
 
-	// Create the blend state using the description.
-	result = m_device->CreateBlendState(&blendStateDescription, &m_alphaEnableBlendingState);
-	if(FAILED(result))
-	{
-		return false;
-	}
+	//// Create the blend state using the description.
+	//result = m_device->CreateBlendState(&blendStateDescription, &m_alphaEnableBlendingState);
+	//if(FAILED(result))
+	//{
+	//	return false;
+	//}
 
-	// Modify the description to create an alpha disabled blend state description.
-	blendStateDescription.RenderTarget[0].BlendEnable = FALSE;
+	//// Modify the description to create an alpha disabled blend state description.
+	//blendStateDescription.RenderTarget[0].BlendEnable = FALSE;
 
-	// Create the second blend state using the description.
-	result = m_device->CreateBlendState(&blendStateDescription, &m_alphaDisableBlendingState);
-	if(FAILED(result))
-	{
-		return false;
-	}
+	//// Create the second blend state using the description.
+	//result = m_device->CreateBlendState(&blendStateDescription, &m_alphaDisableBlendingState);
+	//if(FAILED(result))
+	//{
+	//	return false;
+	//}
 
     return true;
 }
@@ -607,37 +616,37 @@ void D3DClass::TurnZBufferOff()
 }
 
 
-void D3DClass::TurnOnAlphaBlending()
-{
-	float blendFactor[4];
-	
-
-	// Setup the blend factor.
-	blendFactor[0] = 0.0f;
-	blendFactor[1] = 0.0f;
-	blendFactor[2] = 0.0f;
-	blendFactor[3] = 0.0f;
-	
-	// Turn on the alpha blending.
-	m_deviceContext->OMSetBlendState(m_alphaEnableBlendingState, blendFactor, 0xffffffff);
-
-	return;
-}
-
-
-void D3DClass::TurnOffAlphaBlending()
-{
-	float blendFactor[4];
-	
-
-	// Setup the blend factor.
-	blendFactor[0] = 0.0f;
-	blendFactor[1] = 0.0f;
-	blendFactor[2] = 0.0f;
-	blendFactor[3] = 0.0f;
-	
-	// Turn off the alpha blending.
-	m_deviceContext->OMSetBlendState(m_alphaDisableBlendingState, blendFactor, 0xffffffff);
-
-	return;
-}
+//void D3DClass::TurnOnAlphaBlending()
+//{
+//	float blendFactor[4];
+//	
+//
+//	// Setup the blend factor.
+//	blendFactor[0] = 0.0f;
+//	blendFactor[1] = 0.0f;
+//	blendFactor[2] = 0.0f;
+//	blendFactor[3] = 0.0f;
+//	
+//	// Turn on the alpha blending.
+//	m_deviceContext->OMSetBlendState(m_alphaEnableBlendingState, blendFactor, 0xffffffff);
+//
+//	return;
+//}
+//
+//
+//void D3DClass::TurnOffAlphaBlending()
+//{
+//	float blendFactor[4];
+//	
+//
+//	// Setup the blend factor.
+//	blendFactor[0] = 0.0f;
+//	blendFactor[1] = 0.0f;
+//	blendFactor[2] = 0.0f;
+//	blendFactor[3] = 0.0f;
+//	
+//	// Turn off the alpha blending.
+//	m_deviceContext->OMSetBlendState(m_alphaDisableBlendingState, blendFactor, 0xffffffff);
+//
+//	return;
+//}

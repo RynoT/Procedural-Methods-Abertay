@@ -1,9 +1,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 // Filename: cameraclass.cpp
 ////////////////////////////////////////////////////////////////////////////////
-#include "cameraclass.h"
+#include "orthocameraclass.h"
 
-CameraClass::CameraClass()
+OrthoCameraClass::OrthoCameraClass()
 {
 	m_positionX = 0.0f;
 	m_positionY = 0.0f;
@@ -14,48 +14,32 @@ CameraClass::CameraClass()
 	m_rotationZ = 0.0f;
 }
 
-
-CameraClass::CameraClass(const CameraClass& other)
-{
-}
-
-
-CameraClass::~CameraClass()
-{
-}
-
-
-void CameraClass::SetPosition(float x, float y, float z)
+void OrthoCameraClass::SetPosition(float x, float y, float z)
 {
 	m_positionX = x;
 	m_positionY = y;
 	m_positionZ = z;
-	return;
 }
 
-
-void CameraClass::SetRotation(float x, float y, float z)
+void OrthoCameraClass::SetRotation(float x, float y, float z)
 {
 	m_rotationX = x;
 	m_rotationY = y;
 	m_rotationZ = z;
-	return;
 }
 
-
-D3DXVECTOR3 CameraClass::GetPosition()
+D3DXVECTOR3 OrthoCameraClass::GetPosition() const
 {
 	return D3DXVECTOR3(m_positionX, m_positionY, m_positionZ);
 }
 
 
-D3DXVECTOR3 CameraClass::GetRotation()
+D3DXVECTOR3 OrthoCameraClass::GetRotation() const
 {
 	return D3DXVECTOR3(m_rotationX, m_rotationY, m_rotationZ);
 }
 
-
-void CameraClass::Render()
+void OrthoCameraClass::Render()
 {
 	D3DXVECTOR3 up, position, lookAt;
 	float yaw, pitch, roll;
@@ -94,13 +78,9 @@ void CameraClass::Render()
 
 	// Finally create the view matrix from the three updated vectors.
 	D3DXMatrixLookAtLH(&m_viewMatrix, &position, &lookAt, &up);
-
-	return;
 }
 
-
-void CameraClass::GetViewMatrix(D3DXMATRIX& viewMatrix)
+void OrthoCameraClass::GetViewMatrix(D3DXMATRIX& viewMatrix) const
 {
 	viewMatrix = m_viewMatrix;
-	return;
 }

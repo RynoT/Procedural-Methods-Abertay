@@ -85,8 +85,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="applicationclass.cpp" />
-    <ClCompile Include="cameraclass.cpp" />
+    <ClCompile Include="orthocameraclass.cpp" />
     <ClCompile Include="colorshaderclass.cpp" />
+    <ClCompile Include="convolutionshaderclass.cpp" />
     <ClCompile Include="cpuclass.cpp" />
     <ClCompile Include="d3dclass.cpp" />
     <ClCompile Include="fontclass.cpp" />
@@ -100,6 +101,7 @@
     <ClCompile Include="game\model\collision\aabb.cpp" />
     <ClCompile Include="game\model\collision\collision.cpp" />
     <ClCompile Include="game\model\file_model.cpp" />
+    <ClCompile Include="game\model\generated\island_connection_model.cpp" />
     <ClCompile Include="game\model\generated\island_hover_model.cpp" />
     <ClCompile Include="game\model\generated\island_model.cpp" />
     <ClCompile Include="game\model\generated\path_model.cpp" />
@@ -118,12 +120,15 @@
     <ClCompile Include="game\util\math\vector3f.cpp" />
     <ClCompile Include="game\world\grid_cell.cpp" />
     <ClCompile Include="game\world\world_grid.cpp" />
+    <ClCompile Include="horizontalblurshaderclass.cpp" />
     <ClCompile Include="inputclass.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="game\util\noise\perlinnoise.cpp" />
     <ClCompile Include="modelclass.cpp" />
+    <ClCompile Include="orthowindowclass.cpp" />
     <ClCompile Include="positionclass.cpp" />
     <ClCompile Include="game\scene\scene.cpp" />
+    <ClCompile Include="rendertextureclass.cpp" />
     <ClCompile Include="systemclass.cpp" />
     <ClCompile Include="terrainclass.cpp" />
     <ClCompile Include="terrainshaderclass.cpp" />
@@ -131,11 +136,13 @@
     <ClCompile Include="textureclass.cpp" />
     <ClCompile Include="textureshaderclass.cpp" />
     <ClCompile Include="timerclass.cpp" />
+    <ClCompile Include="verticalblurshaderclass.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="applicationclass.h" />
-    <ClInclude Include="cameraclass.h" />
+    <ClInclude Include="orthocameraclass.h" />
     <ClInclude Include="colorshaderclass.h" />
+    <ClInclude Include="convolutionshaderclass.h" />
     <ClInclude Include="cpuclass.h" />
     <ClInclude Include="d3dclass.h" />
     <ClInclude Include="fontclass.h" />
@@ -149,6 +156,7 @@
     <ClInclude Include="game\model\collision\aabb.h" />
     <ClInclude Include="game\model\collision\collision.h" />
     <ClInclude Include="game\model\file_model.h" />
+    <ClInclude Include="game\model\generated\island_connection_model.h" />
     <ClInclude Include="game\model\generated\island_hover_model.h" />
     <ClInclude Include="game\model\generated\path_model.h" />
     <ClInclude Include="game\model\generated\quad_model.h" />
@@ -167,11 +175,14 @@
     <ClInclude Include="game\util\math\vector3f.h" />
     <ClInclude Include="game\world\grid_cell.h" />
     <ClInclude Include="game\world\world_grid.h" />
+    <ClInclude Include="horizontalblurshaderclass.h" />
     <ClInclude Include="inputclass.h" />
     <ClInclude Include="game\util\noise\perlinnoise.h" />
     <ClInclude Include="modelclass.h" />
+    <ClInclude Include="orthowindowclass.h" />
     <ClInclude Include="positionclass.h" />
     <ClInclude Include="game\scene\scene.h" />
+    <ClInclude Include="rendertextureclass.h" />
     <ClInclude Include="systemclass.h" />
     <ClInclude Include="terrainclass.h" />
     <ClInclude Include="terrainshaderclass.h" />
@@ -179,12 +190,23 @@
     <ClInclude Include="textureclass.h" />
     <ClInclude Include="textureshaderclass.h" />
     <ClInclude Include="timerclass.h" />
+    <ClInclude Include="verticalblurshaderclass.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="color.ps" />
     <None Include="color.vs" />
+    <None Include="convolution.ps" />
+    <None Include="convolution.vs" />
     <None Include="font.ps" />
     <None Include="font.vs" />
+    <None Include="horizontalblur.ps" />
+    <None Include="horizontalblur.vs" />
+    <None Include="terrain.ps" />
+    <None Include="terrain.vs" />
+    <None Include="texture.ps" />
+    <None Include="texture.vs" />
+    <None Include="verticalblur.ps" />
+    <None Include="verticalblur.vs" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

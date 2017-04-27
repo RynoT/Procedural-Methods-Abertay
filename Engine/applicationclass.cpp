@@ -9,11 +9,9 @@ int ApplicationClass::SCREEN_HEIGHT = 600;
 ApplicationClass::ApplicationClass(InputClass *input) : m_Input(input), m_Scene(nullptr)
 {
 	m_Direct3D = 0;
-	m_Camera = 0;
 	m_Terrain = 0;
 	m_ColorShader = 0;
 	m_Timer = 0;
-	m_Position = 0;
 	m_Fps = 0;
 	m_Cpu = 0;
 	m_FontShader = 0;
@@ -48,25 +46,6 @@ bool ApplicationClass::Initialize(HINSTANCE hinstance, HWND& hwnd, int screenWid
 		MessageBox(hwnd, L"Could not initialize DirectX 11.", L"Error", MB_OK);
 		return false;
 	}
-
-	// Create the camera object.
-	m_Camera = new CameraClass;
-	if (!m_Camera)
-	{
-		return false;
-	}
-
-	// Initialize a base view matrix with the camera for 2D user interface rendering.
-	m_Camera->SetPosition(0.0f, 0.0f, -1.0f);
-	m_Camera->Render();
-	m_Camera->GetViewMatrix(baseViewMatrix);
-
-	// Set the initial position of the camera.
-	cameraX = 50.0f;
-	cameraY = 2.0f;
-	cameraZ = -7.0f;
-
-	m_Camera->SetPosition(cameraX, cameraY, cameraZ);
 
 	// Create the terrain object.
 	m_Terrain = new TerrainClass;
@@ -112,16 +91,6 @@ bool ApplicationClass::Initialize(HINSTANCE hinstance, HWND& hwnd, int screenWid
 		MessageBox(hwnd, L"Could not initialize the timer object.", L"Error", MB_OK);
 		return false;
 	}
-
-	// Create the position object.
-	m_Position = new PositionClass;
-	if (!m_Position)
-	{
-		return false;
-	}
-
-	// Set the initial position of the viewer to the same as the initial camera position.
-	m_Position->SetPosition(cameraX, cameraY, cameraZ);
 
 	// Create the fps object.
 	m_Fps = new FpsClass;
@@ -229,13 +198,6 @@ void ApplicationClass::Shutdown()
 		m_Fps = 0;
 	}
 
-	// Release the position object.
-	if (m_Position)
-	{
-		delete m_Position;
-		m_Position = 0;
-	}
-
 	// Release the timer object.
 	if (m_Timer)
 	{
@@ -257,13 +219,6 @@ void ApplicationClass::Shutdown()
 		m_Terrain->Shutdown();
 		delete m_Terrain;
 		m_Terrain = 0;
-	}
-
-	// Release the camera object.
-	if (m_Camera)
-	{
-		delete m_Camera;
-		m_Camera = 0;
 	}
 
 	// Release the Direct3D object.
@@ -346,7 +301,8 @@ bool ApplicationClass::RenderGraphics() const
 	D3DXMATRIX projection;
 	this->m_Direct3D->GetProjectionMatrix(projection);
 
-	this->m_Direct3D->BeginScene(0.15f, 0.16f, 0.17f, 1.0f);
+	//this->m_Direct3D->BeginScene(0.15f, 0.16f, 0.17f, 1.0f);
+	this->m_Direct3D->BeginScene(0.02f, 0.04f, 0.1f, 1.0f);
 
 	if (this->m_Scene != nullptr)
 	{

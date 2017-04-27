@@ -26,10 +26,13 @@ protected:
 
 	inline Camera* GetCamera() const { return this->m_Camera; }
 
+	inline const D3DXMATRIX& GetWindowViewMatrix() const { return this->m_WindowViewMatrix; }
+
 	D3DClass *m_Direct3D;
 	InputClass *m_Input;
 
 private:
 	Camera *m_Camera;
-	D3DXMATRIX m_ViewMatrix;
+
+	D3DXMATRIX m_WindowViewMatrix;
 };

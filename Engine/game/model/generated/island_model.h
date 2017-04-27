@@ -1,7 +1,6 @@
 #pragma once
 
 #include "../model.h"
-#include "../../util/math/vector3f.h"
 
 class IslandModel : public Model
 {

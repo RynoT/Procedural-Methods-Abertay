@@ -11,23 +11,21 @@
 #include <D3DX10.h>
 
 ////////////////////////////////////////////////////////////////////////////////
-// Class name: CameraClass
+// Class name: OrthoCameraClass
 ////////////////////////////////////////////////////////////////////////////////
-class CameraClass
+class OrthoCameraClass
 {
 public:
-	CameraClass();
-	CameraClass(const CameraClass&);
-	~CameraClass();
+	OrthoCameraClass();
 
 	void SetPosition(float, float, float);
 	void SetRotation(float, float, float);
 
-	D3DXVECTOR3 GetPosition();
-	D3DXVECTOR3 GetRotation();
+	D3DXVECTOR3 GetPosition() const;
+	D3DXVECTOR3 GetRotation() const;
 
 	void Render();
-	void GetViewMatrix(D3DXMATRIX&);
+	void GetViewMatrix(D3DXMATRIX&) const;
 
 private:
 	float m_positionX, m_positionY, m_positionZ;

@@ -20,11 +20,9 @@ const bool WIREFRAME_MODE = false;
 ///////////////////////
 #include "inputclass.h"
 #include "d3dclass.h"
-#include "cameraclass.h"
 #include "terrainclass.h"
 #include "colorshaderclass.h"
 #include "timerclass.h"
-#include "positionclass.h"
 #include "fpsclass.h"
 #include "cpuclass.h"
 #include "fontshaderclass.h"
@@ -56,11 +54,9 @@ private:
 	HWND *m_HWND;
 	D3DClass* m_Direct3D;
 	InputClass *m_Input;
-	CameraClass* m_Camera;
 	TerrainClass* m_Terrain;
 	ColorShaderClass* m_ColorShader;
 	TimerClass* m_Timer;
-	PositionClass* m_Position;
 	FpsClass* m_Fps;
 	CpuClass* m_Cpu;
 	FontShaderClass* m_FontShader;

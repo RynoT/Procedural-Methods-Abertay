@@ -5,7 +5,7 @@
 
 #include "../../util/noise/perlinnoise.h"
 
-#define HEIGHT_INTENSITY 10.0f
+#define HEIGHT_INTENSITY 7.5f
 #define RADIUS_ITERATIONS 16
 #define ITERATION_OFFSET (1.0f / float(RADIUS_ITERATIONS))
 
