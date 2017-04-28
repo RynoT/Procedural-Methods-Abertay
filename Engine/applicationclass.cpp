@@ -245,6 +245,15 @@ void ApplicationClass::SetScene(Scene* scene)
 	this->m_Scene = scene;
 }
 
+void ApplicationClass::OnResize(const int& width, const int& height)
+{
+	this->m_Direct3D->Resize(width, height);
+	if(this->m_Scene != nullptr)
+	{
+		this->m_Scene->OnResize(this->m_Direct3D, width, height);
+	}
+}
+
 bool ApplicationClass::Frame()
 {
 	bool result;

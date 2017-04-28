@@ -2,19 +2,17 @@
 
 #include <cassert>
 
+#include "post/post_processor.h"
 #include "../world/world_grid.h"
 #include "../entity/player.h"
+#include "../entity/island.h"
 #include "../../inputclass.h"
-#include "../../textureshaderclass.h"
 #include "../../systemclass.h"
 #include "camera/camera_fpv.h"
 #include "camera/camera_transition.h"
-#include "../entity/island.h"
+#include "../../textureshaderclass.h"
 #include "../model/generated/island_hover_model.h"
-#include "../../horizontalblurshaderclass.h"
-#include "../../verticalblurshaderclass.h"
-#include "../../orthocameraclass.h"
-#include "../../orthowindowclass.h"
+#include "post/blur_effect.h"
 #include "../../rendertextureclass.h"
 
 #define GRID_SIZE 9
@@ -31,48 +29,13 @@
 #define MAP_MAX_ZOOM (MAP_CAMERA_Y + MAP_ZOOM_TOTAL / 2.0f)
 
 DefaultScene::DefaultScene(D3DClass *d3d, const HWND& hwnd, InputClass *input)
-	: Scene(d3d, hwnd, input), m_bTransitioning(false), m_HoveredCell(nullptr), m_bBlurMode(false)
+	: Scene(d3d, hwnd, input), m_bTransitioning(false), m_HoveredCell(nullptr)
 {
-	int downSampleWidth = ApplicationClass::SCREEN_WIDTH / 2, downSampleHeight = ApplicationClass::SCREEN_HEIGHT / 2;
-
 	this->m_TextureShader = new TextureShaderClass;
 	this->m_TextureShader->Initialize(d3d->GetDevice(), hwnd);
 
-	this->m_HorizontalBlurShader = new HorizontalBlurShaderClass;
-	this->m_HorizontalBlurShader->Initialize(d3d->GetDevice(), hwnd);
-
-	this->m_VerticalBlurShader = new VerticalBlurShaderClass;
-	this->m_VerticalBlurShader->Initialize(d3d->GetDevice(), hwnd);
-
-	this->m_RenderTexture = new RenderTextureClass;
-	this->m_RenderTexture->Initialize(d3d->GetDevice(), ApplicationClass::SCREEN_WIDTH,
-		ApplicationClass::SCREEN_HEIGHT, SCREEN_DEPTH, SCREEN_NEAR);
-
-	this->m_DownSampleTexure = new RenderTextureClass;
-	this->m_DownSampleTexure->Initialize(d3d->GetDevice(),
-		downSampleWidth, downSampleHeight, SCREEN_DEPTH, SCREEN_NEAR);
-
-	this->m_HorizontalBlurTexture = new RenderTextureClass;
-	this->m_HorizontalBlurTexture->Initialize(d3d->GetDevice(),
-		downSampleWidth, downSampleHeight, SCREEN_DEPTH, SCREEN_NEAR);
-
-	this->m_VerticalBlurTexture = new RenderTextureClass;
-	this->m_VerticalBlurTexture->Initialize(d3d->GetDevice(),
-		downSampleWidth, downSampleHeight, SCREEN_DEPTH, SCREEN_NEAR);
-
-	this->m_UpSampleTexure = new RenderTextureClass;
-	this->m_UpSampleTexure->Initialize(d3d->GetDevice(), ApplicationClass::SCREEN_WIDTH,
-		ApplicationClass::SCREEN_HEIGHT, SCREEN_DEPTH, SCREEN_NEAR);
-
-	this->m_SmallWindow = new OrthoWindowClass;
-	this->m_SmallWindow->Initialize(d3d->GetDevice(), downSampleWidth, downSampleHeight);
-
-	this->m_Window = new OrthoWindowClass;
-	this->m_Window->Initialize(d3d->GetDevice(), ApplicationClass::SCREEN_WIDTH, ApplicationClass::SCREEN_HEIGHT);
-
-	m_Model = new ModelClass;
-	// Initialize the model object.
-	m_Model->Initialize(d3d->GetDevice(), "data/models/cube.txt", L"data/textures/seafloor.dds");
+	this->m_PostProcessor = new PostProcessor(d3d, hwnd, this->m_TextureShader);
+	this->m_PostProcessor->AddEffect(this->m_BlurEffect = new BlurEffect(d3d, hwnd));
 
 	this->m_Player = new Player;
 
@@ -120,60 +83,12 @@ DefaultScene::~DefaultScene()
 		delete this->m_TextureShader;
 		this->m_TextureShader = nullptr;
 	}
-	if (this->m_Window != nullptr)
+	if (this->m_PostProcessor != nullptr)
 	{
-		this->m_Window->Shutdown();
-		delete this->m_Window;
-		this->m_Window = nullptr;
+		delete this->m_PostProcessor;
+		this->m_PostProcessor = nullptr;
 	}
-	if (this->m_SmallWindow != nullptr)
-	{
-		this->m_SmallWindow->Shutdown();
-		delete this->m_SmallWindow;
-		this->m_SmallWindow = nullptr;
-	}
-	if (this->m_UpSampleTexure != nullptr)
-	{
-		this->m_UpSampleTexure->Shutdown();
-		delete this->m_UpSampleTexure;
-		this->m_UpSampleTexure = nullptr;
-	}
-	if (this->m_VerticalBlurTexture != nullptr)
-	{
-		this->m_VerticalBlurTexture->Shutdown();
-		delete this->m_VerticalBlurTexture;
-		this->m_VerticalBlurTexture = nullptr;
-	}
-	if (this->m_HorizontalBlurTexture != nullptr)
-	{
-		this->m_HorizontalBlurTexture->Shutdown();
-		delete this->m_HorizontalBlurTexture;
-		this->m_HorizontalBlurTexture = nullptr;
-	}
-	if (this->m_DownSampleTexure != nullptr)
-	{
-		this->m_DownSampleTexure->Shutdown();
-		delete this->m_DownSampleTexure;
-		this->m_DownSampleTexure = nullptr;
-	}
-	if (this->m_RenderTexture != nullptr)
-	{
-		this->m_RenderTexture->Shutdown();
-		delete this->m_RenderTexture;
-		this->m_RenderTexture = nullptr;
-	}
-	if (this->m_VerticalBlurShader != nullptr)
-	{
-		this->m_VerticalBlurShader->Shutdown();
-		delete this->m_VerticalBlurShader;
-		this->m_VerticalBlurShader = nullptr;
-	}
-	if (this->m_HorizontalBlurShader != nullptr)
-	{
-		this->m_HorizontalBlurShader->Shutdown();
-		delete this->m_HorizontalBlurShader;
-		this->m_HorizontalBlurShader = nullptr;
-	}
+
 	this->m_HoveredCell = nullptr;
 }
 
@@ -183,6 +98,11 @@ void DefaultScene::SetState(const GameState& state)
 	SystemClass::SetMouseGrab(state != GameState::Map);
 }
 
+void DefaultScene::OnResize(D3DClass *d3d, const int& width, const int& height)
+{
+	this->m_PostProcessor->OnResize(d3d, width, height);
+}
+
 bool DefaultScene::Update(const float& delta)
 {
 	this->m_Player->Update(delta);
@@ -190,7 +110,7 @@ bool DefaultScene::Update(const float& delta)
 	const Vector3f& position = this->m_Player->GetPosition();
 	this->m_WorldGrid->Update(Scene::m_Direct3D, position.x, position.z);
 
-	this->m_bBlurMode = Scene::m_Input->IsKeyDown(VK_B);
+	this->m_BlurEffect->SetEnabled(Scene::m_Input->IsKeyDown(VK_B));
 	if (this->m_State == GameState::Map)
 	{
 		if (!this->UpdateMap(delta))
@@ -341,151 +261,18 @@ void DefaultScene::Render(D3DClass* direct, const D3DXMATRIX& projection)
 	{
 		return;
 	}
-	if (this->m_bBlurMode)
-	{
-		this->m_RenderTexture->SetRenderTarget(direct->GetDeviceContext());
-		this->m_RenderTexture->ClearRenderTarget(direct->GetDeviceContext(), 0.0f, 0.0f, 0.0f, 1.0f);
-	}
+	this->m_PostProcessor->GetSceneRenderTexture()->SetRenderTarget(direct->GetDeviceContext());
+	this->m_PostProcessor->GetSceneRenderTexture()->ClearRenderTarget(direct->GetDeviceContext(), 0.0f, 0.0f, 0.0f, 1.0f);
+
 	const D3DXMATRIX& view = camera->GetViewMatrix();
 	this->m_WorldGrid->Render(direct, projection, view);
 	if (this->m_HoveredCell != nullptr && this->m_State == GameState::Map)
 	{
 		this->m_IslandHover->Render(direct, projection, view);
 	}
-	
+
 	this->m_LastView = view;
 	this->m_LastProjection = projection;
 
-	if (this->m_bBlurMode)
-	{
-		direct->SetBackBufferRenderTarget();
-		direct->ResetViewport();
-
-		const D3DXMATRIX& windowView = Scene::GetWindowViewMatrix();
-
-		D3DXMATRIX world;
-		direct->GetWorldMatrix(world);
-
-		this->RenderDownSample(direct, world, windowView);
-		this->RenderHorizontalSample(direct, world, windowView);
-		this->RenderVerticalSample(direct, world, windowView);
-		this->RenderUpSample(direct, world, windowView);
-
-		this->Render2DTextureScene(direct, world, windowView);
-	}
-}
-
-void DefaultScene::RenderUpSample(D3DClass* direct, const D3DXMATRIX& world, const D3DXMATRIX& view) const
-{
-	// Set the render target to be the render to texture.
-	this->m_UpSampleTexure->SetRenderTarget(direct->GetDeviceContext());
-	this->m_UpSampleTexure->ClearRenderTarget(direct->GetDeviceContext(), 0.0f, 1.0f, 0.0f, 1.0f);
-
-	D3DXMATRIX orthoMatrix;
-	this->m_UpSampleTexure->GetOrthoMatrix(orthoMatrix);
-
-	// Turn off the Z buffer to begin all 2D rendering.
-	direct->TurnZBufferOff();
-
-	this->m_Window->Render(direct->GetDeviceContext());
-	this->m_TextureShader->Render(direct->GetDeviceContext(), m_Window->GetIndexCount(), world, view, orthoMatrix,
-		m_VerticalBlurTexture->GetShaderResourceView());
-
-	direct->TurnZBufferOn();
-	direct->SetBackBufferRenderTarget();
-	direct->ResetViewport();
-}
-
-void DefaultScene::RenderDownSample(D3DClass* direct, const D3DXMATRIX& world, const D3DXMATRIX& view) const
-{
-	// Set the render target to be the render to texture.
-	this->m_DownSampleTexure->SetRenderTarget(direct->GetDeviceContext());
-	this->m_DownSampleTexure->ClearRenderTarget(direct->GetDeviceContext(), 0.0f, 1.0f, 0.0f, 1.0f);
-
-	D3DXMATRIX orthoMatrix;
-	this->m_DownSampleTexure->GetOrthoMatrix(orthoMatrix);
-
-	// Turn off the Z buffer to begin all 2D rendering.
-	direct->TurnZBufferOff();
-
-	this->m_SmallWindow->Render(direct->GetDeviceContext());
-	this->m_TextureShader->Render(direct->GetDeviceContext(), this->m_SmallWindow->GetIndexCount(), world, view, orthoMatrix,
-		this->m_RenderTexture->GetShaderResourceView());
-
-	direct->TurnZBufferOn();
-	direct->SetBackBufferRenderTarget();
-	direct->ResetViewport();
-}
-
-void DefaultScene::RenderVerticalSample(D3DClass* direct, const D3DXMATRIX& world, const D3DXMATRIX& view) const
-{
-	// Store the screen height in a float that will be used in the vertical blur shader.
-	float screenSizeY = (float)m_VerticalBlurTexture->GetTextureHeight();
-
-	// Set the render target to be the render to texture.
-	this->m_VerticalBlurTexture->SetRenderTarget(direct->GetDeviceContext());
-	this->m_VerticalBlurTexture->ClearRenderTarget(direct->GetDeviceContext(), 0.0f, 0.0f, 0.0f, 1.0f);
-
-	D3DXMATRIX orthoMatrix;
-	this->m_VerticalBlurTexture->GetOrthoMatrix(orthoMatrix);
-
-	// Turn off the Z buffer to begin all 2D rendering.
-	direct->TurnZBufferOff();
-
-	// Put the small ortho window vertex and index buffers on the graphics pipeline to prepare them for drawing.
-	this->m_SmallWindow->Render(direct->GetDeviceContext());
-
-	// Render the small ortho window using the vertical blur shader and the horizontal blurred render to texture resource.
-	this->m_VerticalBlurShader->Render(direct->GetDeviceContext(), this->m_SmallWindow->GetIndexCount(), world, view, orthoMatrix,
-		this->m_HorizontalBlurTexture->GetShaderResourceView(), screenSizeY);
-
-	direct->TurnZBufferOn();
-	direct->SetBackBufferRenderTarget();
-	direct->ResetViewport();
-}
-
-void DefaultScene::RenderHorizontalSample(D3DClass* direct, const D3DXMATRIX& world, const D3DXMATRIX& view) const
-{
-	// Store the screen width in a float that will be used in the horizontal blur shader.
-	float screenSizeX = (float)this->m_HorizontalBlurTexture->GetTextureWidth();
-
-	// Set the render target to be the render to texture.
-	this->m_HorizontalBlurTexture->SetRenderTarget(direct->GetDeviceContext());
-	this->m_HorizontalBlurTexture->ClearRenderTarget(direct->GetDeviceContext(), 0.0f, 0.0f, 0.0f, 1.0f);
-
-	D3DXMATRIX orthoMatrix;
-	this->m_HorizontalBlurTexture->GetOrthoMatrix(orthoMatrix);
-
-	// Turn off the Z buffer to begin all 2D rendering.
-	direct->TurnZBufferOff();
-
-	// Put the small ortho window vertex and index buffers on the graphics pipeline to prepare them for drawing.
-	this->m_SmallWindow->Render(direct->GetDeviceContext());
-
-	// Render the small ortho window using the horizontal blur shader and the down sampled render to texture resource.
-	this->m_HorizontalBlurShader->Render(direct->GetDeviceContext(), this->m_SmallWindow->GetIndexCount(), world, view, orthoMatrix,
-		this->m_DownSampleTexure->GetShaderResourceView(), screenSizeX);
-
-	direct->TurnZBufferOn();
-	direct->SetBackBufferRenderTarget();
-	direct->ResetViewport();
-}
-
-void DefaultScene::Render2DTextureScene(D3DClass* direct, const D3DXMATRIX& world, const D3DXMATRIX& view) const
-{
-	D3DXMATRIX orthoMatrix;
-	direct->GetOrthoMatrix(orthoMatrix);
-
-	// Turn off the Z buffer to begin all 2D rendering.
-	direct->TurnZBufferOff();
-
-	// Put the full screen ortho window vertex and index buffers on the graphics pipeline to prepare them for drawing.
-	this->m_Window->Render(direct->GetDeviceContext());
-
-	// Render the full screen ortho window using the texture shader and the full screen sized blurred render to texture resource.
-	this->m_TextureShader->Render(direct->GetDeviceContext(), this->m_Window->GetIndexCount(), world, view, orthoMatrix,
-		this->m_UpSampleTexure->GetShaderResourceView());
-
-	// Turn the Z buffer back on now that all 2D rendering has completed.
-	direct->TurnZBufferOn();
+	this->m_PostProcessor->Render(direct);
 }

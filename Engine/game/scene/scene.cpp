@@ -5,10 +5,6 @@
 
 Scene::Scene(D3DClass *d3d, const HWND& hwnd, InputClass* input) : m_Direct3D(d3d), m_Input(input), m_Camera(nullptr)
 {
-	D3DXVECTOR3 position = Vector3f(0.0f, 0.0f, -1.0f);
-	D3DXVECTOR3 lookAt = position + Vector3f(0.0f, 0.0f, 1.0f);
-	D3DXVECTOR3 up = Vector3f(0.0f, 1.0f, 0.0f);
-	D3DXMatrixLookAtLH(&this->m_WindowViewMatrix, &position, &lookAt, &up);
 }
 
 Scene::~Scene()

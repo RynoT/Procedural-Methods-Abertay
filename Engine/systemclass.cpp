@@ -141,7 +141,7 @@ LRESULT CALLBACK SystemClass::MessageHandler(HWND hwnd, UINT umsg, WPARAM wparam
 			}
 			if (this->m_Application != nullptr)
 			{
-				this->m_Application->m_Direct3D->Resize(this->m_bounds.right, this->m_bounds.bottom);
+				this->m_Application->OnResize(this->m_bounds.right, this->m_bounds.bottom);
 			}
 			ApplicationClass::SCREEN_WIDTH = this->m_bounds.right;
 			ApplicationClass::SCREEN_HEIGHT = this->m_bounds.bottom;

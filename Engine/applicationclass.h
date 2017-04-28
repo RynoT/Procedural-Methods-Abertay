@@ -38,6 +38,8 @@ public:
 	ApplicationClass(InputClass *input);
 	~ApplicationClass();
 
+	virtual void OnResize(const int& width, const int& height);
+
 	bool Initialize(HINSTANCE, HWND&, int, int);
 	void Shutdown();
 	bool Frame();

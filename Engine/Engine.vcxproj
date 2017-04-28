@@ -85,7 +85,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="applicationclass.cpp" />
-    <ClCompile Include="orthocameraclass.cpp" />
+    <ClCompile Include="game\scene\post\blur_effect.cpp" />
+    <ClCompile Include="game\scene\post\no_effect.cpp" />
+    <ClCompile Include="game\scene\post\post_effect.cpp" />
+    <ClCompile Include="game\scene\post\post_processor.cpp" />
     <ClCompile Include="colorshaderclass.cpp" />
     <ClCompile Include="convolutionshaderclass.cpp" />
     <ClCompile Include="cpuclass.cpp" />
@@ -140,7 +143,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="applicationclass.h" />
-    <ClInclude Include="orthocameraclass.h" />
+    <ClInclude Include="game\scene\post\blur_effect.h" />
+    <ClInclude Include="game\scene\post\no_effect.h" />
+    <ClInclude Include="game\scene\post\post_processor.h" />
+    <ClInclude Include="game\scene\post\post_effect.h" />
     <ClInclude Include="colorshaderclass.h" />
     <ClInclude Include="convolutionshaderclass.h" />
     <ClInclude Include="cpuclass.h" />
