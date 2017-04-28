@@ -1,6 +1,7 @@
 #pragma once
 
 #include "scene.h"
+
 #include "../entity/model_entity.h"
 
 struct GridCell;

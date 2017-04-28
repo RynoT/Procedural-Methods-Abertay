@@ -311,7 +311,7 @@ bool ApplicationClass::RenderGraphics() const
 	this->m_Direct3D->GetProjectionMatrix(projection);
 
 	//this->m_Direct3D->BeginScene(0.15f, 0.16f, 0.17f, 1.0f);
-	this->m_Direct3D->BeginScene(0.02f, 0.04f, 0.1f, 1.0f);
+	this->m_Direct3D->BeginScene(CLEAR_COLOR);
 
 	if (this->m_Scene != nullptr)
 	{

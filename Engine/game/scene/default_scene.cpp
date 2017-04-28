@@ -262,7 +262,7 @@ void DefaultScene::Render(D3DClass* direct, const D3DXMATRIX& projection)
 		return;
 	}
 	this->m_PostProcessor->GetSceneRenderTexture()->SetRenderTarget(direct->GetDeviceContext());
-	this->m_PostProcessor->GetSceneRenderTexture()->ClearRenderTarget(direct->GetDeviceContext(), 0.0f, 0.0f, 0.0f, 1.0f);
+	this->m_PostProcessor->GetSceneRenderTexture()->ClearRenderTarget(direct->GetDeviceContext(), CLEAR_COLOR);
 
 	const D3DXMATRIX& view = camera->GetViewMatrix();
 	this->m_WorldGrid->Render(direct, projection, view);

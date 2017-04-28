@@ -67,6 +67,7 @@ bool SystemClass::Initialize()
 	{
 		return false;
 	}
+	this->OnResize();
 
 	return true;
 }
@@ -129,22 +130,27 @@ bool SystemClass::Frame() const
 	return this->m_Application->Frame();
 }
 
+void SystemClass::OnResize()
+{
+	GetClientRect(this->m_hwnd, &this->m_bounds);
+	if (this->m_bounds.bottom == 0)
+	{
+		this->m_bounds.bottom = 1;
+	}
+	ApplicationClass::SCREEN_WIDTH = this->m_bounds.right;
+	ApplicationClass::SCREEN_HEIGHT = this->m_bounds.bottom;
+	if (this->m_Application != nullptr)
+	{
+		this->m_Application->OnResize(this->m_bounds.right, this->m_bounds.bottom);
+	}
+}
+
 LRESULT CALLBACK SystemClass::MessageHandler(HWND hwnd, UINT umsg, WPARAM wparam, LPARAM lparam)
 {
 	switch (umsg)
 	{
 		case WM_SIZE:
-			GetClientRect(this->m_hwnd, &this->m_bounds);
-			if (this->m_bounds.bottom == 0)
-			{
-				this->m_bounds.bottom = 1;
-			}
-			if (this->m_Application != nullptr)
-			{
-				this->m_Application->OnResize(this->m_bounds.right, this->m_bounds.bottom);
-			}
-			ApplicationClass::SCREEN_WIDTH = this->m_bounds.right;
-			ApplicationClass::SCREEN_HEIGHT = this->m_bounds.bottom;
+			this->OnResize();
 			break;
 		case WM_KEYDOWN:
 			this->m_Input->SetKey(wparam, true);

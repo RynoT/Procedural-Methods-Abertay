@@ -17,7 +17,7 @@ m_DownSampleTexure(nullptr), m_HorizontalBlurTexture(nullptr), m_VerticalBlurTex
 	this->m_VerticalBlurShader = new VerticalBlurShaderClass;
 	this->m_VerticalBlurShader->Initialize(d3d->GetDevice(), hwnd);
 
-	this->BlurEffect::OnResize(d3d, ApplicationClass::SCREEN_WIDTH, ApplicationClass::SCREEN_HEIGHT);
+	//this->BlurEffect::OnResize(d3d, ApplicationClass::SCREEN_WIDTH, ApplicationClass::SCREEN_HEIGHT);
 }
 
 BlurEffect::~BlurEffect()

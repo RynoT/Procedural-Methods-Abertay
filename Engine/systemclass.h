@@ -33,6 +33,7 @@ public:
 	SystemClass(const SystemClass&);
 	~SystemClass();
 
+	void OnResize();
 	bool Initialize();
 	void Shutdown();
 	void Run() const;

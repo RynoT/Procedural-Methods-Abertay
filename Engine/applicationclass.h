@@ -28,6 +28,8 @@ const bool WIREFRAME_MODE = false;
 #include "fontshaderclass.h"
 #include "textclass.h"
 
+#define CLEAR_COLOR 0.05f, 0.25f, 0.25f, 1.0f
+
 class Scene;
 
 class ApplicationClass
@@ -38,7 +40,7 @@ public:
 	ApplicationClass(InputClass *input);
 	~ApplicationClass();
 
-	virtual void OnResize(const int& width, const int& height);
+	void OnResize(const int& width, const int& height);
 
 	bool Initialize(HINSTANCE, HWND&, int, int);
 	void Shutdown();
