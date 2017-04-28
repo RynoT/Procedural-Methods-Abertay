@@ -30,14 +30,11 @@ public:
 
 	inline OrthoWindowClass* GetSmallWindow() const { return this->m_SmallWindow; }
 
-	inline const D3DXMATRIX& GetWindowViewMatrix() const { return this->m_WindowViewMatrix; }
-
 	inline TextureShaderClass* GetTextureShader() const { return this->m_TextureShader; }
 
 	inline RenderTextureClass* GetSceneRenderTexture() const { return this->m_RenderTexture; }
 
 private:
-	PostEffect *m_NoEffect;
 	std::vector<PostEffect*> m_Effects;
 
 	D3DXMATRIX m_WindowViewMatrix;

@@ -20,7 +20,7 @@ ConvolutionShaderClass::~ConvolutionShaderClass()
 
 bool ConvolutionShaderClass::Initialize(ID3D11Device* device, HWND hwnd)
 {
-	return InitializeShader(device, hwnd, L"convolution.vs", L"convolution.ps");
+	return InitializeShader(device, hwnd, L"data/shadersconvolution.vs", L"data/shadersconvolution.ps");
 }
 
 void ConvolutionShaderClass::Shutdown()

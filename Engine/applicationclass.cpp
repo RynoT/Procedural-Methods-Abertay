@@ -25,7 +25,6 @@ ApplicationClass::~ApplicationClass()
 bool ApplicationClass::Initialize(HINSTANCE hinstance, HWND& hwnd, int screenWidth, int screenHeight)
 {
 	bool result;
-	float cameraX, cameraY, cameraZ;
 	D3DXMATRIX baseViewMatrix;
 	char videoCard[128];
 	int videoMemory;

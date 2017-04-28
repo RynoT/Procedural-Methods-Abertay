@@ -14,6 +14,7 @@
 #include "../model/generated/island_hover_model.h"
 #include "post/blur_effect.h"
 #include "../../rendertextureclass.h"
+#include "post/vignette_effect.h"
 
 #define GRID_SIZE 9
 #define GRID_WORLD_SIZE 2000.0f
@@ -36,6 +37,9 @@ DefaultScene::DefaultScene(D3DClass *d3d, const HWND& hwnd, InputClass *input)
 
 	this->m_PostProcessor = new PostProcessor(d3d, hwnd, this->m_TextureShader);
 	this->m_PostProcessor->AddEffect(this->m_BlurEffect = new BlurEffect(d3d, hwnd));
+	this->m_PostProcessor->AddEffect(this->m_VignatteEffect = new VignetteEffect(d3d, hwnd));
+
+	this->m_BlurEffect->SetEnabled(false);
 
 	this->m_Player = new Player;
 
@@ -110,7 +114,14 @@ bool DefaultScene::Update(const float& delta)
 	const Vector3f& position = this->m_Player->GetPosition();
 	this->m_WorldGrid->Update(Scene::m_Direct3D, position.x, position.z);
 
-	this->m_BlurEffect->SetEnabled(Scene::m_Input->IsKeyDown(VK_B));
+	if (Scene::m_Input->IsKeyPressed(VK_F1))
+	{
+		this->m_BlurEffect->ToggleEnabled();
+	}
+	if (Scene::m_Input->IsKeyPressed(VK_F2))
+	{
+		this->m_VignatteEffect->ToggleEnabled();
+	}
 	if (this->m_State == GameState::Map)
 	{
 		if (!this->UpdateMap(delta))

@@ -1,0 +1,36 @@
+////////////////////////////////////////////////////////////////////////////////
+// Filename: vignette.ps
+////////////////////////////////////////////////////////////////////////////////
+
+
+/////////////
+// GLOBALS //
+/////////////
+Texture2D shaderTexture;
+SamplerState SampleType;
+
+
+//////////////
+// TYPEDEFS //
+//////////////
+struct PixelInputType
+{
+    float4 position : SV_POSITION;
+    float2 tex : TEXCOORD0;
+};
+
+#define RADIUS_X 0.8f
+#define RADIUS_Y 0.3f
+
+////////////////////////////////////////////////////////////////////////////////
+// Pixel Shader
+////////////////////////////////////////////////////////////////////////////////
+float4 VignettePixelShader(PixelInputType input) : SV_TARGET
+{
+    float dist = distance(input.tex, float2(0.5, 0.5)) * 0.75;    
+	
+	float4 textureColor = shaderTexture.Sample(SampleType, input.tex);    
+    textureColor.rgb *= smoothstep(RADIUS_X, RADIUS_Y, dist);    
+
+    return textureColor;
+}

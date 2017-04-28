@@ -16,8 +16,6 @@ m_DownSampleTexure(nullptr), m_HorizontalBlurTexture(nullptr), m_VerticalBlurTex
 
 	this->m_VerticalBlurShader = new VerticalBlurShaderClass;
 	this->m_VerticalBlurShader->Initialize(d3d->GetDevice(), hwnd);
-
-	//this->BlurEffect::OnResize(d3d, ApplicationClass::SCREEN_WIDTH, ApplicationClass::SCREEN_HEIGHT);
 }
 
 BlurEffect::~BlurEffect()
@@ -99,11 +97,8 @@ void BlurEffect::OnResize(D3DClass* d3d, const int& width, const int& height)
 	this->m_UpSampleTexure->Initialize(d3d->GetDevice(), width, height, SCREEN_DEPTH, SCREEN_NEAR);
 }
 
-void BlurEffect::RenderEffect(PostProcessor* processor, D3DClass* direct) const
+void BlurEffect::RenderEffect(PostProcessor* processor, D3DClass* direct, const D3DXMATRIX& world, const D3DXMATRIX& view) const
 {
-	D3DXMATRIX world, view = processor->GetWindowViewMatrix();
-	direct->GetWorldMatrix(world);
-
 	direct->TurnZBufferOff();
 
 	this->RenderDownSample(processor, direct, world, view);

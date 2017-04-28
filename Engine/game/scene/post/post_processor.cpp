@@ -4,8 +4,8 @@
 #include "../../util/math/vector3f.h"
 #include "../../../orthowindowclass.h"
 #include "../../../applicationclass.h"
+#include "../../../textureshaderclass.h"
 #include "../../../rendertextureclass.h"
-#include "no_effect.h"
 
 PostProcessor::PostProcessor(D3DClass* direct, const HWND& hwnd, TextureShaderClass *shader)
 	: m_RenderTexture(nullptr), m_TextureShader(shader), m_Window(nullptr), m_SmallWindow(nullptr)
@@ -16,8 +16,6 @@ PostProcessor::PostProcessor(D3DClass* direct, const HWND& hwnd, TextureShaderCl
 	D3DXMatrixLookAtLH(&this->m_WindowViewMatrix, &position, &lookAt, &up);
 	
 	this->OnResize(direct, ApplicationClass::SCREEN_WIDTH, ApplicationClass::SCREEN_HEIGHT);
-
-	this->m_NoEffect = new NoEffect(direct, hwnd);
 }
 
 PostProcessor::~PostProcessor()
@@ -28,11 +26,6 @@ PostProcessor::~PostProcessor()
 	}
 	this->m_Effects.empty();
 
-	if (this->m_NoEffect != nullptr)
-	{
-		delete this->m_NoEffect;
-		this->m_NoEffect = nullptr;
-	}
 	if (this->m_RenderTexture != nullptr)
 	{
 		this->m_RenderTexture->Shutdown();
@@ -96,17 +89,30 @@ void PostProcessor::Update(const float& delta)
 
 void PostProcessor::Render(D3DClass* direct)
 {
-	int count = 0;
+	D3DXMATRIX world, view = this->m_WindowViewMatrix;
+	direct->GetWorldMatrix(world);
+
 	for (PostEffect *effect : this->m_Effects)
 	{
-		if(effect->Render(this, direct))
-		{
-			count++;
-		}
+		effect->Render(this, direct, world, view);
 	}
-	// If no post-processing effect activated
-	if(count == 0)
-	{
-		this->m_NoEffect->Render(this, direct);
-	}
+
+	direct->SetBackBufferRenderTarget();
+	direct->ResetViewport();
+
+	D3DXMATRIX orthoMatrix;
+	direct->GetOrthoMatrix(orthoMatrix);
+
+	// Turn off the Z buffer to begin all 2D rendering.
+	direct->TurnZBufferOff();
+
+	// Put the full screen ortho window vertex and index buffers on the graphics pipeline to prepare them for drawing.
+	this->GetWindow()->Render(direct->GetDeviceContext());
+
+	// Render the full screen ortho window using the texture shader and the full screen sized blurred render to texture resource.
+	this->GetTextureShader()->Render(direct->GetDeviceContext(), this->GetWindow()->GetIndexCount(),
+		world, view, orthoMatrix, this->m_RenderTexture->GetShaderResourceView());
+
+	// Turn the Z buffer back on now that all 2D rendering has completed.
+	direct->TurnZBufferOn();
 }

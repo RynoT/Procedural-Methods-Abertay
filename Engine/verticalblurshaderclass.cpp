@@ -3,6 +3,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 #include "verticalblurshaderclass.h"
 
+#include <d3dx11async.h>
 
 VerticalBlurShaderClass::VerticalBlurShaderClass()
 {
@@ -31,7 +32,7 @@ bool VerticalBlurShaderClass::Initialize(ID3D11Device* device, HWND hwnd)
 
 
 	// Initialize the vertex and pixel shaders.
-	result = InitializeShader(device, hwnd, L"verticalblur.vs", L"verticalblur.ps");
+	result = InitializeShader(device, hwnd, L"data/shaders/verticalblur.vs", L"data/shaders/verticalblur.ps");
 	if(!result)
 	{
 		return false;

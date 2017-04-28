@@ -180,7 +180,10 @@
     <ClCompile Include="game\scene\post\post_effect.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="game\scene\post\no_effect.cpp">
+    <ClCompile Include="game\scene\post\vignette_effect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="vignetteshaderclass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -347,32 +350,21 @@
     <ClInclude Include="game\scene\post\blur_effect.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="game\scene\post\no_effect.h">
+    <ClInclude Include="game\scene\post\vignette_effect.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="vignetteshaderclass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="color.ps">
-      <Filter>Shader Files</Filter>
-    </None>
-    <None Include="color.vs">
-      <Filter>Shader Files</Filter>
-    </None>
     <None Include="font.ps">
       <Filter>Shader Files</Filter>
     </None>
     <None Include="font.vs">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="convolution.ps" />
-    <None Include="convolution.vs" />
-    <None Include="horizontalblur.ps" />
-    <None Include="horizontalblur.vs" />
-    <None Include="texture.vs" />
-    <None Include="texture.ps" />
     <None Include="terrain.vs" />
     <None Include="terrain.ps" />
-    <None Include="verticalblur.vs" />
-    <None Include="verticalblur.ps" />
   </ItemGroup>
 </Project>

@@ -14,7 +14,7 @@ public:
 	virtual void OnResize(D3DClass* d3d, const int& width, const int& height) override;
 
 protected:
-	virtual void RenderEffect(PostProcessor* processor, D3DClass* direct) const override;
+	virtual void RenderEffect(PostProcessor* processor, D3DClass* direct, const D3DXMATRIX& world, const D3DXMATRIX& view) const override;
 
 	void RenderUpSample(PostProcessor* processor, D3DClass* direct, const D3DXMATRIX& world, const D3DXMATRIX& view) const;
 

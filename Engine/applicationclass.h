@@ -28,7 +28,7 @@ const bool WIREFRAME_MODE = false;
 #include "fontshaderclass.h"
 #include "textclass.h"
 
-#define CLEAR_COLOR 0.05f, 0.25f, 0.25f, 1.0f
+#define CLEAR_COLOR 0.05f, 0.18f, 0.18f, 1.0f
 
 class Scene;
 

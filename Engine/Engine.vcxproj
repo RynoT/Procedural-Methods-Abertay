@@ -72,21 +72,21 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include</AdditionalIncludeDirectories>
       <ShowIncludes>false</ShowIncludes>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="applicationclass.cpp" />
     <ClCompile Include="game\scene\post\blur_effect.cpp" />
-    <ClCompile Include="game\scene\post\no_effect.cpp" />
     <ClCompile Include="game\scene\post\post_effect.cpp" />
     <ClCompile Include="game\scene\post\post_processor.cpp" />
     <ClCompile Include="colorshaderclass.cpp" />
@@ -119,6 +119,7 @@
     <ClCompile Include="game\scene\default_scene.cpp" />
     <ClCompile Include="game\entity\dungeon\leaf.cpp" />
     <ClCompile Include="game\scene\dungeon_scene.cpp" />
+    <ClCompile Include="game\scene\post\vignette_effect.cpp" />
     <ClCompile Include="game\util\math\vector2f.cpp" />
     <ClCompile Include="game\util\math\vector3f.cpp" />
     <ClCompile Include="game\world\grid_cell.cpp" />
@@ -140,11 +141,11 @@
     <ClCompile Include="textureshaderclass.cpp" />
     <ClCompile Include="timerclass.cpp" />
     <ClCompile Include="verticalblurshaderclass.cpp" />
+    <ClCompile Include="vignetteshaderclass.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="applicationclass.h" />
     <ClInclude Include="game\scene\post\blur_effect.h" />
-    <ClInclude Include="game\scene\post\no_effect.h" />
     <ClInclude Include="game\scene\post\post_processor.h" />
     <ClInclude Include="game\scene\post\post_effect.h" />
     <ClInclude Include="colorshaderclass.h" />
@@ -177,6 +178,7 @@
     <ClInclude Include="game\scene\default_scene.h" />
     <ClInclude Include="game\entity\dungeon\leaf.h" />
     <ClInclude Include="game\scene\dungeon_scene.h" />
+    <ClInclude Include="game\scene\post\vignette_effect.h" />
     <ClInclude Include="game\util\math\vector2f.h" />
     <ClInclude Include="game\util\math\vector3f.h" />
     <ClInclude Include="game\world\grid_cell.h" />
@@ -197,22 +199,13 @@
     <ClInclude Include="textureshaderclass.h" />
     <ClInclude Include="timerclass.h" />
     <ClInclude Include="verticalblurshaderclass.h" />
+    <ClInclude Include="vignetteshaderclass.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="color.ps" />
-    <None Include="color.vs" />
-    <None Include="convolution.ps" />
-    <None Include="convolution.vs" />
     <None Include="font.ps" />
     <None Include="font.vs" />
-    <None Include="horizontalblur.ps" />
-    <None Include="horizontalblur.vs" />
     <None Include="terrain.ps" />
     <None Include="terrain.vs" />
-    <None Include="texture.ps" />
-    <None Include="texture.vs" />
-    <None Include="verticalblur.ps" />
-    <None Include="verticalblur.vs" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
