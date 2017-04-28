@@ -15,6 +15,7 @@
 #include "post/blur_effect.h"
 #include "../../rendertextureclass.h"
 #include "post/vignette_effect.h"
+#include "post/invert_effect.h"
 
 #define GRID_SIZE 9
 #define GRID_WORLD_SIZE 2000.0f
@@ -37,9 +38,11 @@ DefaultScene::DefaultScene(D3DClass *d3d, const HWND& hwnd, InputClass *input)
 
 	this->m_PostProcessor = new PostProcessor(d3d, hwnd, this->m_TextureShader);
 	this->m_PostProcessor->AddEffect(this->m_BlurEffect = new BlurEffect(d3d, hwnd));
+	this->m_PostProcessor->AddEffect(this->m_InvertEffect = new InvertEffect(d3d, hwnd));
 	this->m_PostProcessor->AddEffect(this->m_VignatteEffect = new VignetteEffect(d3d, hwnd));
 
 	this->m_BlurEffect->SetEnabled(false);
+	this->m_InvertEffect->SetEnabled(false);
 
 	this->m_Player = new Player;
 
@@ -121,6 +124,10 @@ bool DefaultScene::Update(const float& delta)
 	if (Scene::m_Input->IsKeyPressed(VK_F2))
 	{
 		this->m_VignatteEffect->ToggleEnabled();
+	}
+	if (Scene::m_Input->IsKeyPressed(VK_F3))
+	{
+		this->m_InvertEffect->ToggleEnabled();
 	}
 	if (this->m_State == GameState::Map)
 	{

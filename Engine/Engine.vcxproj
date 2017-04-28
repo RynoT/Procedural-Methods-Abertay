@@ -87,6 +87,7 @@
   <ItemGroup>
     <ClCompile Include="applicationclass.cpp" />
     <ClCompile Include="game\scene\post\blur_effect.cpp" />
+    <ClCompile Include="game\scene\post\invert_effect.cpp" />
     <ClCompile Include="game\scene\post\post_effect.cpp" />
     <ClCompile Include="game\scene\post\post_processor.cpp" />
     <ClCompile Include="colorshaderclass.cpp" />
@@ -126,6 +127,7 @@
     <ClCompile Include="game\world\world_grid.cpp" />
     <ClCompile Include="horizontalblurshaderclass.cpp" />
     <ClCompile Include="inputclass.cpp" />
+    <ClCompile Include="invertshaderclass.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="game\util\noise\perlinnoise.cpp" />
     <ClCompile Include="modelclass.cpp" />
@@ -146,6 +148,7 @@
   <ItemGroup>
     <ClInclude Include="applicationclass.h" />
     <ClInclude Include="game\scene\post\blur_effect.h" />
+    <ClInclude Include="game\scene\post\invert_effect.h" />
     <ClInclude Include="game\scene\post\post_processor.h" />
     <ClInclude Include="game\scene\post\post_effect.h" />
     <ClInclude Include="colorshaderclass.h" />
@@ -186,6 +189,7 @@
     <ClInclude Include="horizontalblurshaderclass.h" />
     <ClInclude Include="inputclass.h" />
     <ClInclude Include="game\util\noise\perlinnoise.h" />
+    <ClInclude Include="invertshaderclass.h" />
     <ClInclude Include="modelclass.h" />
     <ClInclude Include="orthowindowclass.h" />
     <ClInclude Include="positionclass.h" />
