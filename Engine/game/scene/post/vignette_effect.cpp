@@ -37,6 +37,8 @@ void VignetteEffect::OnResize(D3DClass* d3d, const int& width, const int& height
 	}
 	this->m_VignetteTexture = new RenderTextureClass;
 	this->m_VignetteTexture->Initialize(d3d->GetDevice(), width, height, SCREEN_DEPTH, SCREEN_NEAR);
+
+	PostEffect::OnResize(d3d, width, height);
 }
 
 void VignetteEffect::RenderEffect(PostProcessor* processor, D3DClass* direct, const D3DXMATRIX& world, const D3DXMATRIX& view) const

@@ -8,7 +8,7 @@
 #include "../../../convolutionshaderclass.h"
 
 ConvolutionEffect::ConvolutionEffect(D3DClass* d3d, const HWND& hwnd)
-: PostEffect(d3d, hwnd), m_Iterations(1), m_ConvolutionTexture(nullptr), m_ConvolutionShader(nullptr)
+: PostEffect(d3d, hwnd), m_ConvolutionTexture(nullptr), m_Iterations(1), m_ConvolutionShader(nullptr)
 {
 	D3DXMatrixIdentity(&this->m_ConvolutionMatrix);
 
@@ -41,6 +41,8 @@ void ConvolutionEffect::OnResize(D3DClass* d3d, const int& width, const int& hei
 	}
 	this->m_ConvolutionTexture = new RenderTextureClass;
 	this->m_ConvolutionTexture->Initialize(d3d->GetDevice(), width, height, SCREEN_DEPTH, SCREEN_NEAR);
+
+	PostEffect::OnResize(d3d, width, height);
 }
 
 void ConvolutionEffect::RenderEffect(PostProcessor* processor, D3DClass* direct, const D3DXMATRIX& world, const D3DXMATRIX& view) const

@@ -28,10 +28,11 @@ protected:
 
 	void RenderConvolution(PostProcessor* processor, D3DClass* direct, const D3DXMATRIX& world, const D3DXMATRIX& view) const;
 
+	RenderTextureClass *m_ConvolutionTexture;
+
 private:
 	int m_Iterations;
 	D3DXMATRIX m_ConvolutionMatrix;
 
-	RenderTextureClass *m_ConvolutionTexture;
 	ConvolutionShaderClass *m_ConvolutionShader;
 };

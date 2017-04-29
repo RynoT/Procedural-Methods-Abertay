@@ -95,6 +95,8 @@ void BlurEffect::OnResize(D3DClass* d3d, const int& width, const int& height)
 
 	this->m_UpSampleTexure = new RenderTextureClass;
 	this->m_UpSampleTexure->Initialize(d3d->GetDevice(), width, height, SCREEN_DEPTH, SCREEN_NEAR);
+
+	PostEffect::OnResize(d3d, width, height);
 }
 
 void BlurEffect::RenderEffect(PostProcessor* processor, D3DClass* direct, const D3DXMATRIX& world, const D3DXMATRIX& view) const

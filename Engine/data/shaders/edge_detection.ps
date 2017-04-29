@@ -1,0 +1,43 @@
+////////////////////////////////////////////////////////////////////////////////
+// Filename: texture.ps
+////////////////////////////////////////////////////////////////////////////////
+
+
+/////////////
+// GLOBALS //
+/////////////
+Texture2D shaderTexture;
+Texture2D blurredTexture;
+SamplerState SampleType;
+
+#define MIN_COLOR 0.35f
+
+//////////////
+// TYPEDEFS //
+//////////////
+struct PixelInputType
+{
+    float4 position : SV_POSITION;
+    float2 tex : TEXCOORD0;
+};
+
+
+float4 greyscale(float4 color)
+{
+	float avg = (color.r + color.g + color.b) / 3.0f;
+	return float4(avg, avg, avg, 1.0f);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// Pixel Shader
+////////////////////////////////////////////////////////////////////////////////
+float4 EdgeDetectionPixelShader(PixelInputType input) : SV_TARGET
+{
+	float4 color = greyscale(shaderTexture.Sample(SampleType, input.tex)) 
+			- greyscale(blurredTexture.Sample(SampleType, input.tex));
+	color = (color + float4(MIN_COLOR, MIN_COLOR, MIN_COLOR, 0.0f)) / 2.0f;
+
+	color.a = 1.0f;
+
+    return color;
+}
