@@ -2,7 +2,6 @@
 
 #include <cassert>
 
-#include "post/post_processor.h"
 #include "../world/world_grid.h"
 #include "../entity/player.h"
 #include "../entity/island.h"
@@ -12,12 +11,6 @@
 #include "camera/camera_transition.h"
 #include "../../textureshaderclass.h"
 #include "../model/generated/island_hover_model.h"
-#include "post/blur_effect.h"
-#include "../../rendertextureclass.h"
-#include "post/vignette_effect.h"
-#include "post/invert_effect.h"
-#include "post/convolution_blur_effect.h"
-#include "post/edge_detect_effect.h"
 
 #define GRID_SIZE 9
 #define GRID_WORLD_SIZE 2000.0f
@@ -33,24 +26,8 @@
 #define MAP_MAX_ZOOM (MAP_CAMERA_Y + MAP_ZOOM_TOTAL / 2.0f)
 
 DefaultScene::DefaultScene(D3DClass *d3d, const HWND& hwnd, InputClass *input)
-	: Scene(d3d, hwnd, input), m_bTransitioning(false), m_HoveredCell(nullptr)
+	: Scene(SceneId::DEFAULT, d3d, hwnd, input), m_bTransitioning(false), m_HoveredCell(nullptr)
 {
-	this->m_TextureShader = new TextureShaderClass;
-	this->m_TextureShader->Initialize(d3d->GetDevice(), hwnd);
-
-	this->m_PostProcessor = new PostProcessor(d3d, hwnd, this->m_TextureShader);
-	this->m_PostProcessor->AddEffect(this->m_EdgeEffect = new EdgeDetectEffect(d3d, hwnd));
-	this->m_PostProcessor->AddEffect(this->m_ConvBlurEffect = new ConvolutionBlurEffect(d3d, hwnd));
-	this->m_PostProcessor->AddEffect(this->m_BlurEffect = new BlurEffect(d3d, hwnd));
-	this->m_PostProcessor->AddEffect(this->m_InvertEffect = new InvertEffect(d3d, hwnd));
-	this->m_PostProcessor->AddEffect(this->m_VignatteEffect = new VignetteEffect(d3d, hwnd));
-	this->m_PostProcessor->OnResize(d3d, ApplicationClass::SCREEN_WIDTH, ApplicationClass::SCREEN_HEIGHT);
-
-	this->m_BlurEffect->SetEnabled(false);
-	this->m_EdgeEffect->SetEnabled(false);
-	this->m_InvertEffect->SetEnabled(false);
-	this->m_ConvBlurEffect->SetEnabled(false);
-
 	this->m_Player = new Player;
 
 	this->m_IslandHover = new ModelEntity;
@@ -60,12 +37,12 @@ DefaultScene::DefaultScene(D3DClass *d3d, const HWND& hwnd, InputClass *input)
 		const D3DXMATRIX& view, const D3DXMATRIX& model)->void
 	{
 		auto imodel = this->m_IslandHover->GetInternalModel();
-		this->m_TextureShader->Render(direct->GetDeviceContext(),
+		Scene::GetTextureShader()->Render(direct->GetDeviceContext(),
 			imodel->GetIndexCount(), model, view, projection, imodel->GetTexture());
 	});
 
 	this->m_WorldGrid = new WorldGrid(GRID_WORLD_SIZE, GRID_SIZE);
-	this->m_WorldGrid->SetShader(this->m_TextureShader);
+	this->m_WorldGrid->SetShader(Scene::GetTextureShader());
 
 	D3DXMatrixIdentity(&this->m_LastView);
 	D3DXMatrixIdentity(&this->m_LastProjection);
@@ -81,11 +58,6 @@ DefaultScene::~DefaultScene()
 		delete this->m_Player;
 		this->m_Player = nullptr;
 	}
-	if (this->m_PostProcessor != nullptr)
-	{
-		delete this->m_PostProcessor;
-		this->m_PostProcessor = nullptr;
-	}
 	if (this->m_IslandHover != nullptr)
 	{
 		delete this->m_IslandHover;
@@ -96,13 +68,6 @@ DefaultScene::~DefaultScene()
 		delete this->m_WorldGrid;
 		this->m_WorldGrid = nullptr;
 	}
-	if (this->m_TextureShader != nullptr)
-	{
-		this->m_TextureShader->Shutdown();
-		delete this->m_TextureShader;
-		this->m_TextureShader = nullptr;
-	}
-
 	this->m_HoveredCell = nullptr;
 }
 
@@ -112,11 +77,6 @@ void DefaultScene::SetState(const GameState& state)
 	SystemClass::SetMouseGrab(state != GameState::Map);
 }
 
-void DefaultScene::OnResize(D3DClass *d3d, const int& width, const int& height)
-{
-	this->m_PostProcessor->OnResize(d3d, width, height);
-}
-
 bool DefaultScene::Update(const float& delta)
 {
 	this->m_Player->Update(delta);
@@ -124,26 +84,6 @@ bool DefaultScene::Update(const float& delta)
 	const Vector3f& position = this->m_Player->GetPosition();
 	this->m_WorldGrid->Update(Scene::m_Direct3D, position.x, position.z);
 
-	if (Scene::m_Input->IsKeyPressed(VK_F1))
-	{
-		this->m_BlurEffect->ToggleEnabled();
-	}
-	if (Scene::m_Input->IsKeyPressed(VK_F2))
-	{
-		this->m_VignatteEffect->ToggleEnabled();
-	}
-	if (Scene::m_Input->IsKeyPressed(VK_F3))
-	{
-		this->m_InvertEffect->ToggleEnabled();
-	}
-	if (Scene::m_Input->IsKeyPressed(VK_F4))
-	{
-		this->m_EdgeEffect->ToggleEnabled();
-	}
-	if (Scene::m_Input->IsKeyPressed(VK_F5))
-	{
-		this->m_ConvBlurEffect->ToggleEnabled();
-	}
 	if (this->m_State == GameState::Map)
 	{
 		if (!this->UpdateMap(delta))
@@ -287,16 +227,13 @@ bool DefaultScene::UpdateSurface(const float& delta)
 	return true;
 }
 
-void DefaultScene::Render(D3DClass* direct, const D3DXMATRIX& projection)
+void DefaultScene::RenderScene(D3DClass* direct, const D3DXMATRIX& projection)
 {
 	Camera *camera = Scene::GetCamera();
 	if (camera == nullptr)
 	{
 		return;
 	}
-	this->m_PostProcessor->GetSceneRenderTexture()->SetRenderTarget(direct->GetDeviceContext());
-	this->m_PostProcessor->GetSceneRenderTexture()->ClearRenderTarget(direct->GetDeviceContext(), CLEAR_COLOR);
-
 	const D3DXMATRIX& view = camera->GetViewMatrix();
 	this->m_WorldGrid->Render(direct, projection, view);
 	if (this->m_HoveredCell != nullptr && this->m_State == GameState::Map)
@@ -306,6 +243,4 @@ void DefaultScene::Render(D3DClass* direct, const D3DXMATRIX& projection)
 
 	this->m_LastView = view;
 	this->m_LastProjection = projection;
-
-	this->m_PostProcessor->Render(direct);
 }

@@ -10,7 +10,7 @@
 #define SIZE 100
 
 DungeonScene::DungeonScene(D3DClass* d3d, const HWND& hwnd, InputClass* input) 
-: Scene(d3d, hwnd, input), m_RootLeaf(nullptr), m_ColorShader(nullptr)
+: Scene(SceneId::DUNGEON, d3d, hwnd, input), m_RootLeaf(nullptr), m_ColorShader(nullptr)
 {
 	this->m_ColorShader = new ColorShaderClass;
 	this->m_ColorShader->Initialize(d3d->GetDevice(), hwnd);
@@ -36,6 +36,11 @@ DungeonScene::~DungeonScene()
 		delete this->m_ColorShader;
 		this->m_ColorShader = nullptr;
 	}
+}
+
+void DungeonScene::OnRefresh(D3DClass* d3d)
+{
+	this->GenerateDungeon(d3d);
 }
 
 void DungeonScene::GenerateDungeon(D3DClass* d3d)
@@ -69,7 +74,7 @@ bool DungeonScene::Update(const float& delta)
 	return Scene::Update(delta);
 }
 
-void DungeonScene::Render(D3DClass* direct, const D3DXMATRIX& projection)
+void DungeonScene::RenderScene(D3DClass* direct, const D3DXMATRIX& projection)
 {
 	const D3DXMATRIX& view = Scene::GetCamera()->GetViewMatrix();
 	this->m_RootLeaf->Render(direct, projection, view);

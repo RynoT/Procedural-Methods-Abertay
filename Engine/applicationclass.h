@@ -3,6 +3,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 #ifndef _APPLICATIONCLASS_H_
 #define _APPLICATIONCLASS_H_
+#include "game/scene/scene.h"
 
 
 /////////////
@@ -30,8 +31,6 @@ const bool WIREFRAME_MODE = false;
 
 #define CLEAR_COLOR 0.05f, 0.18f, 0.18f, 1.0f
 
-class Scene;
-
 class ApplicationClass
 {
 	friend class SystemClass;
@@ -46,7 +45,7 @@ public:
 	void Shutdown();
 	bool Frame();
 
-	void SetScene(class Scene *scene);
+	void SetScene(const SceneId& id);
 
 	static int SCREEN_WIDTH;
 	static int SCREEN_HEIGHT;

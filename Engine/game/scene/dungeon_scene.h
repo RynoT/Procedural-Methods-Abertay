@@ -13,9 +13,11 @@ public:
 	
 	void GenerateDungeon(D3DClass* d3d);
 
+	virtual void OnRefresh(D3DClass* d3d) override;
+
 	virtual bool Update(const float& delta) override;
 
-	virtual void Render(D3DClass* direct, const D3DXMATRIX& projection) override;
+	virtual void RenderScene(D3DClass* direct, const D3DXMATRIX& projection) override;
 
 private:
 	Leaf *m_RootLeaf;

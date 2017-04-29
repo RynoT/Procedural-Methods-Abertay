@@ -26,11 +26,9 @@ public:
 
 	void SetState(const GameState& state);
 
-	virtual void OnResize(D3DClass *d3d, const int& width, const int& height) override;
-
 	virtual bool Update(const float& delta) override;
 
-	virtual void Render(D3DClass* direct, const D3DXMATRIX& projection) override;
+	virtual void RenderScene(D3DClass* direct, const D3DXMATRIX& projection) override;
 
 protected:
 	bool UpdateMap(const float& delta);
@@ -46,9 +44,5 @@ private:
 	ModelEntity *m_IslandHover;
 	GridCell const*m_HoveredCell;
 
-	PostProcessor *m_PostProcessor;
-	TextureShaderClass *m_TextureShader;
 	D3DXMATRIX m_LastProjection, m_LastView;
-
-	class PostEffect *m_BlurEffect, *m_VignatteEffect, *m_InvertEffect, *m_ConvBlurEffect, *m_EdgeEffect;
 };

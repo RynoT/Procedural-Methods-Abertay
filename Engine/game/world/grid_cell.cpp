@@ -26,7 +26,7 @@
 
 #define CENTER_ALL_ISLANDS false
 
-#define SEED 1000 //TimerClass::SeedOffset // Use time as seed
+#define SEED TimerClass::SeedOffset // 1000 // Use time as seed 
 
 #define pseudo_seed(x, y) srand(GridCell::Hash(x, y))
 #define pseudo_random() (rand() / float(RAND_MAX)) // Random number between 0-1

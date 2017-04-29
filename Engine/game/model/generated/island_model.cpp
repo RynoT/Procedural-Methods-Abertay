@@ -80,7 +80,7 @@ bool IslandModel::Initialize(ID3D11Device *device)
 	this->m_SurfaceLastIndex = data.size();
 	for(int i = 0; i < this->m_SurfaceLastIndex; i++)
 	{
-		data[i].y = PerlinNoise::noise(data[i].x * NOISE_FREQUENCY, data[i].z * NOISE_FREQUENCY, 0.0f) * NOISE_INTENSITY;
+		data[i].y = float(PerlinNoise::noise(data[i].x * NOISE_FREQUENCY, data[i].z * NOISE_FREQUENCY, 0.0f) * NOISE_INTENSITY);
 	}
 
 	// Generate the underneith (hemisphere)
@@ -116,8 +116,8 @@ bool IslandModel::Initialize(ID3D11Device *device)
 			if (latitude >= PI / 2.0f - delta)
 			{
 				// TODO make this more efficient?
-				v1.y = PerlinNoise::noise(v1.x * NOISE_FREQUENCY, v1.z * NOISE_FREQUENCY, 0.0f) * NOISE_INTENSITY;
-				v2.y = PerlinNoise::noise(v2.x * NOISE_FREQUENCY, v2.z * NOISE_FREQUENCY, 0.0f) * NOISE_INTENSITY;
+				v1.y = float(PerlinNoise::noise(v1.x * NOISE_FREQUENCY, v1.z * NOISE_FREQUENCY, 0.0f) * NOISE_INTENSITY);
+				v2.y = float(PerlinNoise::noise(v2.x * NOISE_FREQUENCY, v2.z * NOISE_FREQUENCY, 0.0f) * NOISE_INTENSITY);
 			}
 
 			// Push vertices as triangles
@@ -134,7 +134,7 @@ bool IslandModel::Initialize(ID3D11Device *device)
 	ModelMesh *mesh = Model::CreateMesh();
 	ModelData *modelData = mesh->SetVertexCount(data.size());
 	// Set mesh and apply perlin noise to surface
-	for(int i = 0; i < data.size(); i++)
+	for(size_t i = 0; i < data.size(); i++)
 	{
 		modelData[i] = data[i];
 	}

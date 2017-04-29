@@ -235,11 +235,27 @@ void ApplicationClass::Shutdown()
 	}
 }
 
-void ApplicationClass::SetScene(Scene* scene)
+void ApplicationClass::SetScene(const SceneId& id)
 {
-	if(this->m_Scene != nullptr)
+	if (this->m_Scene != nullptr)
 	{
+		if (this->m_Scene->GetSceneId() == id)
+		{
+			this->m_Scene->OnRefresh(this->m_Direct3D);
+			return;
+		}
 		delete this->m_Scene;
+	}
+	Scene *scene = nullptr;
+	switch (id)
+	{
+		case SceneId::DEFAULT:
+			scene = new DefaultScene(this->m_Direct3D, *this->m_HWND, this->m_Input);
+			break;
+		case SceneId::DUNGEON:
+			scene = new DungeonScene(this->m_Direct3D, *this->m_HWND, this->m_Input);
+			break;
+		default:break;
 	}
 	this->m_Scene = scene;
 }
@@ -247,7 +263,7 @@ void ApplicationClass::SetScene(Scene* scene)
 void ApplicationClass::OnResize(const int& width, const int& height)
 {
 	this->m_Direct3D->Resize(width, height);
-	if(this->m_Scene != nullptr)
+	if (this->m_Scene != nullptr)
 	{
 		this->m_Scene->OnResize(this->m_Direct3D, width, height);
 	}
@@ -276,13 +292,13 @@ bool ApplicationClass::Frame()
 		return false;
 	}
 
-	if(this->m_Input->IsKeyPressed(VK_NUMPAD1))
+	if (this->m_Input->IsKeyPressed(VK_NUMPAD1) || this->m_Input->IsKeyPressed(VK_Z))
 	{
-		this->SetScene(new DefaultScene(this->m_Direct3D, *this->m_HWND, this->m_Input));
+		this->SetScene(SceneId::DEFAULT);
 	}
-	else if(this->m_Input->IsKeyPressed(VK_NUMPAD2))
+	else if (this->m_Input->IsKeyPressed(VK_NUMPAD2) || this->m_Input->IsKeyPressed(VK_X))
 	{
-		this->SetScene(new DungeonScene(this->m_Direct3D, *this->m_HWND, this->m_Input));
+		this->SetScene(SceneId::DUNGEON);
 	}
 
 	if (this->m_Scene != nullptr)
