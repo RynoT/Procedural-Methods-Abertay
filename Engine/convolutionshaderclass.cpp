@@ -20,7 +20,7 @@ ConvolutionShaderClass::~ConvolutionShaderClass()
 
 bool ConvolutionShaderClass::Initialize(ID3D11Device* device, HWND hwnd)
 {
-	return InitializeShader(device, hwnd, L"data/shadersconvolution.vs", L"data/shadersconvolution.ps");
+	return InitializeShader(device, hwnd, L"data/shaders/convolution.vs", L"data/shaders/convolution.ps");
 }
 
 void ConvolutionShaderClass::Shutdown()
@@ -29,12 +29,12 @@ void ConvolutionShaderClass::Shutdown()
 }
 
 bool ConvolutionShaderClass::Render(ID3D11DeviceContext* deviceContext, int indexCount, D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix,
-									   D3DXMATRIX projectionMatrix, D3DXMATRIX convolutionMatrix, ID3D11ShaderResourceView* texture, float screenWidth)
+									   D3DXMATRIX projectionMatrix, D3DXMATRIX convolutionMatrix, ID3D11ShaderResourceView* texture, float screenWidth, float screenHeight)
 {
 	bool result;
 
 	// Set the shader parameters that it will use for rendering.
-	result = SetShaderParameters(deviceContext, worldMatrix, viewMatrix, projectionMatrix, convolutionMatrix, texture, screenWidth);
+	result = SetShaderParameters(deviceContext, worldMatrix, viewMatrix, projectionMatrix, convolutionMatrix, texture, screenWidth, screenHeight);
 	if(!result)
 	{
 		return false;
@@ -312,7 +312,7 @@ void ConvolutionShaderClass::OutputShaderErrorMessage(ID3D10Blob* errorMessage, 
 
 
 bool ConvolutionShaderClass::SetShaderParameters(ID3D11DeviceContext* deviceContext, D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix,
-													D3DXMATRIX projectionMatrix, D3DXMATRIX convolutionMatrix, ID3D11ShaderResourceView* texture, float screenWidth)
+													D3DXMATRIX projectionMatrix, D3DXMATRIX convolutionMatrix, ID3D11ShaderResourceView* texture, float screenWidth, float screenHeight)
 {
 	HRESULT result;
     D3D11_MAPPED_SUBRESOURCE mappedResource;
@@ -382,7 +382,8 @@ bool ConvolutionShaderClass::SetShaderParameters(ID3D11DeviceContext* deviceCont
 
 	// Copy the data into the constant buffer.
 	dataPtr2->screenWidth = screenWidth;
-	dataPtr2->padding = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	dataPtr2->screenHeight = screenHeight;
+	dataPtr2->padding = D3DXVECTOR2(0.0f, 0.0f);
 
 	// Unlock the constant buffer.
     deviceContext->Unmap(m_screenSizeBuffer, 0);

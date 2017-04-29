@@ -35,6 +35,7 @@ public:
 	inline RenderTextureClass* GetSceneRenderTexture() const { return this->m_RenderTexture; }
 
 private:
+	int m_LastWidth, m_LastHeight;
 	std::vector<PostEffect*> m_Effects;
 
 	D3DXMATRIX m_WindowViewMatrix;

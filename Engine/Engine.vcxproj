@@ -87,6 +87,7 @@
   <ItemGroup>
     <ClCompile Include="applicationclass.cpp" />
     <ClCompile Include="game\scene\post\blur_effect.cpp" />
+    <ClCompile Include="game\scene\post\convolution_effect.cpp" />
     <ClCompile Include="game\scene\post\invert_effect.cpp" />
     <ClCompile Include="game\scene\post\post_effect.cpp" />
     <ClCompile Include="game\scene\post\post_processor.cpp" />
@@ -148,6 +149,8 @@
   <ItemGroup>
     <ClInclude Include="applicationclass.h" />
     <ClInclude Include="game\scene\post\blur_effect.h" />
+    <ClInclude Include="game\scene\post\convolution_blur_effect.h" />
+    <ClInclude Include="game\scene\post\convolution_effect.h" />
     <ClInclude Include="game\scene\post\invert_effect.h" />
     <ClInclude Include="game\scene\post\post_processor.h" />
     <ClInclude Include="game\scene\post\post_effect.h" />

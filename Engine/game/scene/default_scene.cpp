@@ -16,6 +16,7 @@
 #include "../../rendertextureclass.h"
 #include "post/vignette_effect.h"
 #include "post/invert_effect.h"
+#include "post/convolution_blur_effect.h"
 
 #define GRID_SIZE 9
 #define GRID_WORLD_SIZE 2000.0f
@@ -37,12 +38,15 @@ DefaultScene::DefaultScene(D3DClass *d3d, const HWND& hwnd, InputClass *input)
 	this->m_TextureShader->Initialize(d3d->GetDevice(), hwnd);
 
 	this->m_PostProcessor = new PostProcessor(d3d, hwnd, this->m_TextureShader);
+	this->m_PostProcessor->AddEffect(this->m_ConvolutionEffect = new ConvolutionBlurEffect(d3d, hwnd));
 	this->m_PostProcessor->AddEffect(this->m_BlurEffect = new BlurEffect(d3d, hwnd));
 	this->m_PostProcessor->AddEffect(this->m_InvertEffect = new InvertEffect(d3d, hwnd));
 	this->m_PostProcessor->AddEffect(this->m_VignatteEffect = new VignetteEffect(d3d, hwnd));
+	this->m_PostProcessor->OnResize(d3d, ApplicationClass::SCREEN_WIDTH, ApplicationClass::SCREEN_HEIGHT);
 
 	this->m_BlurEffect->SetEnabled(false);
 	this->m_InvertEffect->SetEnabled(false);
+	this->m_ConvolutionEffect->SetEnabled(false);
 
 	this->m_Player = new Player;
 
@@ -74,6 +78,11 @@ DefaultScene::~DefaultScene()
 		delete this->m_Player;
 		this->m_Player = nullptr;
 	}
+	if (this->m_PostProcessor != nullptr)
+	{
+		delete this->m_PostProcessor;
+		this->m_PostProcessor = nullptr;
+	}
 	if (this->m_IslandHover != nullptr)
 	{
 		delete this->m_IslandHover;
@@ -89,11 +98,6 @@ DefaultScene::~DefaultScene()
 		this->m_TextureShader->Shutdown();
 		delete this->m_TextureShader;
 		this->m_TextureShader = nullptr;
-	}
-	if (this->m_PostProcessor != nullptr)
-	{
-		delete this->m_PostProcessor;
-		this->m_PostProcessor = nullptr;
 	}
 
 	this->m_HoveredCell = nullptr;
@@ -128,6 +132,10 @@ bool DefaultScene::Update(const float& delta)
 	if (Scene::m_Input->IsKeyPressed(VK_F3))
 	{
 		this->m_InvertEffect->ToggleEnabled();
+	}
+	if (Scene::m_Input->IsKeyPressed(VK_F4))
+	{
+		this->m_ConvolutionEffect->ToggleEnabled();
 	}
 	if (this->m_State == GameState::Map)
 	{

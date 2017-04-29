@@ -50,5 +50,5 @@ private:
 	TextureShaderClass *m_TextureShader;
 	D3DXMATRIX m_LastProjection, m_LastView;
 
-	class PostEffect *m_BlurEffect, *m_VignatteEffect, *m_InvertEffect;
+	class PostEffect *m_BlurEffect, *m_VignatteEffect, *m_InvertEffect, *m_ConvolutionEffect;
 };

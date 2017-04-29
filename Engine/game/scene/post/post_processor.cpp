@@ -8,14 +8,12 @@
 #include "../../../rendertextureclass.h"
 
 PostProcessor::PostProcessor(D3DClass* direct, const HWND& hwnd, TextureShaderClass *shader)
-	: m_RenderTexture(nullptr), m_TextureShader(shader), m_Window(nullptr), m_SmallWindow(nullptr)
+	: m_LastWidth(-1), m_LastHeight(-1), m_RenderTexture(nullptr), m_TextureShader(shader), m_Window(nullptr), m_SmallWindow(nullptr)
 {
 	D3DXVECTOR3 position = Vector3f(0.0f, 0.0f, -1.0f);
 	D3DXVECTOR3 lookAt = position + Vector3f(0.0f, 0.0f, 1.0f);
 	D3DXVECTOR3 up = Vector3f(0.0f, 1.0f, 0.0f);
 	D3DXMatrixLookAtLH(&this->m_WindowViewMatrix, &position, &lookAt, &up);
-	
-	this->OnResize(direct, ApplicationClass::SCREEN_WIDTH, ApplicationClass::SCREEN_HEIGHT);
 }
 
 PostProcessor::~PostProcessor()
@@ -48,6 +46,13 @@ PostProcessor::~PostProcessor()
 
 void PostProcessor::OnResize(D3DClass* d3d, const int& width, const int& height)
 {
+	if(this->m_LastWidth == width && this->m_LastHeight == height)
+	{
+		return;
+	}
+	this->m_LastWidth = width;
+	this->m_LastHeight = height;
+
 	if (this->m_Window != nullptr)
 	{
 		this->m_Window->Shutdown();
@@ -89,6 +94,10 @@ void PostProcessor::Update(const float& delta)
 
 void PostProcessor::Render(D3DClass* direct)
 {
+	if(this->m_LastWidth <= 0 || this->m_LastHeight <= 0)
+	{
+		return;
+	}
 	D3DXMATRIX world, view = this->m_WindowViewMatrix;
 	direct->GetWorldMatrix(world);
 
