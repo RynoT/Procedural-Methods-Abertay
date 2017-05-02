@@ -4,6 +4,7 @@
 
 class ConvolutionShaderClass;
 
+// The ConvolutionEffect uses a convolution matrix to sample pixels around a point. It then combines those pixels.
 class ConvolutionEffect : public PostEffect
 {
 public:
@@ -12,6 +13,7 @@ public:
 
 	virtual void OnResize(D3DClass* d3d, const int& width, const int& height) override;
 
+	// The effect can be ran for multiple passes. The iteration count allows you to do that.
 	inline void SetIterationCount(const int& count) { this->m_Iterations = count; }
 
 	inline void SetConvolutionMatrix(const D3DXMATRIX& matrix) { this->m_ConvolutionMatrix = matrix; }

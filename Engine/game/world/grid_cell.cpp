@@ -7,15 +7,8 @@
 #include "../../timerclass.h"
 #include "../entity/island.h"
 #include "../../textureshaderclass.h"
-#include "../model/generated/island_model.h"
 #include "../model/collision/aabb.h"
 #include "../../applicationclass.h"
-
-//#define MIN_ISLAND_RADIUS_PERC 0.08f
-//#define MAX_ISLAND_RADIUS_PERC 0.32f
-
-//#define MIN_ISLAND_RADIUS (size * MIN_ISLAND_RADIUS_PERC)
-//#define MAX_ISLAND_RADIUS (size * MAX_ISLAND_RADIUS_PERC)
 
 #define ISLAND_SPAWN_CHANCE 0.35f //spawns every x percent
 #define ISLAND_BORDER_OFFSET 20.0f
@@ -45,6 +38,7 @@ void GridCell::Destroy()
 	}
 }
 
+// http://stackoverflow.com/questions/37128451/random-number-generator-with-x-y-coordinates-as-seed
 int GridCell::Hash(const int& x, const int& y)
 {
 	int h = x * 374761393 + y * 668265263 + SEED;
@@ -81,13 +75,14 @@ void GridCell::GenerateIsland(D3DClass *d3d, const float& size)
 		rx = ry = y = 0.0f;
 	}
 
-	this->m_Island = new Island(d3d->GetDevice());
+	this->m_Island = new Island(d3d->GetDevice(), Island::GetType(pseudo_random()));
 	this->m_Island->SetScale(radius);
 	this->m_Island->SetPosition(this->m_CellX * size + rx, y, this->m_CellY * size + ry);
 	this->m_Island->SetRenderMethod([this](D3DClass* direct, const D3DXMATRIX& projection,
 		const D3DXMATRIX& view, const D3DXMATRIX& model)->void { this->Render(direct, projection, view, model); });
 }
 
+// Use matrix maths to get the screen bounds of the island model. Then check to see if (x, y) are within those bounds.
 bool GridCell::IsHovered(const float& x, const float& y, const D3DXMATRIX& projection, const D3DXMATRIX& view) const
 {
 	if (this->m_Island == nullptr)
@@ -124,7 +119,7 @@ bool GridCell::IsHovered(const float& x, const float& y, const D3DXMATRIX& proje
 
 void GridCell::Render(D3DClass* direct, const D3DXMATRIX& projection, const D3DXMATRIX& view, const D3DXMATRIX& model) const
 {
-	if (this->m_Shader == nullptr)
+	if (this->m_Shader == nullptr || this->m_Island == nullptr)
 	{
 		return;
 	}

@@ -17,14 +17,17 @@ Scene::Scene(const SceneId& id, D3DClass *d3d, const HWND& hwnd, InputClass* inp
 	this->m_TextureShader = new TextureShaderClass;
 	this->m_TextureShader->Initialize(d3d->GetDevice(), hwnd);
 
+	// Setup post processing
 	this->m_PostProcessor = new PostProcessor(d3d, hwnd, this->m_TextureShader);
 	this->m_PostProcessor->AddEffect(this->m_EdgeEffect = new EdgeDetectEffect(d3d, hwnd));
 	this->m_PostProcessor->AddEffect(this->m_ConvBlurEffect = new ConvolutionBlurEffect(d3d, hwnd));
 	this->m_PostProcessor->AddEffect(this->m_BlurEffect = new BlurEffect(d3d, hwnd));
 	this->m_PostProcessor->AddEffect(this->m_InvertEffect = new InvertEffect(d3d, hwnd));
 	this->m_PostProcessor->AddEffect(this->m_VignatteEffect = new VignetteEffect(d3d, hwnd));
+	// Force the post processor to update the dimensions of all effects. Only happens if the current dimensions do not match.
 	this->m_PostProcessor->OnResize(d3d, ApplicationClass::SCREEN_WIDTH, ApplicationClass::SCREEN_HEIGHT);
 
+	// Disable these effects. The rest are enabled by default
 	this->m_BlurEffect->SetEnabled(false);
 	this->m_EdgeEffect->SetEnabled(false);
 	this->m_InvertEffect->SetEnabled(false);
@@ -77,6 +80,7 @@ void Scene::OnResize(D3DClass *d3d, const int& width, const int& height)
 
 bool Scene::Update(const float& delta)
 {
+	// Enabled/Disable post effects
 	if (Scene::m_Input->IsKeyPressed(VK_F1))
 	{
 		this->m_BlurEffect->ToggleEnabled();

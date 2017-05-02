@@ -2,7 +2,7 @@
 
 #include "../../util/math/vector3f.h"
 
-/// Abstract class representing a camera 
+// Abstract class representing a camera 
 class Camera
 {
 public:
@@ -38,6 +38,7 @@ public:
 	inline const Vector3f& operator+=(const Vector3f& vector) { this->Translate(vector.x, vector.y, vector.z); return this->m_Position; }
 
 protected:
+	// Let the camera know that the view matrix needs to be reconstructed
 	inline void SetViewAsDirty() { this->m_bViewDirty = true; }
 
 private:

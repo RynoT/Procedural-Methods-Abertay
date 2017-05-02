@@ -13,12 +13,16 @@ public:
 
 	static void SetRenderMethod(ModelEntity *entity, ColorShaderClass *shader);
 
+	// Get closest leaf to position from children
 	Leaf* GetClosestTo(const Vector3f& position);
 
+	// Create rooms for this leaf
 	void CreateRooms(ID3D11Device *device, ColorShaderClass* shader);
 
+	// Create hallways for this leaf
 	void CreateHalls(ID3D11Device *device, ColorShaderClass* shader);
 
+	// Split this leaf into two child leaves
 	bool Split();
 
 	virtual void Update(const float& delta) override { }

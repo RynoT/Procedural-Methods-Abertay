@@ -19,15 +19,9 @@ const bool WIREFRAME_MODE = false;
 ///////////////////////
 // MY CLASS INCLUDES //
 ///////////////////////
-#include "inputclass.h"
 #include "d3dclass.h"
-#include "terrainclass.h"
-#include "colorshaderclass.h"
+#include "inputclass.h"
 #include "timerclass.h"
-#include "fpsclass.h"
-#include "cpuclass.h"
-#include "fontshaderclass.h"
-#include "textclass.h"
 
 #define CLEAR_COLOR 0.05f, 0.18f, 0.18f, 1.0f
 
@@ -37,9 +31,8 @@ class ApplicationClass
 
 public:
 	ApplicationClass(InputClass *input);
-	~ApplicationClass();
 
-	void OnResize(const int& width, const int& height);
+	void OnResize(const int& width, const int& height) const;
 
 	bool Initialize(HINSTANCE, HWND&, int, int);
 	void Shutdown();
@@ -56,16 +49,10 @@ private:
 private:
 	HWND *m_HWND;
 	D3DClass* m_Direct3D;
-	InputClass *m_Input;
-	TerrainClass* m_Terrain;
-	ColorShaderClass* m_ColorShader;
-	TimerClass* m_Timer;
-	FpsClass* m_Fps;
-	CpuClass* m_Cpu;
-	FontShaderClass* m_FontShader;
-	TextClass* m_Text;
 
 	Scene *m_Scene;
+	InputClass *m_Input;
+	TimerClass* m_Timer;
 };
 
 #endif

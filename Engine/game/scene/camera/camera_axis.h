@@ -2,6 +2,7 @@
 
 #include "camera.h"
 
+// This camera type moves on a single predefined axis
 class CameraAxis : public Camera
 {
 public:

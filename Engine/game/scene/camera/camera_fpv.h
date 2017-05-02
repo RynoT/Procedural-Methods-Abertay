@@ -6,7 +6,7 @@
 #define CAMERA_FPV_INVERT_Y false
 #define CAMERA_FPV_MOVE_SENSITIVITY 20.0f
 
-/// First-person camera is a camera which works based off of yaw, pitch, and roll. Useful for first person movement.
+// First-person camera is a camera which works based off of yaw, pitch, and roll. Useful for first person movement.
 class CameraFPV : public Camera //Camera First Person View
 {
 public:
@@ -15,7 +15,7 @@ public:
 
 	virtual void Update(const float& delta) override;
 
-	/// Rotate yaw and pitch (factors in camera sensitivity)
+	// Rotate yaw and pitch (factors in camera sensitivity)
 	void Rotate(float dx, float dy);
 
 	void MoveForward(const float& amount); //move forward and backwards (according to camera rotation)

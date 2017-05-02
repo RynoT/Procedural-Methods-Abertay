@@ -10,6 +10,8 @@ struct ModelData
 	float nx, ny, nz;
 };
 
+// A model mesh contains all the information for the model.
+// Collision can also be setup here
 class ModelMesh
 {
 public:

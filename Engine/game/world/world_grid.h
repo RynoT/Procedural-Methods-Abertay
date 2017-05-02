@@ -16,7 +16,7 @@ public:
 
 	void SetShader(TextureShaderClass *shader);
 
-	void Update(D3DClass *d3d, const float& worldX, const float& worldY);
+	void Update(D3DClass *d3d, const float& worldX, const float& worldY) const;
 
 	void Render(D3DClass* direct, const D3DXMATRIX& projection, const D3DXMATRIX& view) const;
 
@@ -46,8 +46,6 @@ private:
 	const float m_WorldSize;
 
 	const int m_GridSize;
-
-	bool m_bDirty;
 
 	int m_OffsetX, m_OffsetY;
 };

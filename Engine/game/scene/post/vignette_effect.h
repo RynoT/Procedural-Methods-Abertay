@@ -4,6 +4,7 @@
 
 class VignetteShaderClass;
 
+// The VignetteEffect is a simple well-known post processing effect that adds shade to the borders of the window.
 class VignetteEffect : public PostEffect
 {
 public:

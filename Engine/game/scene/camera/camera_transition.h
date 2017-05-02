@@ -2,6 +2,8 @@
 
 #include "camera_fpv.h"
 
+// CameraTransition extends CameraFPV to provide the functionality of transitioning
+// between to positions and rotations over a specified duration
 class CameraTransition : public CameraFPV
 {
 public:

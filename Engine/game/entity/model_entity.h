@@ -24,6 +24,7 @@ public:
 
 	inline Model* GetInternalModel() const { return this->m_Model; }
 
+	// The render method must be set for every entity. This method should call the shader.
 	inline void SetRenderMethod(RenderMethod method) { this->m_RenderMethod = method; }
 
 private:

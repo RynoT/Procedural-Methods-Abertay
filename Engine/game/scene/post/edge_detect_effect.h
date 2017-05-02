@@ -4,6 +4,8 @@
 
 class EdgeDetectionShaderClass;
 
+// EdgeDetectEffect shows edges in the scene. This works by blurring the scene and then subtracting the blur from the scene.
+// This technique for edge detection is well known and reasonably effective.
 class EdgeDetectEffect : public ConvolutionEffect
 {
 public:

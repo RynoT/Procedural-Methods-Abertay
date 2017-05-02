@@ -21,19 +21,7 @@
     <ClCompile Include="colorshaderclass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="cpuclass.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="d3dclass.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="fontclass.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="fontshaderclass.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="fpsclass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="inputclass.cpp">
@@ -42,16 +30,7 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="positionclass.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="systemclass.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="terrainclass.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="textclass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="textureclass.cpp">
@@ -84,9 +63,6 @@
     <ClCompile Include="game\entity\model_entity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="terrainshaderclass.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="game\scene\camera\camera_fixed.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -111,22 +87,13 @@
     <ClCompile Include="game\scene\camera\camera_axis.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="game\model\generated\path_model.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="game\model\model.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="game\model\file_model.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="game\entity\path.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="game\model\model_mesh.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="game\model\collision\collision.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="game\model\collision\aabb.cpp">
@@ -151,9 +118,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="game\entity\dungeon\leaf.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="game\model\generated\island_connection_model.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="convolutionshaderclass.cpp">
@@ -209,34 +173,13 @@
     <ClInclude Include="colorshaderclass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="cpuclass.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="d3dclass.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="fontclass.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="fontshaderclass.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="fpsclass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="inputclass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="positionclass.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="systemclass.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="terrainclass.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="textclass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="textureclass.h">
@@ -269,9 +212,6 @@
     <ClInclude Include="game\entity\model_entity.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="terrainshaderclass.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="game\scene\camera\camera_fpv.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -302,13 +242,7 @@
     <ClInclude Include="game\model\generated\island_model.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="game\model\generated\path_model.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="game\model\file_model.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="game\entity\path.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="game\model\model_mesh.h">
@@ -336,9 +270,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="game\entity\dungeon\leaf.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="game\model\generated\island_connection_model.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="convolutionshaderclass.h">
@@ -389,15 +320,5 @@
     <ClInclude Include="edgedetectionshaderclass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="font.ps">
-      <Filter>Shader Files</Filter>
-    </None>
-    <None Include="font.vs">
-      <Filter>Shader Files</Filter>
-    </None>
-    <None Include="terrain.vs" />
-    <None Include="terrain.ps" />
   </ItemGroup>
 </Project>

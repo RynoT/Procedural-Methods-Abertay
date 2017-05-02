@@ -4,6 +4,7 @@
 
 class InvertShaderClass;
 
+// Invert effect is a simple texture effect. It inverts the colors on screen.
 class InvertEffect : public PostEffect
 {
 public:

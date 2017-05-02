@@ -2,7 +2,8 @@
 
 #include "camera.h"
 
-/// CameraFixed is a camera which works based off two points (A and B)
+// CameraFixed is a camera which works based off two points (A and B).
+// PointA is the position and PointB is where the camera will look.
 class CameraFixed : public Camera
 {
 public:

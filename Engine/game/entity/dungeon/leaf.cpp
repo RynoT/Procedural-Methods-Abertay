@@ -61,6 +61,7 @@ Leaf* Leaf::GetClosestTo(const Vector3f& position)
 {
 	if(this->IsSplit())
 	{
+		// Recursively get closest from children 
 		Leaf *l1 = this->m_ChildA->GetClosestTo(position), *l2 = this->m_ChildB->GetClosestTo(position);
 		return leaf_distance(l1, position) < leaf_distance(l2, position) ? l1 : l2;
 	}
@@ -74,6 +75,7 @@ void Leaf::CreateHalls(ID3D11Device* device, ColorShaderClass* shader)
 		this->m_ChildA->CreateHalls(device, shader);
 		this->m_ChildB->CreateHalls(device, shader);
 
+		// Halls will always go between the two closest neighbours of a split leaf (this leaf)
 		Leaf *neighbourA = this->m_ChildA->GetClosestTo(this->m_ChildB->GetPosition());
 		Leaf *neighbourB = this->m_ChildB->GetClosestTo(this->m_ChildA->GetPosition());
 		this->CreateHall(device, neighbourA->GetPosition(), neighbourB->GetPosition(), shader);
@@ -90,6 +92,7 @@ void Leaf::CreateHall(ID3D11Device* device, const Vector3f& pointA, const Vector
 	Vector3f vector = pointB - pointA;
 	float length = vector.GetLength();
 
+	// Hall is just a simple line to the center of the rooms
 	float theta = std::atan2f(pointB.x - pointA.x, pointB.z - pointA.z);
 	this->m_Hall->SetPosition(VECTOR3_SPLIT(pointA + vector.normalize().multiply(length / 2.0f) + Vector3f(0.0f, -0.02f, 0.0f)));
 	this->m_Hall->SetScale(HALL_WIDTH, 0.0f, length);

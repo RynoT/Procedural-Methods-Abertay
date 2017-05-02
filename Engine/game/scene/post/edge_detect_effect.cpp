@@ -14,7 +14,7 @@ EdgeDetectEffect::EdgeDetectEffect(D3DClass* d3d, const HWND& hwnd)
 	this->m_EdgeDetectShader->Initialize(d3d->GetDevice(), hwnd);
 
 	ConvolutionEffect::SetIterationCount(1);
-	ConvolutionEffect::SetConvolutionMatrix(1, 2, 1, 2, 4, 2, 1, 2, 1);
+	ConvolutionEffect::SetConvolutionMatrix(3, 3, 3, 3, 3, 3, 3, 3, 3);
 }
 
 EdgeDetectEffect::~EdgeDetectEffect()
@@ -48,6 +48,7 @@ void EdgeDetectEffect::OnResize(D3DClass* d3d, const int& width, const int& heig
 
 void EdgeDetectEffect::RenderEffect(PostProcessor* processor, D3DClass* direct, const D3DXMATRIX& world, const D3DXMATRIX& view) const
 {
+	// Render blur
 	ConvolutionEffect::RenderConvolution(processor, direct, world, view);
 
 	this->m_EdgeTexture->SetRenderTarget(direct->GetDeviceContext());
@@ -56,6 +57,7 @@ void EdgeDetectEffect::RenderEffect(PostProcessor* processor, D3DClass* direct, 
 	D3DXMATRIX orthoMatrix;
 	this->m_EdgeTexture->GetOrthoMatrix(orthoMatrix);
 
+	// Render scene using edge detect shader. This shader will subtract the blur from the scene (making only edges visible)
 	processor->GetWindow()->Render(direct->GetDeviceContext());
 	this->m_EdgeDetectShader->Render(direct->GetDeviceContext(), processor->GetWindow()->GetIndexCount(), world, view, orthoMatrix, 
 		processor->GetSceneRenderTexture()->GetShaderResourceView(), ConvolutionEffect::m_ConvolutionTexture->GetShaderResourceView());

@@ -18,6 +18,7 @@ void CollisionAABB::Set(ModelMesh* mesh)
 	this->m_Min.set(std::numeric_limits<float>::max(), std::numeric_limits<float>::max(), std::numeric_limits<float>::max());
 	this->m_Max.set(std::numeric_limits<float>::min(), std::numeric_limits<float>::min(), std::numeric_limits<float>::min());
 
+	// Set min a max to the extremes of the mesh vertex data. This will create an AABB
 	const ModelData *data = mesh->GetModelData();
 	for(int i = 0; i < mesh->GetVertexCount(); i++)
 	{

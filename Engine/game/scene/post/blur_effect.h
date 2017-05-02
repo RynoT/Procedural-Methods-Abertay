@@ -5,6 +5,8 @@
 class VerticalBlurShaderClass;
 class HorizontalBlurShaderClass;
 
+// Blur effect using vertical and horizontal blur shaders.
+// Blur is applied to downsampled texture and then upsampled for performance
 class BlurEffect : public PostEffect
 {
 public:

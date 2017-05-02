@@ -2,6 +2,7 @@
 
 #include "model.h"
 
+// Defines a model that is loaded from a file
 class FileModel : public Model
 {
 public:

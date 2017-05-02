@@ -3,11 +3,11 @@
 #include "../model/collision/aabb.h"
 #include "../../systemclass.h"
 
-Island::Island(ID3D11Device* device)
+Island::Island(ID3D11Device* device, const IslandType& type) : m_Type(type)
 {
-	Model *model = new IslandModel;
+	Model *model = new IslandModel(&this->m_Type);
 	model->Initialize(device);
-	model->SetCollision(new CollisionAABB);
+	model->SetCollision(new CollisionAABB); //give island collision so that we can click it
 
 	ModelEntity::SetModel(model);
 }
